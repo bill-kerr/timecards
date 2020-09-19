@@ -11,6 +11,10 @@ func main() {
 	c := config.Init()
 	app := fiber.New()
 
+	app.Use("/", func(c *fiber.Ctx) {
+		c.SendString("this is a response")
+	})
+
 	if err := app.Listen(":" + c.Port); err != nil {
 		log.Fatal(err.Error())
 	}
