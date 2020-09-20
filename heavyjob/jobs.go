@@ -1,0 +1,17 @@
+package heavyjob
+
+// Job represents a single project.
+type Job struct {
+	ID             string `json:"id"`
+	Code           string `json:"code"`
+	Description    string `json:"description"`
+	BusinessUnitID string `json:"business"`
+	Status         string `json:"status"`
+}
+
+// GetAllJobs returns all jobs owned by the company.
+func (c *Client) GetAllJobs() ([]Job, error) {
+	jobs := []Job{}
+	_, err := c.get("/jobs", &jobs)
+	return jobs, err
+}

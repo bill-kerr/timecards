@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
 )
 
@@ -40,6 +41,15 @@ func GetConfig() *Config {
 		HCSSGrantType:    HCSSGrantType(),
 		HCSSIdentityURL:  HCSSIdentityURL(),
 		HeavyjobRootURL:  HeavyjobRootURL(),
+	}
+}
+
+// SetConfig returns a middleware that stores the configuration in the fiber context.
+func SetConfig() func(*fiber.Ctx) {
+	c := GetConfig()
+	return func(ctx *fiber.Ctx) {
+		ctx.Locals("config", c)
+		ctx.Next()
 	}
 }
 
