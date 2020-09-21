@@ -24,6 +24,7 @@ func main() {
 	v1 := api.Group("/v1", config.SetConfig(), heavyjob.SetClient())
 	v1.Get("/jobs", jobs.GetJobs)
 	v1.Get("/summaries", timecards.GetTimecardSummaries)
+	v1.Get("/timecards/:id", timecards.GetTimecard)
 
 	app.Use(errors.NotFoundHandler)
 

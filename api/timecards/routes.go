@@ -33,9 +33,23 @@ func GetTimecardSummaries(ctx *fiber.Ctx) error {
 	client := heavyjob.GetClient(ctx)
 	summaries, err := client.GetTimecardSummaries(querystring)
 	if err != nil {
-		return fiber.NewError(http.StatusInternalServerError, "Internal server error")
+		return fiber.NewError(http.StatusInternalServerError)
 	}
 
 	ctx.JSON(summaries)
+	return nil
+}
+
+// GetTimecard returns a single timecard.
+func GetTimecard(ctx *fiber.Ctx) error {
+	ID := utils.ImmutableString(ctx.Params("id"))
+
+	client := heavyjob.GetClient(ctx)
+	timecard, err := client.GetTimecard(ID)
+	if err != nil {
+		return fiber.NewError(http.StatusInternalServerError)
+	}
+
+	ctx.JSON(timecard)
 	return nil
 }
