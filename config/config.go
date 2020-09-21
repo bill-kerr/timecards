@@ -45,11 +45,12 @@ func GetConfig() *Config {
 }
 
 // SetConfig returns a middleware that stores the configuration in the fiber context.
-func SetConfig() func(*fiber.Ctx) {
+func SetConfig() func(*fiber.Ctx) error {
 	c := GetConfig()
-	return func(ctx *fiber.Ctx) {
+	return func(ctx *fiber.Ctx) error {
 		ctx.Locals("config", c)
 		ctx.Next()
+		return nil
 	}
 }
 

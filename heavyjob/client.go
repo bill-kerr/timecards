@@ -30,11 +30,12 @@ func newClient() *Client {
 }
 
 // SetClient returns a middleware that creates an http client and stores it in the fiber context.
-func SetClient() func(*fiber.Ctx) {
+func SetClient() func(*fiber.Ctx) error {
 	client := newClient()
-	return func(ctx *fiber.Ctx) {
+	return func(ctx *fiber.Ctx) error {
 		ctx.Locals(clientLocal, client)
 		ctx.Next()
+		return nil
 	}
 }
 

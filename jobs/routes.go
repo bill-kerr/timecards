@@ -7,10 +7,10 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-// GetAllJobs responds with all jobs owned by the company.
-func GetAllJobs(ctx *fiber.Ctx) error {
+// GetJobs responds with jobs owned by the company.
+func GetJobs(ctx *fiber.Ctx) error {
 	client := heavyjob.GetClient(ctx)
-	jobs, err := client.GetAllJobs()
+	jobs, err := client.GetJobs()
 	if err != nil {
 		return fiber.NewError(http.StatusInternalServerError, "Internal server error")
 	}

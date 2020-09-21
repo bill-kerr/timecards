@@ -9,8 +9,8 @@ type Job struct {
 	Status         string `json:"status"`
 }
 
-// GetAllJobs returns all jobs owned by the company.
-func (c *Client) GetAllJobs() ([]Job, error) {
+// GetJobs returns all jobs owned by the company.
+func (c *Client) GetJobs() ([]Job, error) {
 	jobs := []Job{}
 	_, err := c.get("/jobs", &jobs)
 	return jobs, err
