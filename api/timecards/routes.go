@@ -53,3 +53,34 @@ func GetTimecard(ctx *fiber.Ctx) error {
 	ctx.JSON(timecard)
 	return nil
 }
+
+// GetTimecards returns timecards within a specific date range.
+func GetTimecards(ctx *fiber.Ctx) error {
+	queryvals := SummaryFilters{}
+	if err := ctx.QueryParser(&queryvals); err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, "Invalid query parameters")
+	}
+
+	querystring, err := utils.BuildQuery(queryvals)
+	if err != nil {
+		return fiber.NewError(http.StatusBadRequest, "Invalid query parameters")
+	}
+
+	client := heavyjob.GetClient(ctx)
+	summaries, err := client.GetTimecardSummaries(querystring)
+	if err != nil {
+		return fiber.NewError(http.StatusInternalServerError)
+	}
+
+	timecards := []heavyjob.Timecard{}
+	for _, summary := range summaries {
+		timecard, err := client.GetTimecard(summary.ID)
+		if err != nil {
+			return fiber.NewError(http.StatusInternalServerError)
+		}
+		timecards = append(timecards, timecard)
+	}
+
+	ctx.JSON(timecards)
+	return nil
+}

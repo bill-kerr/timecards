@@ -25,6 +25,7 @@ func main() {
 	v1.Get("/jobs", jobs.GetJobs)
 	v1.Get("/summaries", timecards.GetTimecardSummaries)
 	v1.Get("/timecards/:id", timecards.GetTimecard)
+	v1.Get("/timecards", timecards.GetTimecards)
 
 	app.Use(errors.NotFoundHandler)
 
