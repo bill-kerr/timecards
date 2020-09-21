@@ -18,6 +18,7 @@ type Config struct {
 	HCSSGrantType    string
 	HCSSIdentityURL  string
 	HeavyjobRootURL  string
+	BusinessUnitID   string
 }
 
 // Init initializes the environmental variables defined in the Config struct.
@@ -41,6 +42,7 @@ func GetConfig() *Config {
 		HCSSGrantType:    HCSSGrantType(),
 		HCSSIdentityURL:  HCSSIdentityURL(),
 		HeavyjobRootURL:  HeavyjobRootURL(),
+		BusinessUnitID:   BusinessUnitID(),
 	}
 }
 
@@ -96,4 +98,9 @@ func HCSSIdentityURL() string {
 // HeavyjobRootURL returns the HEAVYJOB_ROOT_URL env variable.
 func HeavyjobRootURL() string {
 	return get("HEAVYJOB_ROOT_URL")
+}
+
+// BusinessUnitID returns the manager's business unit id from the BUSINESS_UNIT_ID env variable.
+func BusinessUnitID() string {
+	return get("BUSINESS_UNIT_ID")
 }

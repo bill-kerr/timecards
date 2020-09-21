@@ -5,7 +5,7 @@ type Job struct {
 	ID             string `json:"id"`
 	Code           string `json:"code"`
 	Description    string `json:"description"`
-	BusinessUnitID string `json:"business"`
+	BusinessUnitID string `json:"businessUnitId"`
 	Status         string `json:"status"`
 }
 

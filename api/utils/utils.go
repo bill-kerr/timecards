@@ -19,3 +19,13 @@ func BuildQuery(params interface{}) (string, error) {
 func ImmutableString(str string) string {
 	return utils.ImmutableString(str)
 }
+
+// Contains checks if a given string is contained within the given slice.
+func Contains(slice []string, str string) bool {
+	for _, val := range slice {
+		if val == str {
+			return true
+		}
+	}
+	return false
+}
