@@ -3,8 +3,8 @@ package timecards
 import (
 	"net/http"
 
+	"github.com/bk7987/timecards/common"
 	"github.com/bk7987/timecards/heavyjob"
-	"github.com/bk7987/timecards/utils"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -25,7 +25,7 @@ func GetTimecardSummaries(ctx *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusBadRequest, "Invalid query parameters")
 	}
 
-	querystring, err := utils.BuildQuery(queryvals)
+	querystring, err := common.BuildQuery(queryvals)
 	if err != nil {
 		return fiber.NewError(http.StatusBadRequest, "Invalid query parameters")
 	}
@@ -42,7 +42,7 @@ func GetTimecardSummaries(ctx *fiber.Ctx) error {
 
 // GetTimecard returns a single timecard.
 func GetTimecard(ctx *fiber.Ctx) error {
-	ID := utils.ImmutableString(ctx.Params("id"))
+	ID := common.ImmutableString(ctx.Params("id"))
 
 	client := heavyjob.GetClient(ctx)
 	timecard, err := client.GetTimecard(ID)
@@ -61,7 +61,7 @@ func GetTimecards(ctx *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusBadRequest, "Invalid query parameters")
 	}
 
-	querystring, err := utils.BuildQuery(queryvals)
+	querystring, err := common.BuildQuery(queryvals)
 	if err != nil {
 		return fiber.NewError(http.StatusBadRequest, "Invalid query parameters")
 	}

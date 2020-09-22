@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 
+	"github.com/bk7987/timecards/common"
 	"github.com/bk7987/timecards/config"
 	"github.com/bk7987/timecards/errors"
 	"github.com/bk7987/timecards/heavyjob"
@@ -10,10 +11,18 @@ import (
 	"github.com/bk7987/timecards/timecards"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/recover"
+	"gorm.io/gorm"
 )
+
+func migrate(db *gorm.DB) {
+	db.AutoMigrate(&jobs.JobModel{})
+}
 
 func main() {
 	c := config.Init()
+	db := common.InitDB(c.PGConnString)
+	migrate(db)
+	heavyjob.ScheduleRefresh(c.RefreshInterval)
 
 	app := fiber.New(fiber.Config{
 		ErrorHandler: errors.ErrorHandler,

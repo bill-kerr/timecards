@@ -3,6 +3,7 @@ package config
 import (
 	"log"
 	"os"
+	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
@@ -19,6 +20,8 @@ type Config struct {
 	HCSSIdentityURL  string
 	HeavyjobRootURL  string
 	BusinessUnitID   string
+	PGConnString     string
+	RefreshInterval  uint64
 }
 
 // Init initializes the environmental variables defined in the Config struct.
@@ -43,6 +46,8 @@ func GetConfig() *Config {
 		HCSSIdentityURL:  HCSSIdentityURL(),
 		HeavyjobRootURL:  HeavyjobRootURL(),
 		BusinessUnitID:   BusinessUnitID(),
+		PGConnString:     PGConnString(),
+		RefreshInterval:  RefreshInterval(),
 	}
 }
 
@@ -103,4 +108,18 @@ func HeavyjobRootURL() string {
 // BusinessUnitID returns the manager's business unit id from the BUSINESS_UNIT_ID env variable.
 func BusinessUnitID() string {
 	return get("BUSINESS_UNIT_ID")
+}
+
+// PGConnString returns the connection string for the Postgres database from the PG_CONN_STRING env variable.
+func PGConnString() string {
+	return get("PG_CONN_STRING")
+}
+
+// RefreshInterval returns the time in minutes between data refresh calls to the HeavyJob API from the REFRESH_INTERVAL env variable.
+func RefreshInterval() uint64 {
+	interval, err := strconv.Atoi(get("REFRESH_INTERVAL"))
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	return uint64(interval)
 }
