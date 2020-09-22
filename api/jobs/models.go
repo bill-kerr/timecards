@@ -1,10 +1,7 @@
 package jobs
 
 import (
-	"errors"
-
 	"github.com/bk7987/timecards/common"
-	"gorm.io/gorm"
 )
 
 // JobModel is the database representation of a job.
@@ -32,22 +29,20 @@ func Save(job JobModel) error {
 }
 
 // SaveMany saves multiple JobModels to the database.
-func SaveMany(data []JobModel) error {
+func SaveMany(job []JobModel) error {
 	db := common.GetDB()
-	tx := db.Create(&data)
+	tx := db.Create(&job)
 	return tx.Error
 }
 
 // UpdateOrSave updates the matching job, or creates it if it does not exist.
 func UpdateOrSave(job JobModel) error {
 	db := common.GetDB()
-	err := db.Model(&JobModel{}).Where(JobModel{ID: job.ID}).Updates(&job).Error
-	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return db.Create(&job).Error
-		}
+	tx := db.Model(&JobModel{}).Where(JobModel{ID: job.ID}).Updates(&job)
+	if tx.RowsAffected == 0 {
+		return db.Create(&job).Error
 	}
-	return err
+	return tx.Error
 }
 
 // UpdateOrSaveMany updates or saves many jobs.

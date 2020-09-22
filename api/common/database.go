@@ -14,6 +14,11 @@ type Database struct {
 	*gorm.DB
 }
 
+// Indexable has at least an ID field.
+type Indexable struct {
+	ID string
+}
+
 // DB is the variables that holds the database instance.
 var DB *gorm.DB
 

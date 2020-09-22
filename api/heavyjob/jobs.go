@@ -27,8 +27,8 @@ func (j *Job) Transform() jobs.JobModel {
 	}
 }
 
-// transformMany returns a slice of transformed Job models.
-func transformMany(hjJobs []Job) []jobs.JobModel {
+// transformJobs returns a slice of transformed Job models.
+func transformJobs(hjJobs []Job) []jobs.JobModel {
 	transformed := []jobs.JobModel{}
 	for _, job := range hjJobs {
 		transformed = append(transformed, jobs.JobModel{

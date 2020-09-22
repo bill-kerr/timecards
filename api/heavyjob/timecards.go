@@ -32,8 +32,8 @@ type CostCode struct {
 	Unit               string  `json:"unitOfMeasure"`
 }
 
-// Employee represents the data for a specific employee.
-type Employee struct {
+// TimecardEmployee represents the data for an employee on a specific timecard.
+type TimecardEmployee struct {
 	TimecardEmployeeID  string          `json:"timeCardEmployeeId"`
 	EmployeeID          string          `json:"employeeId"`
 	EmployeeCode        string          `json:"employeeCode"`
@@ -55,31 +55,31 @@ type EmployeeHours struct {
 
 // Timecard represents the data for a specific timecard.
 type Timecard struct {
-	ID                      string     `json:"id"`
-	ForemanID               string     `json:"foremanId"`
-	ForemanCode             string     `json:"foremanCode"`
-	ForemanDescription      string     `json:"foremanDescription"`
-	JobID                   string     `json:"jobId"`
-	JobCode                 string     `json:"jobCode"`
-	JobDescription          string     `json:"jobDescription"`
-	BusinessUnitID          string     `json:"businessUnitId"`
-	BusinessUnitCode        string     `json:"businessUnitCode"`
-	BusinessUnitDescription string     `json:"businessUnitDescription"`
-	Date                    string     `json:"date"`
-	Revision                int        `json:"revision"`
-	IsApproved              bool       `json:"isApproved"`
-	ApprovedByID            string     `json:"approvedById"`
-	IsReviewed              bool       `json:"isReviewed"`
-	ReviewedByID            string     `json:"reviewedById"`
-	IsAccepted              bool       `json:"isAccepted"`
-	AcceptedByID            string     `json:"acceptedById"`
-	IsRejected              bool       `json:"isRejected"`
-	RejectedByID            string     `json:"rejectedById"`
-	SentToPayrollRevision   int        `json:"sentToPayrollRevision"`
-	SentToPayrollDateTime   string     `json:"sentToPayrollDateTime"`
-	LastModifiedDateTime    string     `json:"lastModifiedDateTime"`
-	CostCodes               []CostCode `json:"costCodes"`
-	Employees               []Employee `json:"employees"`
+	ID                      string             `json:"id"`
+	ForemanID               string             `json:"foremanId"`
+	ForemanCode             string             `json:"foremanCode"`
+	ForemanDescription      string             `json:"foremanDescription"`
+	JobID                   string             `json:"jobId"`
+	JobCode                 string             `json:"jobCode"`
+	JobDescription          string             `json:"jobDescription"`
+	BusinessUnitID          string             `json:"businessUnitId"`
+	BusinessUnitCode        string             `json:"businessUnitCode"`
+	BusinessUnitDescription string             `json:"businessUnitDescription"`
+	Date                    string             `json:"date"`
+	Revision                int                `json:"revision"`
+	IsApproved              bool               `json:"isApproved"`
+	ApprovedByID            string             `json:"approvedById"`
+	IsReviewed              bool               `json:"isReviewed"`
+	ReviewedByID            string             `json:"reviewedById"`
+	IsAccepted              bool               `json:"isAccepted"`
+	AcceptedByID            string             `json:"acceptedById"`
+	IsRejected              bool               `json:"isRejected"`
+	RejectedByID            string             `json:"rejectedById"`
+	SentToPayrollRevision   int                `json:"sentToPayrollRevision"`
+	SentToPayrollDateTime   string             `json:"sentToPayrollDateTime"`
+	LastModifiedDateTime    string             `json:"lastModifiedDateTime"`
+	CostCodes               []CostCode         `json:"costCodes"`
+	Employees               []TimecardEmployee `json:"employees"`
 }
 
 // GetTimecardSummaries returns all timecard summaries within a date range.
