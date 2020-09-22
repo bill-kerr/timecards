@@ -1,6 +1,8 @@
 package common
 
 import (
+	"errors"
+
 	"github.com/gofiber/fiber/v2/utils"
 	"github.com/google/go-querystring/query"
 )
@@ -28,4 +30,12 @@ func Contains(slice []string, str string) bool {
 		}
 	}
 	return false
+}
+
+// GetFirstArg returns the first element of a string array. Helpful for parsing optional string arguments.
+func GetFirstArg(args []string) (string, error) {
+	if len(args) > 0 {
+		return args[0], nil
+	}
+	return "", errors.New("No arguments")
 }

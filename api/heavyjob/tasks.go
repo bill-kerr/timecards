@@ -11,7 +11,7 @@ import (
 // ScheduleRefresh schedules a data refresh to be run periodically. The interval parameter is in minutes.
 func ScheduleRefresh(interval uint64) *gocron.Job {
 	schedule := gocron.NewScheduler(time.UTC)
-	task, err := schedule.Every(interval).Minutes().StartImmediately().Do(RefreshData)
+	task, err := schedule.Every(interval).Minutes().Do(RefreshData)
 	if err != nil {
 		log.Fatal(err.Error())
 	}

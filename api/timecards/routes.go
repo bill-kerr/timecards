@@ -1,8 +1,6 @@
 package timecards
 
 import (
-	"net/http"
-
 	"github.com/bk7987/timecards/common"
 	"github.com/bk7987/timecards/heavyjob"
 	"github.com/gofiber/fiber/v2"
@@ -22,22 +20,21 @@ type SummaryFilters struct {
 func GetTimecardSummaries(ctx *fiber.Ctx) error {
 	queryvals := SummaryFilters{}
 	if err := ctx.QueryParser(&queryvals); err != nil {
-		return fiber.NewError(fiber.StatusBadRequest, "Invalid query parameters")
+		return common.BadRequestError(ctx, "Invalid query parameters")
 	}
 
 	querystring, err := common.BuildQuery(queryvals)
 	if err != nil {
-		return fiber.NewError(http.StatusBadRequest, "Invalid query parameters")
+		return common.BadRequestError(ctx, "Invalid query parameters")
 	}
 
 	client := heavyjob.GetClient(ctx)
 	summaries, err := client.GetTimecardSummaries(querystring)
 	if err != nil {
-		return fiber.NewError(http.StatusInternalServerError)
+		return common.InternalServerError(ctx)
 	}
 
-	ctx.JSON(summaries)
-	return nil
+	return ctx.JSON(summaries)
 }
 
 // GetTimecard returns a single timecard.
@@ -47,40 +44,38 @@ func GetTimecard(ctx *fiber.Ctx) error {
 	client := heavyjob.GetClient(ctx)
 	timecard, err := client.GetTimecard(ID)
 	if err != nil {
-		return fiber.NewError(http.StatusInternalServerError)
+		return common.InternalServerError(ctx)
 	}
 
-	ctx.JSON(timecard)
-	return nil
+	return ctx.JSON(timecard)
 }
 
 // GetTimecards returns timecards within a specific date range.
 func GetTimecards(ctx *fiber.Ctx) error {
 	queryvals := SummaryFilters{}
 	if err := ctx.QueryParser(&queryvals); err != nil {
-		return fiber.NewError(fiber.StatusBadRequest, "Invalid query parameters")
+		return common.BadRequestError(ctx, "Invalid query parameters")
 	}
 
 	querystring, err := common.BuildQuery(queryvals)
 	if err != nil {
-		return fiber.NewError(http.StatusBadRequest, "Invalid query parameters")
+		return common.BadRequestError(ctx, "Invalid query parameters")
 	}
 
 	client := heavyjob.GetClient(ctx)
 	summaries, err := client.GetTimecardSummaries(querystring)
 	if err != nil {
-		return fiber.NewError(http.StatusInternalServerError)
+		return common.InternalServerError(ctx)
 	}
 
 	timecards := []heavyjob.Timecard{}
 	for _, summary := range summaries {
 		timecard, err := client.GetTimecard(summary.ID)
 		if err != nil {
-			return fiber.NewError(http.StatusInternalServerError)
+			return common.InternalServerError(ctx)
 		}
 		timecards = append(timecards, timecard)
 	}
 
-	ctx.JSON(timecards)
-	return nil
+	return ctx.JSON(timecards)
 }

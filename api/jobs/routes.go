@@ -1,44 +1,50 @@
 package jobs
 
 import (
+	"errors"
+	"strings"
+
+	"github.com/bk7987/timecards/common"
 	"github.com/gofiber/fiber/v2"
+	"gorm.io/gorm"
 )
 
 // GetJobs responds with jobs owned by the company.
 func GetJobs(ctx *fiber.Ctx) error {
-	// fetchAll := true
-	// include := strings.Split(ctx.Query("select"), ",")
-	// for _, val := range include {
-	// 	if val == "all" {
-	// 		fetchAll = true
-	// 		break
-	// 	}
+	fetchAll := true
+	include := strings.Split(ctx.Query("select"), ",")
+	for _, val := range include {
+		if val == "all" {
+			fetchAll = true
+			break
+		}
+		if val == "" {
+			continue
+		}
+		fetchAll = false
+	}
 
-	// 	if val == "" {
-	// 		continue
-	// 	}
+	db := common.GetDB()
+	jobs := []JobModel{}
 
-	// 	fetchAll = false
-	// }
+	if fetchAll {
+		db.Find(&jobs)
+		ctx.JSON(jobs)
+		return nil
+	}
 
-	// client := heavyjob.GetClient(ctx)
-	// jobs, err := client.GetJobs()
-	// if err != nil {
-	// 	return fiber.NewError(http.StatusInternalServerError, "Internal server error")
-	// }
+	db.Find(&jobs, include)
+	return ctx.JSON(jobs)
+}
 
-	// if fetchAll {
-	// 	ctx.JSON(jobs)
-	// 	return nil
-	// }
-
-	// filteredJobs := []heavyjob.Job{}
-	// for _, job := range jobs {
-	// 	if common.Contains(include, job.ID) {
-	// 		filteredJobs = append(filteredJobs, job)
-	// 	}
-	// }
-
-	// ctx.JSON(filteredJobs)
-	return nil
+// GetJob returns a job by ID.
+func GetJob(ctx *fiber.Ctx) error {
+	ID := common.ImmutableString(ctx.Params("id"))
+	job, err := FindOne(JobModel{ID: ID})
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return common.NotFoundError(ctx)
+		}
+	}
+	return ctx.JSON(job)
 }
