@@ -1,6 +1,7 @@
 package heavyjob
 
 import (
+	"github.com/bk7987/timecards/common"
 	"github.com/bk7987/timecards/timecards"
 	"github.com/gofrs/uuid"
 )
@@ -23,6 +24,12 @@ type TimecardSummary struct {
 // TimecardSummaryResponse represents the shape of the response from the Heavyjob API.
 type TimecardSummaryResponse struct {
 	Summaries []TimecardSummary `json:"results"`
+	Metadata  SummaryMetadata   `json:"metadata"`
+}
+
+// SummaryMetadata represents the metadata portion of the HeavyJob API timecard summary response.
+type SummaryMetadata struct {
+	NextCursor string `json:"nextCursor"`
 }
 
 // CostCode represents the data for a specific cost code.
@@ -87,15 +94,42 @@ type Timecard struct {
 	Employees               []TimecardEmployee `json:"employees"`
 }
 
-// GetTimecardSummaries returns all timecard summaries within a date range.
-func (c *Client) GetTimecardSummaries(querystring string) ([]TimecardSummary, error) {
-	response := TimecardSummaryResponse{}
-	path := "/timeCardInfo" + querystring
-	if _, err := c.get(path, &response); err != nil {
+// TimecardFilters represents the filters that can be applied when fetching timecards from the HeavyJob API.
+type TimecardFilters struct {
+	JobID         string `url:"jobId,omitempty"`
+	ForemanID     string `url:"foremanId,omitempty"`
+	EmployeeID    string `url:"employeeId,omitempty"`
+	StartDate     string `url:"startDate,omitempty"`
+	EndDate       string `url:"endDate,omitempty"`
+	ModifiedSince string `url:"modifiedSince,omitempty"`
+	Cursor        string `url:"cursor,omitempty"`
+}
+
+// GetTimecardSummaries recursively returns all timecard summaries within a date range.
+func (c *Client) GetTimecardSummaries(filters TimecardFilters) ([]TimecardSummary, error) {
+	querystring, err := common.BuildQuery(filters)
+	if err != nil {
 		return nil, err
 	}
 
-	return response.Summaries, nil
+	path := "/timeCardInfo" + querystring
+	response := TimecardSummaryResponse{}
+	if _, err := c.get(path, &response); err != nil {
+		return nil, err
+	}
+	summaries := response.Summaries
+
+	if response.Metadata.NextCursor != "" {
+		newFilters := filters
+		newFilters.Cursor = response.Metadata.NextCursor
+		nextSummaries, err := c.GetTimecardSummaries(newFilters)
+		if err != nil {
+			return nil, err
+		}
+		summaries = append(summaries, nextSummaries...)
+	}
+
+	return summaries, nil
 }
 
 // GetTimecard returns the data for a timecard with the specified ID.
@@ -120,13 +154,9 @@ func transformTimecards(hjTimecards []Timecard) []timecards.Timecard {
 			Date:                  tc.Date,
 			Revision:              tc.Revision,
 			IsApproved:            tc.IsApproved,
-			ApprovedByID:          tc.ApprovedByID,
 			IsReviewed:            tc.IsReviewed,
-			ReviewedByID:          tc.ReviewedByID,
 			IsAccepted:            tc.IsAccepted,
-			AcceptedByID:          tc.AcceptedByID,
 			IsRejected:            tc.IsRejected,
-			RejectedByID:          tc.RejectedByID,
 			SentToPayrollRevision: tc.SentToPayrollRevision,
 			SentToPayrollDateTime: tc.SentToPayrollDateTime,
 			LastModifiedDateTime:  tc.LastModifiedDateTime,

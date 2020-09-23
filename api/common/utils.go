@@ -2,6 +2,8 @@ package common
 
 import (
 	"errors"
+	"strconv"
+	"time"
 
 	"github.com/gofiber/fiber/v2/utils"
 	"github.com/google/go-querystring/query"
@@ -38,4 +40,34 @@ func GetFirstArg(args []string) (string, error) {
 		return args[0], nil
 	}
 	return "", errors.New("No arguments")
+}
+
+// TwoSundaysAgo returns the date that corresponds to two sundays ago, starting from the provided time.
+func TwoSundaysAgo(t time.Time) time.Time {
+	subDays := 7
+	if t.Weekday() == time.Sunday {
+		subDays = 14
+	}
+	sub := int(time.Sunday-t.Weekday()) - subDays
+	return t.AddDate(0, 0, sub)
+}
+
+// IsDate validates that a string matches YYYY-MM-DD and is a valid date.
+func IsDate(value interface{}) error {
+	s, _ := value.(string)
+	_, err := time.Parse("2006-01-02", s)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// IsBool validates that a string is a boolean value
+func IsBool(value interface{}) error {
+	s, _ := value.(string)
+	_, err := strconv.ParseBool(s)
+	if err != nil {
+		return err
+	}
+	return nil
 }

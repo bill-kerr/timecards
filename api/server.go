@@ -10,6 +10,7 @@ import (
 	"github.com/bk7987/timecards/jobs"
 	"github.com/bk7987/timecards/timecards"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/recover"
 	"gorm.io/gorm"
 )
 
@@ -34,6 +35,7 @@ func main() {
 	})
 
 	app := fiber.New()
+	app.Use(recover.New())
 	api := app.Group("/api")
 
 	v1 := api.Group("/v1", config.SetConfig(), heavyjob.SetClient())
@@ -42,6 +44,8 @@ func main() {
 	v1.Get("/employees", employees.GetEmployees)
 	v1.Get("/employees/:id", employees.GetEmployee)
 	v1.Patch("/employees/:id", employees.Update)
+	v1.Get("/timecards", timecards.GetTimecards)
+	v1.Get("/timecards/:id/timecardEmployees", timecards.GetTimecardEmployees)
 
 	app.Use(common.NotFoundHandler)
 

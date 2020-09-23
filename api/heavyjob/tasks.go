@@ -3,6 +3,7 @@ package heavyjob
 import (
 	"time"
 
+	"github.com/bk7987/timecards/common"
 	"github.com/bk7987/timecards/employees"
 	"github.com/bk7987/timecards/jobs"
 	"github.com/bk7987/timecards/timecards"
@@ -56,7 +57,9 @@ func (c *Client) refreshEmployees() error {
 
 // refreshTimecards refreshes all of the timecard data using the HeavyJob API.
 func (c *Client) refreshTimecards() error {
-	summaries, err := c.GetTimecardSummaries("?startDate=2020-09-23")
+	summaries, err := c.GetTimecardSummaries(TimecardFilters{
+		StartDate: common.TwoSundaysAgo(time.Now().Local()).Format("2006-01-02"),
+	})
 	if err != nil {
 		return err
 	}

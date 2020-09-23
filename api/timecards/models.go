@@ -10,18 +10,14 @@ type Timecard struct {
 	Date                  string             `json:"date"`
 	Revision              int                `json:"revision"`
 	IsApproved            bool               `json:"isApproved"`
-	ApprovedByID          string             `json:"approvedById"`
 	IsReviewed            bool               `json:"isReviewed"`
-	ReviewedByID          string             `json:"reviewedById"`
 	IsAccepted            bool               `json:"isAccepted"`
-	AcceptedByID          string             `json:"acceptedById"`
 	IsRejected            bool               `json:"isRejected"`
-	RejectedByID          string             `json:"rejectedById"`
 	SentToPayrollRevision int                `json:"sentToPayrollRevision"`
 	SentToPayrollDateTime string             `json:"sentToPayrollDateTime"`
 	LastModifiedDateTime  string             `json:"lastModifiedDateTime"`
-	TimecardCostCodes     []TimecardCostCode `json:"timecardCostCodes"`
-	TimecardEmployees     []TimecardEmployee `json:"timecardEmployees"`
+	TimecardCostCodes     []TimecardCostCode `json:"-"`
+	TimecardEmployees     []TimecardEmployee `json:"-"`
 	CreatedAt             int64              `json:"createdAt"`
 	UpdatedAt             int64              `json:"updatedAt"`
 }

@@ -1,35 +1,56 @@
 package timecards
 
-// SummaryFilters represents the fields available for filtering the timecard summary request results.
-type SummaryFilters struct {
-	JobID         string `url:"jobId,omitempty"`
-	ForemanID     string `url:"foremanId,omitempty"`
-	EmployeeID    string `url:"employeeId,omitempty"`
-	StartDate     string `url:"startDate,omitempty"`
-	EndDate       string `url:"endDate,omitempty"`
-	ModifiedSince string `url:"modifiedSince,omitempty"`
+import (
+	"log"
+
+	"github.com/bk7987/timecards/common"
+	"github.com/gofiber/fiber/v2"
+	"gorm.io/gorm"
+)
+
+// GetTimecards returns all timecards matching the given query parameters.
+func GetTimecards(ctx *fiber.Ctx) error {
+	queryvals := TimecardFilters{}
+	if err := ctx.QueryParser(&queryvals); err != nil {
+		return common.BadRequestError(ctx, "Invalid query parameters")
+	}
+
+	if err := queryvals.Validate(); err != nil {
+		return common.BadRequestError(ctx, "Bad query params")
+	}
+
+	timecards := []Timecard{}
+	db := common.GetDB()
+
+	log.Println(queryvals)
+	db.Transaction(func(tx *gorm.DB) error {
+		if queryvals.StartDate != "" {
+			tx = tx.Where("date >= ?", queryvals.StartDate)
+		}
+		if queryvals.EndDate != "" {
+			tx = tx.Where("date <= ?", queryvals.EndDate)
+		}
+		tx.Order("date DESC").Find(&timecards, queryvals)
+		return nil
+	})
+
+	return ctx.JSON(timecards)
 }
 
-// GetTimecardSummaries returns timecard summaries for a given date range.
-// func GetTimecardSummaries(ctx *fiber.Ctx) error {
-// 	queryvals := SummaryFilters{}
-// 	if err := ctx.QueryParser(&queryvals); err != nil {
-// 		return common.BadRequestError(ctx, "Invalid query parameters")
-// 	}
+// GetTimecardEmployees returns all timecard employees matching the given query parameters.
+func GetTimecardEmployees(ctx *fiber.Ctx) error {
+	timecardID := common.ImmutableString(ctx.Params("id"))
+	employees := []TimecardEmployee{}
+	db := common.GetDB()
 
-// 	querystring, err := common.BuildQuery(queryvals)
-// 	if err != nil {
-// 		return common.BadRequestError(ctx, "Invalid query parameters")
-// 	}
+	if err := db.Preload("RegularHours").Preload("OvertimeHours").Preload("DoubletimeHours").Find(&employees, &TimecardEmployee{
+		TimecardID: timecardID,
+	}).Error; err != nil {
+		return err
+	}
 
-// 	client := heavyjob.GetClient(ctx)
-// 	summaries, err := client.GetTimecardSummaries(querystring)
-// 	if err != nil {
-// 		return common.InternalServerError(ctx)
-// 	}
-
-// 	return ctx.JSON(summaries)
-// }
+	return ctx.JSON(employees)
+}
 
 // GetTimecard returns a single timecard.
 // func GetTimecard(ctx *fiber.Ctx) error {
