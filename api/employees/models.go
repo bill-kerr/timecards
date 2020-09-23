@@ -2,12 +2,10 @@ package employees
 
 import (
 	"github.com/bk7987/timecards/common"
-	"gorm.io/gorm"
 )
 
 // Employee represents a single employee in the system.
 type Employee struct {
-	gorm.Model
 	ID                  string `gorm:"primary_key" json:"id"`
 	Name                string `json:"name"`
 	IsForeman           bool   `gorm:"default:false" json:"isForeman"`

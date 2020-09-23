@@ -27,9 +27,10 @@ func main() {
 	db := common.InitDB(c.PGConnString)
 	migrate(db)
 	heavyjob.ScheduleRefresh(heavyjob.ScheduleConfig{
-		HCSSTokenUpdateInterval: c.HCSSTokenRefreshInt,
-		EmployeeUpdateInterval:  c.EmployeeRefreshInt,
-		JobUpdateInterval:       c.JobRefreshInt,
+		HCSSTokenRefreshInterval: c.HCSSTokenRefreshInt,
+		EmployeeRefreshInterval:  c.EmployeeRefreshInt,
+		JobRefreshInterval:       c.JobRefreshInt,
+		TimecardRefreshInterval:  c.TimecardRefreshInt,
 	})
 
 	app := fiber.New()
@@ -38,9 +39,6 @@ func main() {
 	v1 := api.Group("/v1", config.SetConfig(), heavyjob.SetClient())
 	v1.Get("/jobs", jobs.GetJobs)
 	v1.Get("/jobs/:id", jobs.GetJob)
-	v1.Get("/summaries", timecards.GetTimecardSummaries)
-	v1.Get("/timecards/:id", timecards.GetTimecard)
-	v1.Get("/timecards", timecards.GetTimecards)
 	v1.Get("/employees", employees.GetEmployees)
 	v1.Get("/employees/:id", employees.GetEmployee)
 	v1.Patch("/employees/:id", employees.Update)

@@ -1,13 +1,9 @@
 package jobs
 
-import (
-	"github.com/bk7987/timecards/common"
-	"gorm.io/gorm"
-)
+import "github.com/bk7987/timecards/common"
 
 // Job is the database representation of a job.
 type Job struct {
-	gorm.Model
 	ID          string `gorm:"primary_key" json:"id"`
 	JobNumber   string `json:"jobNumber"`
 	Description string `json:"description"`

@@ -24,6 +24,7 @@ type Config struct {
 	PGConnString        string
 	JobRefreshInt       uint64
 	EmployeeRefreshInt  uint64
+	TimecardRefreshInt  uint64
 }
 
 // Init initializes the environmental variables defined in the Config struct.
@@ -52,6 +53,7 @@ func GetConfig() *Config {
 		PGConnString:        PGConnString(),
 		JobRefreshInt:       JobRefreshInt(),
 		EmployeeRefreshInt:  EmployeeRefreshInt(),
+		TimecardRefreshInt:  TimecardRefreshInt(),
 	}
 }
 
@@ -140,4 +142,9 @@ func JobRefreshInt() uint64 {
 // EmployeeRefreshInt returns the time in minutes between data refresh calls to the HeavyJob API from the EMPLOYEE_REFRESH_INT env variable.
 func EmployeeRefreshInt() uint64 {
 	return strToUint64(get("EMPLOYEE_REFRESH_INT"))
+}
+
+// TimecardRefreshInt returns the time in minutes between data refresh calls to the HeavyJob API from the TIMECARD_REFRESH_INT env varaible.
+func TimecardRefreshInt() uint64 {
+	return strToUint64(get("TIMECARD_REFRESH_INT"))
 }

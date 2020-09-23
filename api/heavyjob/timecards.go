@@ -1,5 +1,10 @@
 package heavyjob
 
+import (
+	"github.com/bk7987/timecards/timecards"
+	"github.com/gofrs/uuid"
+)
+
 // TimecardSummary represents the summary data for a specific timecard.
 type TimecardSummary struct {
 	ID                          string `json:"id"`
@@ -102,4 +107,83 @@ func (c *Client) GetTimecard(ID string) (Timecard, error) {
 	}
 
 	return timecard, nil
+}
+
+// transformTimecards transforms timecards from HeavyJob's API to new Timecard models
+func transformTimecards(hjTimecards []Timecard) []timecards.Timecard {
+	transformed := []timecards.Timecard{}
+	for _, tc := range hjTimecards {
+		transformed = append(transformed, timecards.Timecard{
+			ID:                    tc.ID,
+			JobID:                 tc.JobID,
+			ForemanID:             tc.ForemanID,
+			Date:                  tc.Date,
+			Revision:              tc.Revision,
+			IsApproved:            tc.IsApproved,
+			ApprovedByID:          tc.ApprovedByID,
+			IsReviewed:            tc.IsReviewed,
+			ReviewedByID:          tc.ReviewedByID,
+			IsAccepted:            tc.IsAccepted,
+			AcceptedByID:          tc.AcceptedByID,
+			IsRejected:            tc.IsRejected,
+			RejectedByID:          tc.RejectedByID,
+			SentToPayrollRevision: tc.SentToPayrollRevision,
+			SentToPayrollDateTime: tc.SentToPayrollDateTime,
+			LastModifiedDateTime:  tc.LastModifiedDateTime,
+			TimecardCostCodes:     transformCostCodes(tc.CostCodes, tc.ID),
+			TimecardEmployees:     transformTimecardEmployees(tc.Employees, tc.ID),
+		})
+	}
+	return transformed
+}
+
+// transformCostCodes transforms cost codes from HeavyJob's API to new TimecardCostCode objects
+func transformCostCodes(hjCostCodes []CostCode, timecardID string) []timecards.TimecardCostCode {
+	transformed := []timecards.TimecardCostCode{}
+	for _, cc := range hjCostCodes {
+		transformed = append(transformed, timecards.TimecardCostCode{
+			ID:          cc.TimecardCostCodeID,
+			TimecardID:  timecardID,
+			Code:        cc.Code,
+			Description: cc.Description,
+			Quantity:    cc.Quantity,
+			Unit:        cc.Unit,
+		})
+	}
+	return transformed
+}
+
+// transformTimecardEmployees transforms TimecardEmployees from HeavyJob's API to new TimecardEmployee objects.
+func transformTimecardEmployees(hjEmployees []TimecardEmployee, timecardID string) []timecards.TimecardEmployee {
+	transformed := []timecards.TimecardEmployee{}
+	for _, em := range hjEmployees {
+		transformed = append(transformed, timecards.TimecardEmployee{
+			ID:              em.TimecardEmployeeID,
+			TimecardID:      timecardID,
+			EmployeeID:      em.EmployeeID,
+			RegularHours:    transformEmployeeHours(em.RegularHours, em.TimecardEmployeeID),
+			OvertimeHours:   transformEmployeeHours(em.OvertimeHours, em.TimecardEmployeeID),
+			DoubletimeHours: transformEmployeeHours(em.DoubletimeHours, em.TimecardEmployeeID),
+		})
+	}
+	return transformed
+}
+
+// transformEmployeeHours transforms EmployeeHours from HeavyJob's API to new EmployeeHour objects.
+func transformEmployeeHours(hjHours []EmployeeHours, tcEmployeeID string) []timecards.EmployeeHours {
+	transformed := []timecards.EmployeeHours{}
+	for _, hours := range hjHours {
+		id, err := uuid.NewV4()
+		if err != nil {
+			continue
+		}
+		transformed = append(transformed, timecards.EmployeeHours{
+			ID:                 id.String(),
+			TimecardEmployeeID: tcEmployeeID,
+			Hours:              hours.Hours,
+			TagCode:            hours.TagCode,
+			TimecardCostCodeID: hours.TimecardCostCodeID,
+		})
+	}
+	return transformed
 }
