@@ -53,7 +53,12 @@ func GetTimecard(ctx *fiber.Ctx) error {
 	ID := common.ImmutableString(ctx.Params("id"))
 	timecard, err := FindOneTimecard(Timecard{ID: ID})
 	if err != nil {
-		common.NotFoundError(ctx)
+		return common.NotFoundError(ctx)
 	}
 	return ctx.JSON(timecard)
+}
+
+// GetEmployeeHours
+func GetEmployeeHours(ctx *fiber.Ctx) error {
+	return nil
 }

@@ -47,6 +47,7 @@ func main() {
 	v1.Get("/timecards", timecards.GetTimecards)
 	v1.Get("/timecards/:id", timecards.GetTimecard)
 	v1.Get("/timecards/:id/timecardEmployees", timecards.GetTimecardEmployees)
+	v1.Get("/employeeHours", timecards.GetEmployeeHours)
 
 	app.Use(common.NotFoundHandler)
 

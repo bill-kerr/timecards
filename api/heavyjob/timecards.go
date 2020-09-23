@@ -191,16 +191,16 @@ func transformTimecardEmployees(hjEmployees []TimecardEmployee, timecardID strin
 			ID:              em.TimecardEmployeeID,
 			TimecardID:      timecardID,
 			EmployeeID:      em.EmployeeID,
-			RegularHours:    transformEmployeeHours(em.RegularHours, em.TimecardEmployeeID),
-			OvertimeHours:   transformEmployeeHours(em.OvertimeHours, em.TimecardEmployeeID),
-			DoubletimeHours: transformEmployeeHours(em.DoubletimeHours, em.TimecardEmployeeID),
+			RegularHours:    transformEmployeeHours(em.RegularHours, em.TimecardEmployeeID, "regular"),
+			OvertimeHours:   transformEmployeeHours(em.OvertimeHours, em.TimecardEmployeeID, "overtime"),
+			DoubletimeHours: transformEmployeeHours(em.DoubletimeHours, em.TimecardEmployeeID, "doubletime"),
 		})
 	}
 	return transformed
 }
 
 // transformEmployeeHours transforms EmployeeHours from HeavyJob's API to new EmployeeHour objects.
-func transformEmployeeHours(hjHours []EmployeeHours, tcEmployeeID string) []timecards.EmployeeHours {
+func transformEmployeeHours(hjHours []EmployeeHours, tcEmployeeID string, hoursType string) []timecards.EmployeeHours {
 	transformed := []timecards.EmployeeHours{}
 	for _, hours := range hjHours {
 		id, err := uuid.NewV4()
@@ -211,6 +211,7 @@ func transformEmployeeHours(hjHours []EmployeeHours, tcEmployeeID string) []time
 			ID:                 id.String(),
 			TimecardEmployeeID: tcEmployeeID,
 			Hours:              hours.Hours,
+			Type:               hoursType,
 			TagCode:            hours.TagCode,
 			TimecardCostCodeID: hours.TimecardCostCodeID,
 		})

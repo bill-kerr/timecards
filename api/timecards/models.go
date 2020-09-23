@@ -51,6 +51,7 @@ type EmployeeHours struct {
 	ID                 string  `gorm:"primary_key" json:"id"`
 	TimecardEmployeeID string  `json:"timecardEmployeeID"`
 	Hours              float32 `json:"hours"`
+	Type               string  `json:"type"`
 	TagCode            string  `json:"tagCode"`
 	TimecardCostCodeID string  `json:"timecardCostCodeId"`
 	CreatedAt          int64   `json:"createdAt"`
