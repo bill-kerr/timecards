@@ -1,8 +1,6 @@
 package timecards
 
 import (
-	"log"
-
 	"github.com/bk7987/timecards/common"
 	"github.com/gofiber/fiber/v2"
 	"gorm.io/gorm"
@@ -22,7 +20,6 @@ func GetTimecards(ctx *fiber.Ctx) error {
 	timecards := []Timecard{}
 	db := common.GetDB()
 
-	log.Println(queryvals)
 	db.Transaction(func(tx *gorm.DB) error {
 		if queryvals.StartDate != "" {
 			tx = tx.Where("date >= ?", queryvals.StartDate)
@@ -30,8 +27,7 @@ func GetTimecards(ctx *fiber.Ctx) error {
 		if queryvals.EndDate != "" {
 			tx = tx.Where("date <= ?", queryvals.EndDate)
 		}
-		tx.Order("date DESC").Find(&timecards, queryvals)
-		return nil
+		return tx.Order("date DESC").Find(&timecards, queryvals).Error
 	})
 
 	return ctx.JSON(timecards)
@@ -52,45 +48,12 @@ func GetTimecardEmployees(ctx *fiber.Ctx) error {
 	return ctx.JSON(employees)
 }
 
-// GetTimecard returns a single timecard.
-// func GetTimecard(ctx *fiber.Ctx) error {
-// 	ID := common.ImmutableString(ctx.Params("id"))
-
-// 	client := heavyjob.GetClient(ctx)
-// 	timecard, err := client.GetTimecard(ID)
-// 	if err != nil {
-// 		return common.InternalServerError(ctx)
-// 	}
-
-// 	return ctx.JSON(timecard)
-// }
-
-// GetTimecards returns timecards within a specific date range.
-// func GetTimecards(ctx *fiber.Ctx) error {
-// 	queryvals := SummaryFilters{}
-// 	if err := ctx.QueryParser(&queryvals); err != nil {
-// 		return common.BadRequestError(ctx, "Invalid query parameters")
-// 	}
-
-// 	querystring, err := common.BuildQuery(queryvals)
-// 	if err != nil {
-// 		return common.BadRequestError(ctx, "Invalid query parameters")
-// 	}
-
-// 	client := heavyjob.GetClient(ctx)
-// 	summaries, err := client.GetTimecardSummaries(querystring)
-// 	if err != nil {
-// 		return common.InternalServerError(ctx)
-// 	}
-
-// 	timecards := []heavyjob.Timecard{}
-// 	for _, summary := range summaries {
-// 		timecard, err := client.GetTimecard(summary.ID)
-// 		if err != nil {
-// 			return common.InternalServerError(ctx)
-// 		}
-// 		timecards = append(timecards, timecard)
-// 	}
-
-// 	return ctx.JSON(timecards)
-// }
+// GetTimecard returns a single timecard matching the ID in the URL parameter.
+func GetTimecard(ctx *fiber.Ctx) error {
+	ID := common.ImmutableString(ctx.Params("id"))
+	timecard, err := FindOneTimecard(Timecard{ID: ID})
+	if err != nil {
+		common.NotFoundError(ctx)
+	}
+	return ctx.JSON(timecard)
+}

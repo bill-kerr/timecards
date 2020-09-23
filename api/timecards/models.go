@@ -57,6 +57,14 @@ type EmployeeHours struct {
 	UpdatedAt          int64   `json:"updatedAt"`
 }
 
+// FindOneTimecard finds the first record in the database matching the given condition.
+func FindOneTimecard(condition Timecard) (Timecard, error) {
+	db := common.GetDB()
+	var tc Timecard
+	err := db.Where(condition).First(&tc).Error
+	return tc, err
+}
+
 // UpdateOrSaveTimecard either updates an existing Timecard or saves a new one.
 func UpdateOrSaveTimecard(tc Timecard) error {
 	db := common.GetDB()

@@ -45,6 +45,7 @@ func main() {
 	v1.Get("/employees/:id", employees.GetEmployee)
 	v1.Patch("/employees/:id", employees.Update)
 	v1.Get("/timecards", timecards.GetTimecards)
+	v1.Get("/timecards/:id", timecards.GetTimecard)
 	v1.Get("/timecards/:id/timecardEmployees", timecards.GetTimecardEmployees)
 
 	app.Use(common.NotFoundHandler)
