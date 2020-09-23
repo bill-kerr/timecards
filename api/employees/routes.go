@@ -11,7 +11,7 @@ import (
 // GetEmployees returns all employees in the company.
 func GetEmployees(ctx *fiber.Ctx) error {
 	db := common.GetDB()
-	employees := []EmployeeModel{}
+	employees := []Employee{}
 	db.Find(&employees)
 	return ctx.JSON(employees)
 }
@@ -19,7 +19,7 @@ func GetEmployees(ctx *fiber.Ctx) error {
 // GetEmployee returns the employee with the matching ID.
 func GetEmployee(ctx *fiber.Ctx) error {
 	ID := common.ImmutableString(ctx.Params("id"))
-	employee, err := FindOne(EmployeeModel{ID: ID})
+	employee, err := FindOne(Employee{ID: ID})
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return common.NotFoundError(ctx)
@@ -31,13 +31,13 @@ func GetEmployee(ctx *fiber.Ctx) error {
 // Update finds and edits an existing employee.
 func Update(ctx *fiber.Ctx) error {
 	ID := common.ImmutableString(ctx.Params("id"))
-	employee := EmployeeModel{}
+	employee := Employee{}
 	if err := ctx.BodyParser(employee); err != nil {
 		return common.BadRequestError(ctx, err.Error())
 	}
 
 	db := common.GetDB()
-	tx := db.Where(EmployeeModel{ID: ID}).Updates(&employee)
+	tx := db.Where(Employee{ID: ID}).Updates(&employee)
 	if tx.Error != nil {
 		return tx.Error
 	}

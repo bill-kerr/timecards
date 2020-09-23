@@ -19,8 +19,8 @@ func (c *Client) GetJobs() ([]Job, error) {
 }
 
 // Transform translates the HeavyJob API job object to the Timecards job model.
-func (j *Job) Transform() jobs.JobModel {
-	return jobs.JobModel{
+func (j *Job) Transform() jobs.Job {
+	return jobs.Job{
 		ID:          j.ID,
 		Description: j.Description,
 		JobNumber:   j.Code,
@@ -28,10 +28,10 @@ func (j *Job) Transform() jobs.JobModel {
 }
 
 // transformJobs returns a slice of transformed Job models.
-func transformJobs(hjJobs []Job) []jobs.JobModel {
-	transformed := []jobs.JobModel{}
+func transformJobs(hjJobs []Job) []jobs.Job {
+	transformed := []jobs.Job{}
 	for _, job := range hjJobs {
-		transformed = append(transformed, jobs.JobModel{
+		transformed = append(transformed, jobs.Job{
 			ID:          job.ID,
 			Description: job.Description,
 			JobNumber:   job.Code,

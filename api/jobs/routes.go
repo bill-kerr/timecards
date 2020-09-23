@@ -25,7 +25,7 @@ func GetJobs(ctx *fiber.Ctx) error {
 	}
 
 	db := common.GetDB()
-	jobs := []JobModel{}
+	jobs := []Job{}
 
 	if fetchAll {
 		db.Find(&jobs)
@@ -40,7 +40,7 @@ func GetJobs(ctx *fiber.Ctx) error {
 // GetJob returns a job by ID.
 func GetJob(ctx *fiber.Ctx) error {
 	ID := common.ImmutableString(ctx.Params("id"))
-	job, err := FindOne(JobModel{ID: ID})
+	job, err := FindOne(Job{ID: ID})
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return common.NotFoundError(ctx)

@@ -14,8 +14,12 @@ import (
 )
 
 func migrate(db *gorm.DB) {
-	db.AutoMigrate(&jobs.JobModel{})
-	db.AutoMigrate(&employees.EmployeeModel{})
+	db.AutoMigrate(&jobs.Job{})
+	db.AutoMigrate(&employees.Employee{})
+	db.AutoMigrate(&timecards.Timecard{})
+	db.AutoMigrate(&timecards.TimecardCostCode{})
+	db.AutoMigrate(&timecards.TimecardEmployee{})
+	db.AutoMigrate(&timecards.EmployeeHours{})
 }
 
 func main() {

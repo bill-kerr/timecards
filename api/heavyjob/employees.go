@@ -33,10 +33,10 @@ func (c *Client) GetEmployees() ([]Employee, error) {
 }
 
 // transformEmployees returns a slice of transformed Employee models.
-func transformEmployees(hjEmployees []Employee) []employees.EmployeeModel {
-	transformed := []employees.EmployeeModel{}
+func transformEmployees(hjEmployees []Employee) []employees.Employee {
+	transformed := []employees.Employee{}
 	for _, employee := range hjEmployees {
-		transformed = append(transformed, employees.EmployeeModel{
+		transformed = append(transformed, employees.Employee{
 			ID:                  employee.ID,
 			Name:                employee.getName(),
 			PayClassCode:        employee.DefaultPayClassCode,

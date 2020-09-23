@@ -2,10 +2,12 @@ package jobs
 
 import (
 	"github.com/bk7987/timecards/common"
+	"gorm.io/gorm"
 )
 
-// JobModel is the database representation of a job.
-type JobModel struct {
+// Job is the database representation of a job.
+type Job struct {
+	gorm.Model
 	ID          string `gorm:"primary_key" json:"id"`
 	JobNumber   string `json:"jobNumber"`
 	Description string `json:"description"`
@@ -14,31 +16,31 @@ type JobModel struct {
 }
 
 // FindOne returns the first job that matches the given criteria.
-func FindOne(condition JobModel) (JobModel, error) {
+func FindOne(condition Job) (Job, error) {
 	db := common.GetDB()
-	var job JobModel
+	var job Job
 	err := db.Where(condition).First(&job).Error
 	return job, err
 }
 
-// Save saves the provided JobModel to the database.
-func Save(job JobModel) error {
+// Save saves the provided Job to the database.
+func Save(job Job) error {
 	db := common.GetDB()
 	tx := db.Create(&job)
 	return tx.Error
 }
 
-// SaveMany saves multiple JobModels to the database.
-func SaveMany(job []JobModel) error {
+// SaveMany saves multiple Jobs to the database.
+func SaveMany(job []Job) error {
 	db := common.GetDB()
 	tx := db.Create(&job)
 	return tx.Error
 }
 
 // UpdateOrSave updates the matching job, or creates it if it does not exist.
-func UpdateOrSave(job JobModel) error {
+func UpdateOrSave(job Job) error {
 	db := common.GetDB()
-	tx := db.Model(&JobModel{}).Where(JobModel{ID: job.ID}).Updates(&job)
+	tx := db.Model(&Job{}).Where(Job{ID: job.ID}).Updates(&job)
 	if tx.RowsAffected == 0 {
 		return db.Create(&job).Error
 	}
@@ -46,7 +48,7 @@ func UpdateOrSave(job JobModel) error {
 }
 
 // UpdateOrSaveMany updates or saves many jobs.
-func UpdateOrSaveMany(jobs []JobModel) error {
+func UpdateOrSaveMany(jobs []Job) error {
 	var err error
 	for _, job := range jobs {
 		err = UpdateOrSave(job)

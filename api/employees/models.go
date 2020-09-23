@@ -2,10 +2,12 @@ package employees
 
 import (
 	"github.com/bk7987/timecards/common"
+	"gorm.io/gorm"
 )
 
-// EmployeeModel represents a single employee in the system.
-type EmployeeModel struct {
+// Employee represents a single employee in the system.
+type Employee struct {
+	gorm.Model
 	ID                  string `gorm:"primary_key" json:"id"`
 	Name                string `json:"name"`
 	IsForeman           bool   `gorm:"default:false" json:"isForeman"`
@@ -17,17 +19,17 @@ type EmployeeModel struct {
 }
 
 // FindOne returns the first job that matches the given criteria.
-func FindOne(condition EmployeeModel) (EmployeeModel, error) {
+func FindOne(condition Employee) (Employee, error) {
 	db := common.GetDB()
-	var employee EmployeeModel
+	var employee Employee
 	err := db.Where(condition).First(&employee).Error
 	return employee, err
 }
 
 // UpdateOrSave updates the matching employee, or creates it if it does not exist.
-func UpdateOrSave(employee EmployeeModel) error {
+func UpdateOrSave(employee Employee) error {
 	db := common.GetDB()
-	tx := db.Model(&EmployeeModel{}).Where(EmployeeModel{ID: employee.ID}).Updates(&employee)
+	tx := db.Model(&Employee{}).Where(Employee{ID: employee.ID}).Updates(&employee)
 	if tx.RowsAffected == 0 {
 		return db.Create(&employee).Error
 	}
@@ -35,7 +37,7 @@ func UpdateOrSave(employee EmployeeModel) error {
 }
 
 // UpdateOrSaveMany updates or saves many employees.
-func UpdateOrSaveMany(employees []EmployeeModel) error {
+func UpdateOrSaveMany(employees []Employee) error {
 	var err error
 	for _, employee := range employees {
 		err = UpdateOrSave(employee)
