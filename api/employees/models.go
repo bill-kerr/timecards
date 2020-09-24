@@ -16,7 +16,7 @@ type Employee struct {
 	UpdatedAt           int64  `json:"updatedAt"`
 }
 
-// FindOne returns the first job that matches the given criteria.
+// FindOne returns the first employee that matches the given criteria.
 func FindOne(condition Employee) (Employee, error) {
 	db := common.GetDB()
 	var employee Employee

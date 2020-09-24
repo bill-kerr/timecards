@@ -65,6 +65,24 @@ type EmployeeHours struct {
 	Hours              float32 `json:"hours"`
 }
 
+// TimecardEquipment represents the data for a piece of equipment on a given timecard.
+type TimecardEquipment struct {
+	TimecardEquipmentID      string           `json:"timeCardEquipmentId"`
+	EquipmentID              string           `json:"equipmentId"`
+	EquipmentCode            string           `json:"equipmentCode"`
+	EquipmentDescription     string           `json:"equipmentDescription"`
+	LinkedTimecardEmployeeID string           `json:"linkedTimeCardEmployeeId"`
+	TotalHours               []EquipmentHours `json:"totalHours"`
+	OwnershipHours           []EquipmentHours `json:"ownershipHours"`
+	OperatingHours           []EquipmentHours `json:"operatingHours"`
+}
+
+// EquipmentHours represents the data for equipment hours on a given timecard.
+type EquipmentHours struct {
+	TimecardCostCodeID string  `json:"timeCardCostCodeId"`
+	Hours              float32 `json:"hours"`
+}
+
 // Timecard represents the data for a specific timecard.
 type Timecard struct {
 	ID                      string             `json:"id"`
@@ -203,17 +221,49 @@ func transformTimecardEmployees(hjEmployees []TimecardEmployee, timecardID strin
 func transformEmployeeHours(hjHours []EmployeeHours, tcEmployeeID string, hoursType string) []timecards.EmployeeHours {
 	transformed := []timecards.EmployeeHours{}
 	for _, hours := range hjHours {
-		id, err := uuid.NewV4()
+		ID, err := uuid.NewV4()
 		if err != nil {
 			continue
 		}
 		transformed = append(transformed, timecards.EmployeeHours{
-			ID:                 id.String(),
+			ID:                 ID.String(),
 			TimecardEmployeeID: tcEmployeeID,
 			Hours:              hours.Hours,
 			Type:               hoursType,
 			TagCode:            hours.TagCode,
 			TimecardCostCodeID: hours.TimecardCostCodeID,
+		})
+	}
+	return transformed
+}
+
+// transformTimecardEquipment transforms TimecardEquipment from HeavyJob's API to timecards.TimecardEquipment objects.
+func transformTimecardEquipment(hjEquipment []TimecardEquipment, timecardID string) []timecards.TimecardEquipment {
+	transformed := []timecards.TimecardEquipment{}
+	for _, eq := range hjEquipment {
+		transformed = append(transformed, timecards.TimecardEquipment{
+			ID:          eq.TimecardEquipmentID,
+			TimecardID:  timecardID,
+			EquipmentID: eq.EquipmentID,
+			Hours:       transformEquipmentHours(eq.TotalHours, eq.TimecardEquipmentID),
+		})
+	}
+	return transformed
+}
+
+// transformEquipmentHours transforms EquipmentHours from HeavyJob's API to timecard.EquipmentHours objects.
+func transformEquipmentHours(hjHours []EquipmentHours, tcEquipmentID string) []timecards.EquipmentHours {
+	transformed := []timecards.EquipmentHours{}
+	for _, hours := range hjHours {
+		ID, err := uuid.NewV4()
+		if err != nil {
+			continue
+		}
+		transformed = append(transformed, timecards.EquipmentHours{
+			ID:                  ID.String(),
+			TimecardEquipmentID: tcEquipmentID,
+			TimecardCostCodeID:  hours.TimecardCostCodeID,
+			Hours:               hours.Hours,
 		})
 	}
 	return transformed

@@ -5,6 +5,7 @@ import (
 
 	"github.com/bk7987/timecards/common"
 	"github.com/bk7987/timecards/employees"
+	"github.com/bk7987/timecards/equipment"
 	"github.com/bk7987/timecards/jobs"
 	"github.com/bk7987/timecards/timecards"
 	"github.com/go-co-op/gocron"
@@ -15,6 +16,7 @@ type ScheduleConfig struct {
 	HCSSTokenRefreshInterval uint64
 	JobRefreshInterval       uint64
 	EmployeeRefreshInterval  uint64
+	EquipmentRefreshInterval uint64
 	TimecardRefreshInterval  uint64
 }
 
@@ -28,7 +30,8 @@ func ScheduleRefresh(scheduleConfig ScheduleConfig) {
 	})
 	schedule.Every(scheduleConfig.JobRefreshInterval).Minutes().Do(client.refreshJobs)
 	schedule.Every(scheduleConfig.EmployeeRefreshInterval).Minutes().Do(client.refreshEmployees)
-	schedule.Every(scheduleConfig.TimecardRefreshInterval).StartImmediately().Minutes().Do(client.refreshTimecards)
+	schedule.Every(scheduleConfig.EquipmentRefreshInterval).Minutes().Do(client.refreshEquipment)
+	schedule.Every(scheduleConfig.TimecardRefreshInterval).Minutes().Do(client.refreshTimecards)
 
 	schedule.StartAsync()
 }
@@ -40,8 +43,7 @@ func (c *Client) refreshJobs() error {
 		return err
 	}
 
-	jobs.UpdateOrSaveMany(transformJobs(hjJobs))
-	return nil
+	return jobs.UpdateOrSaveMany(transformJobs(hjJobs))
 }
 
 // refreshEmployees refreshes all of the employees from the HeavyJob API.
@@ -51,8 +53,17 @@ func (c *Client) refreshEmployees() error {
 		return err
 	}
 
-	employees.UpdateOrSaveMany(transformEmployees(hjEmployees))
-	return nil
+	return employees.UpdateOrSaveMany(transformEmployees(hjEmployees))
+}
+
+// refreshEquipment refreshes all of the equipment from the HeavyJob API.
+func (c *Client) refreshEquipment() error {
+	hjEquipment, err := c.GetEquipment()
+	if err != nil {
+		return err
+	}
+
+	return equipment.UpdateOrSaveMany(transformEquipment(hjEquipment))
 }
 
 // refreshTimecards refreshes all of the timecard data using the HeavyJob API.

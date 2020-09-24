@@ -6,6 +6,7 @@ import (
 	"github.com/bk7987/timecards/common"
 	"github.com/bk7987/timecards/config"
 	"github.com/bk7987/timecards/employees"
+	"github.com/bk7987/timecards/equipment"
 	"github.com/bk7987/timecards/heavyjob"
 	"github.com/bk7987/timecards/jobs"
 	"github.com/bk7987/timecards/timecards"
@@ -17,10 +18,13 @@ import (
 func migrate(db *gorm.DB) {
 	db.AutoMigrate(&jobs.Job{})
 	db.AutoMigrate(&employees.Employee{})
+	db.AutoMigrate(&equipment.Equipment{})
 	db.AutoMigrate(&timecards.Timecard{})
 	db.AutoMigrate(&timecards.TimecardCostCode{})
 	db.AutoMigrate(&timecards.TimecardEmployee{})
 	db.AutoMigrate(&timecards.EmployeeHours{})
+	db.AutoMigrate(&timecards.TimecardEquipment{})
+	db.AutoMigrate(&timecards.EquipmentHours{})
 }
 
 func main() {
@@ -30,6 +34,7 @@ func main() {
 	heavyjob.ScheduleRefresh(heavyjob.ScheduleConfig{
 		HCSSTokenRefreshInterval: c.HCSSTokenRefreshInt,
 		EmployeeRefreshInterval:  c.EmployeeRefreshInt,
+		EquipmentRefreshInterval: c.EquipmentRefreshInt,
 		JobRefreshInterval:       c.JobRefreshInt,
 		TimecardRefreshInterval:  c.TimecardRefreshInt,
 	})
@@ -47,7 +52,8 @@ func main() {
 	v1.Get("/timecards", timecards.GetTimecards)
 	v1.Get("/timecards/:id", timecards.GetTimecard)
 	v1.Get("/timecards/:id/timecardEmployees", timecards.GetTimecardEmployees)
-	v1.Get("/employeeHours", timecards.GetEmployeeHours)
+	v1.Get("/equipment", equipment.GetAllEquipment)
+	v1.Get("/equipment/:id", equipment.GetEquipment)
 
 	app.Use(common.NotFoundHandler)
 

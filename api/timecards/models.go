@@ -58,6 +58,26 @@ type EmployeeHours struct {
 	UpdatedAt          int64   `json:"updatedAt"`
 }
 
+// TimecardEquipment represents a piece of equipment on a single timecard.
+type TimecardEquipment struct {
+	ID          string           `gorm:"primary_key" json:"id"`
+	TimecardID  string           `json:"timecardId"`
+	EquipmentID string           `json:"equipmentId"`
+	Hours       []EquipmentHours `json:"hours"`
+	CreatedAt   int64            `json:"createdAt"`
+	UpdatedAt   int64            `json:"updatedAt"`
+}
+
+// EquipmentHours represents all of the hours for a single piece of equipment on a specific timecard.
+type EquipmentHours struct {
+	ID                  string  `gorm:"primary_key" json:"id"`
+	TimecardEquipmentID string  `json:"timecardEquipmentId"`
+	Hours               float32 `json:"hours"`
+	TimecardCostCodeID  string  `json:"timecardCostCodeId"`
+	CreatedAt           int64   `json:"createdAt"`
+	UpdatedAt           int64   `json:"updatedAt"`
+}
+
 // FindOneTimecard finds the first record in the database matching the given condition.
 func FindOneTimecard(condition Timecard) (Timecard, error) {
 	db := common.GetDB()
