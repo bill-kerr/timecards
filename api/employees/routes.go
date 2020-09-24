@@ -10,9 +10,23 @@ import (
 
 // GetEmployees returns all employees in the company.
 func GetEmployees(ctx *fiber.Ctx) error {
-	db := common.GetDB()
+	queryvals := EmployeeFilters{}
+	if err := ctx.QueryParser(&queryvals); err != nil {
+		return common.BadRequestError(ctx, "Invalid query parameters")
+	}
+
+	if err := queryvals.Validate(); err != nil {
+		return common.BadRequestError(ctx, "Bad query params")
+	}
+
 	employees := []Employee{}
-	db.Find(&employees)
+	db := common.GetDB()
+	if (EmployeeFilters{}) == queryvals {
+		db.Find(&employees)
+	} else {
+		db.Find(&employees, queryvals)
+	}
+
 	return ctx.JSON(employees)
 }
 
@@ -31,13 +45,24 @@ func GetEmployee(ctx *fiber.Ctx) error {
 // Update finds and edits an existing employee.
 func Update(ctx *fiber.Ctx) error {
 	ID := common.ImmutableString(ctx.Params("id"))
-	employee := Employee{}
-	if err := ctx.BodyParser(employee); err != nil {
-		return common.BadRequestError(ctx, err.Error())
+	employee, err := FindOne(Employee{ID: ID})
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return common.NotFoundError(ctx)
+		}
 	}
 
+	updates := UpdateDTO{}
+	if err := ctx.BodyParser(&updates); err != nil {
+		return common.BadRequestError(ctx, err.Error())
+	}
+	if err := updates.Validate(); err != nil {
+		return common.BadRequestError(ctx, err.Error())
+	}
+	updates.Bind(&employee)
+
 	db := common.GetDB()
-	tx := db.Where(Employee{ID: ID}).Updates(&employee)
+	tx := db.Model(&employee).Updates(&employee)
 	if tx.Error != nil {
 		return tx.Error
 	}

@@ -27,13 +27,17 @@ func GetTimecards(ctx *fiber.Ctx) error {
 		if queryvals.EndDate != "" {
 			tx = tx.Where("date <= ?", queryvals.EndDate)
 		}
+		if (TimecardFilters{}) == queryvals {
+			return tx.Order("date DESC").Find(&timecards).Error
+		}
+
 		return tx.Order("date DESC").Find(&timecards, queryvals).Error
 	})
 
 	return ctx.JSON(timecards)
 }
 
-// GetTimecardEmployees returns all timecard employees matching the given query parameters.
+// GetTimecardEmployees returns timecard employees for the specified timecard.
 func GetTimecardEmployees(ctx *fiber.Ctx) error {
 	timecardID := common.ImmutableString(ctx.Params("id"))
 	employees := []TimecardEmployee{}
@@ -46,6 +50,21 @@ func GetTimecardEmployees(ctx *fiber.Ctx) error {
 	}
 
 	return ctx.JSON(employees)
+}
+
+// GetTimecardEquipment returns timecard equipment for the specified timecard.
+func GetTimecardEquipment(ctx *fiber.Ctx) error {
+	timecardID := common.ImmutableString(ctx.Params("id"))
+	equipment := []TimecardEquipment{}
+	db := common.GetDB()
+
+	if err := db.Preload("Hours").Find(&equipment, &TimecardEquipment{
+		TimecardID: timecardID,
+	}).Error; err != nil {
+		return err
+	}
+
+	return ctx.JSON(equipment)
 }
 
 // GetTimecard returns a single timecard matching the ID in the URL parameter.

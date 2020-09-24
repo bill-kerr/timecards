@@ -44,16 +44,21 @@ func main() {
 	api := app.Group("/api")
 
 	v1 := api.Group("/v1", config.SetConfig(), heavyjob.SetClient())
+
 	v1.Get("/jobs", jobs.GetJobs)
 	v1.Get("/jobs/:id", jobs.GetJob)
+
 	v1.Get("/employees", employees.GetEmployees)
 	v1.Get("/employees/:id", employees.GetEmployee)
 	v1.Patch("/employees/:id", employees.Update)
+
+	v1.Get("/equipment", equipment.GetAllEquipment)
+	v1.Get("/equipment/:id", equipment.GetEquipment)
+
 	v1.Get("/timecards", timecards.GetTimecards)
 	v1.Get("/timecards/:id", timecards.GetTimecard)
 	v1.Get("/timecards/:id/timecardEmployees", timecards.GetTimecardEmployees)
-	v1.Get("/equipment", equipment.GetAllEquipment)
-	v1.Get("/equipment/:id", equipment.GetEquipment)
+	v1.Get("/timecards/:id/timecardEquipment", timecards.GetTimecardEquipment)
 
 	app.Use(common.NotFoundHandler)
 
