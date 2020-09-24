@@ -24,16 +24,6 @@ func ImmutableString(str string) string {
 	return utils.ImmutableString(str)
 }
 
-// Contains checks if a given string is contained within the given slice.
-func Contains(slice []string, str string) bool {
-	for _, val := range slice {
-		if val == str {
-			return true
-		}
-	}
-	return false
-}
-
 // GetFirstArg returns the first element of a string array. Helpful for parsing optional string arguments.
 func GetFirstArg(args []string) (string, error) {
 	if len(args) > 0 {
