@@ -4,7 +4,7 @@ import { Equipment, EquipmentActionTypes, EQUIPMENT_FETCH_COMPLETE } from './typ
 
 const initialState: Dictionary<Equipment> = {};
 
-export const equipmentReducer = (state = initialState, action: EquipmentActionTypes) => {
+export const equipmentReducer = (state = initialState, action: EquipmentActionTypes): Dictionary<Equipment> => {
   switch (action.type) {
     case EQUIPMENT_FETCH_COMPLETE:
       return { ...state, ...mapKeys(action.equipment) };

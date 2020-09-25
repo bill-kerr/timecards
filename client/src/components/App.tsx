@@ -5,7 +5,7 @@ import { getEquipment } from '../store/equipment/actions';
 import { getJobs } from '../store/jobs/actions';
 import { getTimecards } from '../store/timecards/actions';
 import { filterDict, values } from '../utils';
-import { Foreman } from './Foreman';
+import { ForemanCard } from './ForemanCard';
 
 export const App: React.FC = () => {
   const dispatch = useTypedDispatch();
@@ -22,7 +22,7 @@ export const App: React.FC = () => {
   return (
     <>
       {values(foremen).map((foreman) => (
-        <Foreman foreman={foreman} timecards={values(timecards, (t) => t.foremanId === foreman.id)} />
+        <ForemanCard foreman={foreman} timecards={values(timecards, (t) => t.foremanId === foreman.id)} />
       ))}
     </>
   );

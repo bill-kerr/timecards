@@ -2,12 +2,12 @@ import React from 'react';
 import { Employee } from '../store/employees/types';
 import { Timecard } from '../store/timecards/types';
 
-interface ForemanProps {
+interface ForemanCardProps {
   foreman: Employee;
   timecards?: Timecard[];
 }
 
-export const Foreman: React.FC<ForemanProps> = ({ foreman, timecards = [] }) => {
+export const ForemanCard: React.FC<ForemanCardProps> = ({ foreman, timecards = [] }) => {
   return (
     <>
       <div>{foreman.name}</div>

@@ -4,7 +4,10 @@ import { Timecard, TimecardsActionTypes, TIMECARDS_FETCH_COMPLETE } from './type
 
 const initialState: Dictionary<Timecard> = {};
 
-export const timecardsReducer = (state = initialState, action: TimecardsActionTypes) => {
+export const timecardsReducer = (
+  state = initialState,
+  action: TimecardsActionTypes
+): Dictionary<Timecard> => {
   switch (action.type) {
     case TIMECARDS_FETCH_COMPLETE:
       return { ...state, ...mapKeys(action.timecards) };
