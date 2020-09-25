@@ -1,7 +1,11 @@
-export type Dictionary<T> = { [key: string]: T };
+import { Dictionary, Identifiable } from './types';
 
-export const mapKeys = <T extends object>(object: T[], iteratee: string): Dictionary<T> => {
+export const mapKeys = <T extends Identifiable>(list: T[]): Dictionary<T> => {
   const result: Dictionary<T> = {};
-  object.forEach((object) => (result[iteratee] = object));
+  list.forEach((item) => (result[item.id] = item));
   return result;
+};
+
+export const values = <T>(object: Dictionary<T>): T[] => {
+  return Object.values(object).map((item) => item);
 };

@@ -9,16 +9,24 @@ export interface Employee {
   updatedAt: number;
 }
 
-export const FETCH_EMPLOYEES_START = 'Employees:FetchStart';
-export const FETCH_EMPLOYEES_COMPLETE = 'Employees:FetchComplete';
+export const EMPLOYEES_FETCH_START = 'Employees:FetchStart';
+export const EMPLOYEES_FETCH_COMPLETE = 'Employees:FetchComplete';
+export const EMPLOYEES_FETCH_ERROR = 'Employees:FetchError';
 
 export interface IFetchEmployeesStartAction {
-  type: typeof FETCH_EMPLOYEES_START;
+  type: typeof EMPLOYEES_FETCH_START;
 }
 
 export interface IFetchEmployeesCompleteAction {
-  type: typeof FETCH_EMPLOYEES_COMPLETE;
+  type: typeof EMPLOYEES_FETCH_COMPLETE;
   employees: Employee[];
 }
 
-export type EmployeeActionTypes = IFetchEmployeesStartAction | IFetchEmployeesCompleteAction;
+export interface IFetchEmployeesErrorAction {
+  type: typeof EMPLOYEES_FETCH_ERROR;
+}
+
+export type EmployeeActionTypes =
+  | IFetchEmployeesStartAction
+  | IFetchEmployeesCompleteAction
+  | IFetchEmployeesErrorAction;
