@@ -3,12 +3,15 @@ import { Action, combineReducers } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { employeeReducer } from './employees/reducers';
 import { EmployeeActionTypes } from './employees/types';
+import { timecardsReducer } from './timecards/reducers';
+import { TimecardActionTypes } from './timecards/types';
 
 export const rootReducer = combineReducers({
   employees: employeeReducer,
+  timecards: timecardsReducer,
 });
 
-export type ActionTypes = EmployeeActionTypes;
+export type ActionTypes = EmployeeActionTypes | TimecardActionTypes;
 
 export type RootState = ReturnType<typeof rootReducer>;
 export const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;
