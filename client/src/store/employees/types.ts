@@ -5,8 +5,6 @@ export interface Employee {
   payClassCode: string;
   payClassDescription: string;
   payClassId: string;
-  createdAt: number;
-  updatedAt: number;
 }
 
 export const EMPLOYEES_FETCH_START = 'Employees:FetchStart';
@@ -43,7 +41,7 @@ export interface IEmployeesUpdateErrorAction {
   type: typeof EMPLOYEES_UPDATE_ERROR;
 }
 
-export type EmployeeActionTypes =
+export type EmployeesActionTypes =
   | IEmployeesFetchCompleteAction
   | IEmployeesFetchStartAction
   | IEmployeesFetchErrorAction

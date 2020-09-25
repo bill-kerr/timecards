@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { TIMECARDS_BASE_URL } from '../constants';
 import { Employee } from '../store/employees/types';
+import { Equipment } from '../store/equipment/types';
+import { Job } from '../store/jobs/types';
 import { Timecard } from '../store/timecards/types';
 
 const headers = {
@@ -15,6 +17,8 @@ export interface ITimecardsClient {
   getEmployees: () => Promise<Employee[]>;
   updateEmployee: (id: string, employee: Partial<Employee>) => Promise<Employee>;
   getTimecards: (startDate: string, endDate: string) => Promise<Timecard[]>;
+  getJobs: () => Promise<Job[]>;
+  getEquipment: () => Promise<Equipment[]>;
 }
 
 export const timecardsClient: ITimecardsClient = {
@@ -35,6 +39,16 @@ export const timecardsClient: ITimecardsClient = {
         endDate,
       },
     });
+    return res.data;
+  },
+
+  getJobs: async () => {
+    const res = await axiosClient.get<Job[]>('/jobs');
+    return res.data;
+  },
+
+  getEquipment: async () => {
+    const res = await axiosClient.get<Equipment[]>('/equipment');
     return res.data;
   },
 };

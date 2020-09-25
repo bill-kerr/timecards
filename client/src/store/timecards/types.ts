@@ -29,7 +29,7 @@ export interface ITimecardsFetchErrorAction {
   type: typeof TIMECARDS_FETCH_ERROR;
 }
 
-export type TimecardActionTypes =
+export type TimecardsActionTypes =
   | ITimecardsFetchStartAction
   | ITimecardsFetchCompleteAction
   | ITimecardsFetchErrorAction;
