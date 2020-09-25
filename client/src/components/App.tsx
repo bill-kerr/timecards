@@ -1,15 +1,16 @@
 import React, { useEffect } from 'react';
 import { useTypedDispatch, useTypedSelector } from '../store';
-import { getEmployees, updateEmployee } from '../store/employees/actions';
-import { Employee } from '../store/employees/types';
+import { getEmployees } from '../store/employees/actions';
 import { getEquipment } from '../store/equipment/actions';
 import { getJobs } from '../store/jobs/actions';
 import { getTimecards } from '../store/timecards/actions';
-import { values } from '../utils';
+import { filterDict, values } from '../utils';
+import { Foreman } from './Foreman';
 
 export const App: React.FC = () => {
   const dispatch = useTypedDispatch();
-  const employees = useTypedSelector((state) => state.employees);
+  const foremen = useTypedSelector((state) => filterDict(state.employees, (e) => e.isForeman));
+  const timecards = useTypedSelector((state) => filterDict(state.timecards, (t) => t.foremanId in foremen));
 
   useEffect(() => {
     dispatch(getEmployees());
@@ -18,20 +19,10 @@ export const App: React.FC = () => {
     dispatch(getEquipment());
   }, [dispatch]);
 
-  const handleClick = (employee: Employee) => {
-    dispatch(updateEmployee(employee.id, { isForeman: !employee.isForeman }));
-  };
-
   return (
     <>
-      {values(employees).map((employee) => (
-        <div
-          key={employee.id}
-          style={{ fontWeight: employee.isForeman ? 'bold' : 'normal' }}
-          onClick={() => handleClick(employee)}
-        >
-          {employee.name}
-        </div>
+      {values(foremen).map((foreman) => (
+        <Foreman foreman={foreman} timecards={values(timecards, (t) => t.foremanId === foreman.id)} />
       ))}
     </>
   );
