@@ -59,12 +59,13 @@ func Update(ctx *fiber.Ctx) error {
 	if err := updates.Validate(); err != nil {
 		return common.BadRequestError(ctx, err.Error())
 	}
-	updates.Bind(&employee)
 
 	db := common.GetDB()
-	tx := db.Model(&employee).Updates(&employee)
-	if tx.Error != nil {
-		return tx.Error
+	if employee.IsForeman != *updates.IsForeman {
+		tx := db.Model(&employee).Update("is_foreman", *updates.IsForeman)
+		if tx.Error != nil {
+			return tx.Error
+		}
 	}
 	return ctx.JSON(employee)
 }
