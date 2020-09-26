@@ -10,7 +10,9 @@ import { ForemanCard } from './ForemanCard';
 export const App: React.FC = () => {
   const dispatch = useTypedDispatch();
   const foremen = useTypedSelector((state) => filterDict(state.employees, (e) => e.isForeman));
-  const timecards = useTypedSelector((state) => filterDict(state.timecards, (t) => t.foremanId in foremen));
+  const timecards = useTypedSelector((state) =>
+    filterDict(state.timecards, (t) => t.foremanId in foremen)
+  );
 
   useEffect(() => {
     dispatch(getEmployees());
@@ -20,10 +22,15 @@ export const App: React.FC = () => {
   }, [dispatch]);
 
   return (
-    <>
-      {values(foremen).map((foreman) => (
-        <ForemanCard foreman={foreman} timecards={values(timecards, (t) => t.foremanId === foreman.id)} />
-      ))}
-    </>
+    <div className="px-6 mx-auto max-w-screen-xl font-display">
+      <div className="flex flex-wrap">
+        {values(foremen).map((foreman) => (
+          <ForemanCard
+            foreman={foreman}
+            timecards={values(timecards, (t) => t.foremanId === foreman.id)}
+          />
+        ))}
+      </div>
+    </div>
   );
 };

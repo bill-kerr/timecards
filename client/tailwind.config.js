@@ -5,8 +5,14 @@ module.exports = {
   },
   purge: [],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        display: ['Nunito'],
+      },
+    },
   },
-  variants: {},
+  variants: {
+    margin: ['responsive', 'first'],
+  },
   plugins: [],
 };

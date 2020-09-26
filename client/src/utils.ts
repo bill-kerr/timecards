@@ -1,9 +1,8 @@
-import toDate from 'date-fns/toDate';
-import formatDate from 'date-fns/format';
-import sub from 'date-fns/sub';
-import startOfWeek from 'date-fns/startOfWeek';
-import endOfWeek from 'date-fns/endOfWeek';
-import { DateRange, Dictionary, IDate, Identifiable } from './types';
+import addTime from 'date-fns/add';
+import eachDayOfInterval from 'date-fns/eachDayOfInterval';
+import fnsFormat from 'date-fns/format';
+import { DATE_FORMAT } from './constants';
+import { DateRange, Dictionary, Identifiable } from './types';
 
 export const mapKeys = <T extends Identifiable>(list: T[]): Dictionary<T> => {
   const result: Dictionary<T> = {};
@@ -36,15 +35,34 @@ export const filterDict = <T extends Identifiable>(
   return filteredDict;
 };
 
-export const newDate = (date?: Date): IDate => {
-  const _date = date ? toDate(date) : new Date();
+export const lastDayOfWeek = (date?: Date): Date => {
+  const _date = date ? date : new Date();
+  const addDays = 6 - _date.getDay();
+  return addTime(_date, { days: addDays });
+};
+
+export const firstDayOfWeek = (date?: Date): Date => {
+  const _date = date ? date : new Date();
+  const subDays = -_date.getDay();
+  return addTime(_date, { days: subDays });
+};
+
+export const twoWeekRange = (baseDate?: Date): DateRange => {
+  const date = baseDate ? baseDate : new Date();
   return {
-    date: _date,
-    toString: () => formatDate(_date, 'yyyy-MM-dd'),
+    startDate: addTime(firstDayOfWeek(date), { weeks: -1 }),
+    endDate: lastDayOfWeek(date),
   };
 };
 
-export const twoWeekRange: DateRange = {
-  startDate: newDate(sub(startOfWeek(new Date()), { weeks: 1 })),
-  endDate: newDate(endOfWeek(new Date())),
+export const getEachDayOfWeek = (weekEnding?: Date): Date[] => {
+  const endDate = weekEnding ? weekEnding : lastDayOfWeek(new Date());
+  return eachDayOfInterval({
+    start: firstDayOfWeek(endDate),
+    end: endDate,
+  });
+};
+
+export const formatDate = (date: Date, format?: string): string => {
+  return format ? fnsFormat(date, format) : fnsFormat(date, DATE_FORMAT);
 };

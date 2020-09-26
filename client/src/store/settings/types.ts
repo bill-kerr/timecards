@@ -1,8 +1,8 @@
-import { DateRange, IDate } from '../../types';
+import { DateRange } from '../../types';
 
 export interface Settings {
   timecardDateRange: DateRange;
-  weekEnding: IDate;
+  weekEnding: Date;
 }
 
 export const SETTINGS_SET_TIMECARD_DATE_RANGE = 'Settings:SetTimecardDateRange';
@@ -15,7 +15,7 @@ export interface SettingsSetTimecardDateRangeAction {
 
 export interface SettingsSetWeekEndingAction {
   type: typeof SETTINGS_SET_WEEK_ENDING;
-  weekEnding: IDate;
+  weekEnding: Date;
 }
 
 export type SettingsActionTypes = SettingsSetTimecardDateRangeAction | SettingsSetWeekEndingAction;
