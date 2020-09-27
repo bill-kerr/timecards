@@ -8,7 +8,7 @@ import {
 
 const initialState: Settings = {
   timecardDateRange: twoWeekRange(),
-  weekEnding: twoWeekRange().endDate,
+  weekEnding: new Date(2020, 8, 26), //twoWeekRange().endDate,
 };
 
 export const settingsReducer = (state = initialState, action: SettingsActionTypes): Settings => {

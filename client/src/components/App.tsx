@@ -4,32 +4,38 @@ import { getEmployees } from '../store/employees/actions';
 import { getEquipment } from '../store/equipment/actions';
 import { getJobs } from '../store/jobs/actions';
 import { getTimecards } from '../store/timecards/actions';
-import { filterDict, values } from '../utils';
-import { ForemanCard } from './ForemanCard';
+import { formatDate, getEachDayOfWeek } from '../utils';
+import { ForemenOverview } from './foremen/ForemenOverview';
+import { Header } from './Header';
+import { WeekSelector } from './WeekSelector';
 
 export const App: React.FC = () => {
   const dispatch = useTypedDispatch();
-  const foremen = useTypedSelector((state) => filterDict(state.employees, (e) => e.isForeman));
-  const timecards = useTypedSelector((state) =>
-    filterDict(state.timecards, (t) => t.foremanId in foremen)
-  );
+  const { startDate, endDate, weekdays } = useTypedSelector((state) => {
+    return {
+      startDate: state.settings.timecardDateRange.startDate,
+      endDate: state.settings.timecardDateRange.endDate,
+      weekdays: getEachDayOfWeek(state.settings.weekEnding),
+    };
+  });
 
   useEffect(() => {
     dispatch(getEmployees());
-    dispatch(getTimecards('2020-09-01', '2020-09-25'));
+    dispatch(getTimecards(formatDate(startDate), formatDate(endDate)));
     dispatch(getJobs());
     dispatch(getEquipment());
-  }, [dispatch]);
+  }, [dispatch, startDate, endDate]);
 
   return (
     <div className="px-6 mx-auto max-w-screen-xl font-display">
-      <div className="flex flex-wrap">
-        {values(foremen).map((foreman) => (
-          <ForemanCard
-            foreman={foreman}
-            timecards={values(timecards, (t) => t.foremanId === foreman.id)}
-          />
-        ))}
+      <div className="">
+        <WeekSelector weekdays={weekdays} />
+      </div>
+      <div>
+        <Header />
+      </div>
+      <div>
+        <ForemenOverview />
       </div>
     </div>
   );

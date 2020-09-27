@@ -66,3 +66,22 @@ export const getEachDayOfWeek = (weekEnding?: Date): Date[] => {
 export const formatDate = (date: Date, format?: string): string => {
   return format ? fnsFormat(date, format) : fnsFormat(date, DATE_FORMAT);
 };
+
+export const weekDayLabel = (day: number) => {
+  switch (day) {
+    case 0:
+    case 6:
+      return 'S';
+    case 2:
+    case 4:
+      return 'T';
+    case 1:
+      return 'M';
+    case 3:
+      return 'W';
+    case 5:
+      return 'F';
+    default:
+      return '';
+  }
+};
