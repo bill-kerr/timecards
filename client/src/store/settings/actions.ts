@@ -1,6 +1,5 @@
-import { DateRange } from '../../types';
-import { SettingsSetTimecardDateRangeAction, SETTINGS_SET_TIMECARD_DATE_RANGE } from './types';
+import { SettingsSetWeekEndingAction, SETTINGS_SET_WEEK_ENDING } from './types';
 
-export const setTimecardDateRange = (dateRange: DateRange): SettingsSetTimecardDateRangeAction => {
-  return { type: SETTINGS_SET_TIMECARD_DATE_RANGE, dateRange };
+export const setWeekEnding = (date: Date): SettingsSetWeekEndingAction => {
+  return { type: SETTINGS_SET_WEEK_ENDING, weekEnding: date };
 };

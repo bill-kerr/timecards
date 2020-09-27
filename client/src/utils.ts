@@ -85,3 +85,5 @@ export const weekDayLabel = (day: number) => {
       return '';
   }
 };
+
+export const noop = () => {};
