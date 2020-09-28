@@ -47,7 +47,7 @@ type TimecardEmployee struct {
 // EmployeeHours represents all of the hours for a single employee on a specific timecard.
 type EmployeeHours struct {
 	ID                 string  `gorm:"primary_key" json:"id"`
-	TimecardEmployeeID string  `json:"timecardEmployeeID"`
+	TimecardEmployeeID string  `json:"timecardEmployeeId"`
 	Hours              float32 `json:"hours"`
 	Type               string  `json:"type"`
 	TagCode            string  `json:"tagCode"`
