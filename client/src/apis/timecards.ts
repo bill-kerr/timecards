@@ -3,6 +3,7 @@ import { TIMECARDS_BASE_URL } from '../constants';
 import { Employee } from '../store/employees/types';
 import { Equipment } from '../store/equipment/types';
 import { Job } from '../store/jobs/types';
+import { TimecardEmployee } from '../store/timecard-employees/types';
 import { Timecard } from '../store/timecards/types';
 
 const headers = {
@@ -19,6 +20,7 @@ export interface ITimecardsClient {
   getTimecards: (startDate: string, endDate: string) => Promise<Timecard[]>;
   getJobs: () => Promise<Job[]>;
   getEquipment: () => Promise<Equipment[]>;
+  getTimecardEmployees: (timecardId: string) => Promise<TimecardEmployee[]>;
 }
 
 export const timecardsClient: ITimecardsClient = {
@@ -49,6 +51,11 @@ export const timecardsClient: ITimecardsClient = {
 
   getEquipment: async () => {
     const res = await axiosClient.get<Equipment[]>('/equipment');
+    return res.data;
+  },
+
+  getTimecardEmployees: async (timecardId) => {
+    const res = await axiosClient.get<TimecardEmployee[]>(`/timecards/${timecardId}/timecard-employees`);
     return res.data;
   },
 };

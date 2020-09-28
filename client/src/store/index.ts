@@ -9,12 +9,15 @@ import { jobsReducer } from './jobs/reducers';
 import { JobsActionTypes } from './jobs/types';
 import { settingsReducer } from './settings/reducers';
 import { SettingsActionTypes } from './settings/types';
+import { timecardEmployeesReducer } from './timecard-employees/reducers';
+import { TimecardEmployeesActionTypes } from './timecard-employees/types';
 import { timecardsReducer } from './timecards/reducers';
 import { TimecardsActionTypes } from './timecards/types';
 
 export const rootReducer = combineReducers({
   employees: employeesReducer,
   timecards: timecardsReducer,
+  timecardEmployees: timecardEmployeesReducer,
   jobs: jobsReducer,
   equipment: equipmentReducer,
   settings: settingsReducer,
@@ -25,6 +28,7 @@ export type ActionTypes =
   | TimecardsActionTypes
   | JobsActionTypes
   | EquipmentActionTypes
+  | TimecardEmployeesActionTypes
   | SettingsActionTypes;
 
 export type RootState = ReturnType<typeof rootReducer>;
@@ -33,7 +37,4 @@ export const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;
 export type Dispatch = ThunkDispatch<RootState, any, ActionTypes>;
 export const useTypedDispatch = () => useDispatch<Dispatch>();
 
-export type AsyncAction<A extends Action> = (
-  dispatch: Dispatch,
-  getState: () => RootState
-) => Promise<A>;
+export type AsyncAction<A extends Action> = (dispatch: Dispatch, getState: () => RootState) => Promise<A>;

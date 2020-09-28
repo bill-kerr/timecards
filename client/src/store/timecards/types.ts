@@ -16,20 +16,17 @@ export const TIMECARDS_FETCH_START = 'Timecards:FetchStart';
 export const TIMECARDS_FETCH_COMPLETE = 'Timecards:FetchComplete';
 export const TIMECARDS_FETCH_ERROR = 'Timecards:FetchError';
 
-export interface ITimecardsFetchStartAction {
+export interface TimecardsFetchStartAction {
   type: typeof TIMECARDS_FETCH_START;
 }
 
-export interface ITimecardsFetchCompleteAction {
+export interface TimecardsFetchCompleteAction {
   type: typeof TIMECARDS_FETCH_COMPLETE;
   timecards: Timecard[];
 }
 
-export interface ITimecardsFetchErrorAction {
+export interface TimecardsFetchErrorAction {
   type: typeof TIMECARDS_FETCH_ERROR;
 }
 
-export type TimecardsActionTypes =
-  | ITimecardsFetchStartAction
-  | ITimecardsFetchCompleteAction
-  | ITimecardsFetchErrorAction;
+export type TimecardsActionTypes = TimecardsFetchStartAction | TimecardsFetchCompleteAction | TimecardsFetchErrorAction;

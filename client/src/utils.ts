@@ -22,10 +22,7 @@ export const values = <T>(object: Dictionary<T>, filter?: (elem: T) => boolean):
   return list;
 };
 
-export const filterDict = <T extends Identifiable>(
-  dictionary: Dictionary<T>,
-  filter: (elem: T) => boolean
-) => {
+export const filterDict = <T extends Identifiable>(dictionary: Dictionary<T>, filter: (elem: T) => boolean) => {
   const filteredDict: Dictionary<T> = {};
   values(dictionary).forEach((elem) => {
     if (filter(elem)) {
@@ -87,3 +84,17 @@ export const weekDayLabel = (day: number) => {
 };
 
 export const noop = () => {};
+
+export const nextWeekEnding = (currentDate: Date): Date => {
+  const date = addTime(currentDate, { weeks: 1 });
+  return lastDayOfWeek(date);
+};
+
+export const prevWeekEnding = (currentDate: Date): Date => {
+  const date = addTime(currentDate, { weeks: -1 });
+  return lastDayOfWeek(date);
+};
+
+export const isEmptyObj = (obj: Object): boolean => {
+  return Object.keys(obj).length === 0 && obj.constructor === Object;
+};

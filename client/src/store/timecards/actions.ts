@@ -1,8 +1,8 @@
 import { AsyncAction } from '..';
 import { timecardsClient } from '../../apis/timecards';
-import { ITimecardsFetchCompleteAction, TIMECARDS_FETCH_COMPLETE, TIMECARDS_FETCH_START } from './types';
+import { TimecardsFetchCompleteAction, TIMECARDS_FETCH_COMPLETE, TIMECARDS_FETCH_START } from './types';
 
-export const getTimecards = (startDate: string, endDate: string): AsyncAction<ITimecardsFetchCompleteAction> => {
+export const getTimecards = (startDate: string, endDate: string): AsyncAction<TimecardsFetchCompleteAction> => {
   return async (dispatch) => {
     dispatch({ type: TIMECARDS_FETCH_START });
 
