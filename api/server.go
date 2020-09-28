@@ -59,8 +59,10 @@ func main() {
 
 	v1.Get("/timecards", timecards.GetTimecards)
 	v1.Get("/timecards/:id", timecards.GetTimecard)
-	v1.Get("/timecards/:id/timecardEmployees", timecards.GetTimecardEmployees)
-	v1.Get("/timecards/:id/timecardEquipment", timecards.GetTimecardEquipment)
+	v1.Get("/timecards/:id/timecard-employees", timecards.GetTimecardEmployeesByTimecard)
+	v1.Get("/timecards/:id/timecard-equipment", timecards.GetTimecardEquipment)
+
+	v1.Get("/timecard-employees", timecards.GetTimecardEmployees)
 
 	app.Use(common.NotFoundHandler)
 

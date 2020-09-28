@@ -36,14 +36,12 @@ type TimecardCostCode struct {
 
 // TimecardEmployee represents an employee on a single timecard.
 type TimecardEmployee struct {
-	ID              string          `gorm:"primary_key" json:"id"`
-	TimecardID      string          `json:"timecardId"`
-	EmployeeID      string          `json:"employeeId"`
-	RegularHours    []EmployeeHours `json:"regularHours"`
-	OvertimeHours   []EmployeeHours `json:"overtimeHours"`
-	DoubletimeHours []EmployeeHours `json:"doubletimeHours"`
-	CreatedAt       int64           `json:"createdAt"`
-	UpdatedAt       int64           `json:"updatedAt"`
+	ID         string          `gorm:"primary_key" json:"id"`
+	TimecardID string          `json:"timecardId"`
+	EmployeeID string          `json:"employeeId"`
+	Hours      []EmployeeHours `json:"hours"`
+	CreatedAt  int64           `json:"createdAt"`
+	UpdatedAt  int64           `json:"updatedAt"`
 }
 
 // EmployeeHours represents all of the hours for a single employee on a specific timecard.

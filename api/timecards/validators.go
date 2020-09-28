@@ -18,6 +18,12 @@ type TimecardFilters struct {
 	IsRejected string `url:"isRejected,omitempty"`
 }
 
+// TimecardEmployeeFilters represents the filters that can be applied when fetching timecard employees.
+type TimecardEmployeeFilters struct {
+	StartDate string `url:"startDate,omitempty"`
+	EndDate   string `url:"endDate,omitempty"`
+}
+
 // Validate validates TimecardFilter fields
 func (f *TimecardFilters) Validate() error {
 	return v.ValidateStruct(f,
@@ -27,5 +33,13 @@ func (f *TimecardFilters) Validate() error {
 		v.Field(&f.IsReviewed, v.Skip.When(f.IsReviewed == ""), v.By(common.IsBool)),
 		v.Field(&f.IsAccepted, v.Skip.When(f.IsAccepted == ""), v.By(common.IsBool)),
 		v.Field(&f.IsRejected, v.Skip.When(f.IsRejected == ""), v.By(common.IsBool)),
+	)
+}
+
+// Validate validates TimecardEmployeeFilter fields
+func (f *TimecardEmployeeFilters) Validate() error {
+	return v.ValidateStruct(f,
+		v.Field(&f.StartDate, v.Required, v.By(common.IsDate)),
+		v.Field(&f.EndDate, v.Required, v.By(common.IsDate)),
 	)
 }

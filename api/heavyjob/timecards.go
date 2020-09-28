@@ -206,35 +206,59 @@ func transformTimecardEmployees(hjEmployees []TimecardEmployee, timecardID strin
 	transformed := []timecards.TimecardEmployee{}
 	for _, em := range hjEmployees {
 		transformed = append(transformed, timecards.TimecardEmployee{
-			ID:              em.TimecardEmployeeID,
-			TimecardID:      timecardID,
-			EmployeeID:      em.EmployeeID,
-			RegularHours:    transformEmployeeHours(em.RegularHours, em.TimecardEmployeeID, "regular"),
-			OvertimeHours:   transformEmployeeHours(em.OvertimeHours, em.TimecardEmployeeID, "overtime"),
-			DoubletimeHours: transformEmployeeHours(em.DoubletimeHours, em.TimecardEmployeeID, "doubletime"),
+			ID:         em.TimecardEmployeeID,
+			TimecardID: timecardID,
+			EmployeeID: em.EmployeeID,
+			Hours:      transformEmployeeHours(em),
 		})
 	}
 	return transformed
 }
 
 // transformEmployeeHours transforms EmployeeHours from HeavyJob's API to new EmployeeHour objects.
-func transformEmployeeHours(hjHours []EmployeeHours, tcEmployeeID string, hoursType string) []timecards.EmployeeHours {
+func transformEmployeeHours(hjEmployee TimecardEmployee) []timecards.EmployeeHours {
 	transformed := []timecards.EmployeeHours{}
-	for _, hours := range hjHours {
-		ID, err := uuid.NewV4()
+
+	for _, hours := range hjEmployee.RegularHours {
+		employeeHours, err := makeHours(hjEmployee.TimecardEmployeeID, hours, "regular")
 		if err != nil {
 			continue
 		}
-		transformed = append(transformed, timecards.EmployeeHours{
-			ID:                 ID.String(),
-			TimecardEmployeeID: tcEmployeeID,
-			Hours:              hours.Hours,
-			Type:               hoursType,
-			TagCode:            hours.TagCode,
-			TimecardCostCodeID: hours.TimecardCostCodeID,
-		})
+		transformed = append(transformed, employeeHours)
 	}
+
+	for _, hours := range hjEmployee.OvertimeHours {
+		employeeHours, err := makeHours(hjEmployee.TimecardEmployeeID, hours, "overtime")
+		if err != nil {
+			continue
+		}
+		transformed = append(transformed, employeeHours)
+	}
+
+	for _, hours := range hjEmployee.DoubletimeHours {
+		employeeHours, err := makeHours(hjEmployee.TimecardEmployeeID, hours, "doubletime")
+		if err != nil {
+			continue
+		}
+		transformed = append(transformed, employeeHours)
+	}
+
 	return transformed
+}
+
+func makeHours(timecardEmployeeID string, hjHours EmployeeHours, hoursType string) (timecards.EmployeeHours, error) {
+	ID, err := uuid.NewV4()
+	if err != nil {
+		return timecards.EmployeeHours{}, err
+	}
+	return timecards.EmployeeHours{
+		ID:                 ID.String(),
+		TimecardEmployeeID: timecardEmployeeID,
+		Hours:              hjHours.Hours,
+		Type:               hoursType,
+		TagCode:            hjHours.TagCode,
+		TimecardCostCodeID: hjHours.TimecardCostCodeID,
+	}, nil
 }
 
 // transformTimecardEquipment transforms TimecardEquipment from HeavyJob's API to timecards.TimecardEquipment objects.
