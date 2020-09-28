@@ -20,7 +20,8 @@ export interface ITimecardsClient {
   getTimecards: (startDate: string, endDate: string) => Promise<Timecard[]>;
   getJobs: () => Promise<Job[]>;
   getEquipment: () => Promise<Equipment[]>;
-  getTimecardEmployees: (timecardId: string) => Promise<TimecardEmployee[]>;
+  getTimecardEmployeesByTimecard: (timecardId: string) => Promise<TimecardEmployee[]>;
+  getTimecardEmployees: (startDate: string, endDate: string) => Promise<TimecardEmployee[]>;
 }
 
 export const timecardsClient: ITimecardsClient = {
@@ -36,10 +37,7 @@ export const timecardsClient: ITimecardsClient = {
 
   getTimecards: async (startDate: string, endDate: string) => {
     const res = await axiosClient.get<Timecard[]>('/timecards', {
-      params: {
-        startDate,
-        endDate,
-      },
+      params: { startDate, endDate },
     });
     return res.data;
   },
@@ -54,8 +52,17 @@ export const timecardsClient: ITimecardsClient = {
     return res.data;
   },
 
-  getTimecardEmployees: async (timecardId) => {
-    const res = await axiosClient.get<TimecardEmployee[]>(`/timecards/${timecardId}/timecard-employees`);
+  getTimecardEmployeesByTimecard: async (timecardId) => {
+    const res = await axiosClient.get<TimecardEmployee[]>(
+      `/timecards/${timecardId}/timecard-employees`
+    );
+    return res.data;
+  },
+
+  getTimecardEmployees: async (startDate, endDate) => {
+    const res = await axiosClient.get<TimecardEmployee[]>('/timecard-employees', {
+      params: { startDate, endDate },
+    });
     return res.data;
   },
 };

@@ -4,6 +4,6 @@ export interface Identifiable {
 export type Dictionary<T> = { [key: string]: T };
 
 export interface DateRange {
-  startDate: Date;
-  endDate: Date;
+  start: Date;
+  end: Date;
 }

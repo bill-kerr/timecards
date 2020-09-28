@@ -22,7 +22,10 @@ export const values = <T>(object: Dictionary<T>, filter?: (elem: T) => boolean):
   return list;
 };
 
-export const filterDict = <T extends Identifiable>(dictionary: Dictionary<T>, filter: (elem: T) => boolean) => {
+export const filterDict = <T extends Identifiable>(
+  dictionary: Dictionary<T>,
+  filter: (elem: T) => boolean
+) => {
   const filteredDict: Dictionary<T> = {};
   values(dictionary).forEach((elem) => {
     if (filter(elem)) {
@@ -47,8 +50,8 @@ export const firstDayOfWeek = (date?: Date): Date => {
 export const twoWeekRange = (baseDate?: Date): DateRange => {
   const date = baseDate ? baseDate : new Date();
   return {
-    startDate: addTime(firstDayOfWeek(date), { weeks: -1 }),
-    endDate: lastDayOfWeek(date),
+    start: addTime(firstDayOfWeek(date), { weeks: -1 }),
+    end: lastDayOfWeek(date),
   };
 };
 
@@ -60,8 +63,19 @@ export const getEachDayOfWeek = (weekEnding?: Date): Date[] => {
   });
 };
 
+export const firstAndLastOfWeek = (date: Date): DateRange => {
+  return {
+    start: firstDayOfWeek(date),
+    end: lastDayOfWeek(date),
+  };
+};
+
 export const formatDate = (date: Date, format?: string): string => {
   return format ? fnsFormat(date, format) : fnsFormat(date, DATE_FORMAT);
+};
+
+export const formatRange = (dateRange: DateRange, format?: string): [string, string] => {
+  return [formatDate(dateRange.start, format), formatDate(dateRange.end, format)];
 };
 
 export const weekDayLabel = (day: number) => {
@@ -97,4 +111,8 @@ export const prevWeekEnding = (currentDate: Date): Date => {
 
 export const isEmptyObj = (obj: Object): boolean => {
   return Object.keys(obj).length === 0 && obj.constructor === Object;
+};
+
+export const toTitleCase = (str: string): string => {
+  return str.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
 };

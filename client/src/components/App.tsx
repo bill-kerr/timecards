@@ -6,7 +6,7 @@ import { getEquipment } from '../store/equipment/actions';
 import { getJobs } from '../store/jobs/actions';
 import { setWeekEnding } from '../store/settings/actions';
 import { getTimecards } from '../store/timecards/actions';
-import { firstDayOfWeek, formatDate, getEachDayOfWeek, nextWeekEnding, prevWeekEnding } from '../utils';
+import { firstAndLastOfWeek, getEachDayOfWeek, nextWeekEnding, prevWeekEnding } from '../utils';
 import { EmployeeOverview } from './employees/EmployeeOverview';
 import { ForemanOverview } from './foremen/ForemanOverview';
 import { Header } from './Header';
@@ -24,7 +24,8 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     // Extract initial data load to custom hook
-    dispatch(getTimecards(formatDate(firstDayOfWeek(weekEnding)), formatDate(weekEnding)));
+    const dates = firstAndLastOfWeek(weekEnding);
+    dispatch(getTimecards(dates));
   }, [dispatch, weekEnding]);
 
   const onSelectPrevWeek = () => {
