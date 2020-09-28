@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { useTypedDispatch, useTypedSelector } from '../store';
 import { getEmployees } from '../store/employees/actions';
 import { getEquipment } from '../store/equipment/actions';
 import { getJobs } from '../store/jobs/actions';
 import { getTimecards } from '../store/timecards/actions';
 import { firstDayOfWeek, formatDate, getEachDayOfWeek } from '../utils';
-import { ForemenOverview } from './foremen/ForemenOverview';
+import { EmployeeOverview } from './employees/EmployeeOverview';
+import { ForemanOverview } from './foremen/ForemanOverview';
 import { Header } from './Header';
 import { WeekSelector } from './WeekSelector';
 
@@ -24,16 +26,25 @@ export const App: React.FC = () => {
   }, [dispatch, weekEnding]);
 
   return (
-    <div className="px-6 mx-auto max-w-screen-xl font-display">
-      <div className="mt-6">
-        <WeekSelector weekdays={getEachDayOfWeek(weekEnding)} onPrevWeek={onPrevWeek} />
-      </div>
-      <div className="mt-3">
-        <Header />
-      </div>
-      <div>
-        <ForemenOverview />
-      </div>
+    <div className="px-6 mx-auto max-w-screen-xl font-display text-gray-900 antialiased">
+      <Router>
+        <div className="mt-6">
+          <WeekSelector weekdays={getEachDayOfWeek(weekEnding)} onPrevWeek={onPrevWeek} />
+        </div>
+        <div className="mt-3">
+          <Header />
+        </div>
+        <div>
+          <Switch>
+            <Route path="/employee-overview">
+              <EmployeeOverview />
+            </Route>
+            <Route path="/foreman-overview">
+              <ForemanOverview />
+            </Route>
+          </Switch>
+        </div>
+      </Router>
     </div>
   );
 };

@@ -20,7 +20,7 @@ export const WeekSelector: React.FC<WeekSelectorProps> = ({
   return (
     <div className={`flex items-center justify-center ${className}`} {...props}>
       <ChevronLeft
-        className="h-8 w-8 text-gray-500 hover:text-teal-500 cursor-pointer"
+        className="h-10 w-10 text-gray-500 hover:text-teal-500 cursor-pointer"
         onClick={() => onPrevWeek()}
       />
       <div className="flex items-center justify-center">
@@ -29,7 +29,7 @@ export const WeekSelector: React.FC<WeekSelectorProps> = ({
         ))}
       </div>
       <ChevronRight
-        className="h-8 w-8 text-gray-500 hover:text-teal-500 cursor-pointer"
+        className="h-10 w-10 text-gray-500 hover:text-teal-500 cursor-pointer"
         onClick={() => onNextWeek()}
       />
     </div>

@@ -1,8 +1,12 @@
 import React from 'react';
 
-export const ChevronRight: React.FC<React.HTMLAttributes<HTMLOrSVGElement>> = (props) => {
+export const ChevronRight: React.FC<React.HTMLAttributes<HTMLOrSVGElement>> = React.forwardRef<
+  SVGSVGElement,
+  React.HTMLAttributes<HTMLOrSVGElement>
+>((props, ref) => {
   return (
     <svg
+      ref={ref}
       className="w-6 h-6"
       fill="currentColor"
       viewBox="0 0 20 20"
@@ -16,4 +20,4 @@ export const ChevronRight: React.FC<React.HTMLAttributes<HTMLOrSVGElement>> = (p
       ></path>
     </svg>
   );
-};
+});

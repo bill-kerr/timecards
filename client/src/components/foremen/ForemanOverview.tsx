@@ -1,9 +1,11 @@
 import React from 'react';
-import { useTypedSelector } from '../../store';
+import { useTypedDispatch, useTypedSelector } from '../../store';
+import { updateEmployee } from '../../store/employees/actions';
 import { filterDict, getEachDayOfWeek, values } from '../../utils';
 import { ForemanCard } from './ForemanCard';
 
-export const ForemenOverview: React.FC = () => {
+export const ForemanOverview: React.FC = () => {
+  const dispatch = useTypedDispatch();
   const { foremen, timecards, weekdays } = useTypedSelector((state) => {
     const foremen = filterDict(state.employees, (e) => e.isForeman);
     return {
@@ -14,13 +16,15 @@ export const ForemenOverview: React.FC = () => {
   });
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col md:flex-row flex-wrap">
       {values(foremen).map((foreman) => (
-        <div key={foreman.id} className="mt-6">
+        <div key={foreman.id} className="md:mr-6 mt-6 inline-block w-64">
           <ForemanCard
             foreman={foreman}
             timecards={values(timecards, (t) => t.foremanId === foreman.id)}
             weekdays={weekdays}
+            className="w-full"
+            onRemoveForeman={() => dispatch(updateEmployee(foreman.id, { isForeman: false }))}
           />
         </div>
       ))}
