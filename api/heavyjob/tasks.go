@@ -1,6 +1,7 @@
 package heavyjob
 
 import (
+	"log"
 	"time"
 
 	"github.com/bk7987/timecards/common"
@@ -20,12 +21,15 @@ type ScheduleConfig struct {
 	TimecardRefreshInterval  uint64
 }
 
+var client *Client
+
 // ScheduleRefresh schedules a data refresh to be run periodically. The interval parameter is in minutes.
 func ScheduleRefresh(scheduleConfig ScheduleConfig) {
 	schedule := gocron.NewScheduler(time.UTC)
-	client := newClient()
+	client = newClient()
 
 	schedule.Every(scheduleConfig.HCSSTokenRefreshInterval).Minutes().Do(func() {
+		log.Println("Refreshing access token...")
 		client = newClient()
 	})
 	schedule.Every(scheduleConfig.JobRefreshInterval).Minutes().Do(client.refreshJobs)
@@ -38,6 +42,7 @@ func ScheduleRefresh(scheduleConfig ScheduleConfig) {
 
 // refreshJobs refreshes all of the jobs in the database from the HeavyJob API.
 func (c *Client) refreshJobs() error {
+	log.Println("Refreshing jobs...")
 	hjJobs, err := c.GetJobs()
 	if err != nil {
 		return err
@@ -48,6 +53,7 @@ func (c *Client) refreshJobs() error {
 
 // refreshEmployees refreshes all of the employees from the HeavyJob API.
 func (c *Client) refreshEmployees() error {
+	log.Println("Refreshing employees...")
 	hjEmployees, err := c.GetEmployees()
 	if err != nil {
 		return err
@@ -58,6 +64,7 @@ func (c *Client) refreshEmployees() error {
 
 // refreshEquipment refreshes all of the equipment from the HeavyJob API.
 func (c *Client) refreshEquipment() error {
+	log.Println("Refreshing equipment...")
 	hjEquipment, err := c.GetEquipment()
 	if err != nil {
 		return err
@@ -68,6 +75,7 @@ func (c *Client) refreshEquipment() error {
 
 // refreshTimecards refreshes all of the timecard data using the HeavyJob API.
 func (c *Client) refreshTimecards() error {
+	log.Println("Refreshing timecards...")
 	summaries, err := c.GetTimecardSummaries(TimecardFilters{
 		StartDate: common.TwoSundaysAgo(time.Now().Local()).Format("2006-01-02"),
 	})
