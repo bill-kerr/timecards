@@ -7,7 +7,7 @@ import { ForemanCard } from './ForemanCard';
 export const ForemanOverview: React.FC = () => {
   const dispatch = useTypedDispatch();
   const { foremen, timecards, weekdays } = useTypedSelector((state) => {
-    const foremen = filterDict(state.employees, (e) => e.isForeman);
+    const foremen = filterDict(state.employees.employees, (e) => e.isForeman);
     return {
       foremen,
       timecards: filterDict(state.timecards, (t) => t.foremanId in foremen),

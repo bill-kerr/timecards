@@ -3,6 +3,7 @@ export interface TimecardEmployee {
   timecardId: string;
   employeeId: string;
   hours: EmployeeHours[];
+  timecardDate: string;
 }
 
 export interface EmployeeHours {

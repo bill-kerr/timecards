@@ -1,6 +1,7 @@
 import React from 'react';
+import { useTypedSelector } from '../../store';
 import { Employee } from '../../store/employees/types';
-import { formatDate, toTitleCase } from '../../utils';
+import { formatDate, toTitleCase, values } from '../../utils';
 
 interface EmployeeItemProps extends React.HTMLAttributes<HTMLDivElement> {
   employee: Employee;
@@ -8,9 +9,25 @@ interface EmployeeItemProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export const EmployeeItem: React.FC<EmployeeItemProps> = ({ employee, weekdays = [], className, ...props }) => {
+  const tcEmployees = useTypedSelector((state) =>
+    values(state.timecardEmployees.timecardEmployees, (tcEmployee) => tcEmployee.employeeId === employee.id)
+  );
+
   const renderWeekday = (date: Date) => {
     const formattedDate = formatDate(date);
-    return <div className="w-1/12 text-center">{formattedDate}</div>;
+    let hours = 0;
+    tcEmployees.forEach((tcEmployee) => {
+      if (tcEmployee.timecardDate === formattedDate) {
+        tcEmployee.hours.forEach((timeSet) => {
+          hours += timeSet.hours;
+        });
+      }
+    });
+    return (
+      <div key={formattedDate} className="w-1/12 text-center">
+        {hours === 0 ? '' : hours}
+      </div>
+    );
   };
 
   return (

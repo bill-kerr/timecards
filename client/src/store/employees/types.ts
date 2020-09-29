@@ -11,16 +11,16 @@ export const EMPLOYEES_FETCH_START = 'Employees:FetchStart';
 export const EMPLOYEES_FETCH_COMPLETE = 'Employees:FetchComplete';
 export const EMPLOYEES_FETCH_ERROR = 'Employees:FetchError';
 
-export interface IEmployeesFetchStartAction {
+export interface EmployeesFetchStartAction {
   type: typeof EMPLOYEES_FETCH_START;
 }
 
-export interface IEmployeesFetchCompleteAction {
+export interface EmployeesFetchCompleteAction {
   type: typeof EMPLOYEES_FETCH_COMPLETE;
   employees: Employee[];
 }
 
-export interface IEmployeesFetchErrorAction {
+export interface EmployeesFetchErrorAction {
   type: typeof EMPLOYEES_FETCH_ERROR;
 }
 
@@ -28,23 +28,31 @@ export const EMPLOYEES_UPDATE_START = 'Employees:UpdateStart';
 export const EMPLOYEES_UPDATE_COMPLETE = 'Employees:UpdateComplete';
 export const EMPLOYEES_UPDATE_ERROR = 'Employees:UpdateError';
 
-export interface IEmployeesUpdateStartAction {
+export interface EmployeesUpdateStartAction {
   type: typeof EMPLOYEES_UPDATE_START;
 }
 
-export interface IEmployeesUpdateCompleteAction {
+export interface EmployeesUpdateCompleteAction {
   type: typeof EMPLOYEES_UPDATE_COMPLETE;
   employee: Employee;
 }
 
-export interface IEmployeesUpdateErrorAction {
+export interface EmployeesUpdateErrorAction {
   type: typeof EMPLOYEES_UPDATE_ERROR;
 }
 
+export const EMPLOYEES_SET_ACTIVE = 'Employees:SetActive';
+
+export interface EmployeesSetActiveAction {
+  type: typeof EMPLOYEES_SET_ACTIVE;
+  employeeIds: string[];
+}
+
 export type EmployeesActionTypes =
-  | IEmployeesFetchCompleteAction
-  | IEmployeesFetchStartAction
-  | IEmployeesFetchErrorAction
-  | IEmployeesUpdateStartAction
-  | IEmployeesUpdateCompleteAction
-  | IEmployeesUpdateErrorAction;
+  | EmployeesFetchCompleteAction
+  | EmployeesFetchStartAction
+  | EmployeesFetchErrorAction
+  | EmployeesUpdateStartAction
+  | EmployeesUpdateCompleteAction
+  | EmployeesUpdateErrorAction
+  | EmployeesSetActiveAction;

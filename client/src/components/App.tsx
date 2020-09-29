@@ -5,6 +5,7 @@ import { getEmployees } from '../store/employees/actions';
 import { getEquipment } from '../store/equipment/actions';
 import { getJobs } from '../store/jobs/actions';
 import { setWeekEnding } from '../store/settings/actions';
+import { getTimecardEmployees } from '../store/timecard-employees/actions';
 import { getTimecards } from '../store/timecards/actions';
 import { firstAndLastOfWeek, getEachDayOfWeek, nextWeekEnding, prevWeekEnding } from '../utils';
 import { EmployeeOverview } from './employees/EmployeeOverview';
@@ -20,7 +21,8 @@ export const App: React.FC = () => {
     dispatch(getEmployees());
     dispatch(getJobs());
     dispatch(getEquipment());
-  }, [dispatch]);
+    dispatch(getTimecardEmployees(firstAndLastOfWeek(settings.weekEnding)));
+  }, [dispatch, settings.weekEnding]);
 
   useEffect(() => {
     // Extract initial data load to custom hook
