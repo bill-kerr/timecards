@@ -14,7 +14,7 @@ import { WeekSelector } from './WeekSelector';
 
 export const App: React.FC = () => {
   const dispatch = useTypedDispatch();
-  const weekEnding = useTypedSelector((state) => state.settings.weekEnding);
+  const { settings } = useTypedSelector((state) => state);
 
   useEffect(() => {
     dispatch(getEmployees());
@@ -24,34 +24,34 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     // Extract initial data load to custom hook
-    const dates = firstAndLastOfWeek(weekEnding);
+    const dates = firstAndLastOfWeek(settings.weekEnding);
     dispatch(getTimecards(dates));
-  }, [dispatch, weekEnding]);
+  }, [dispatch, settings.weekEnding]);
 
   const onSelectPrevWeek = () => {
-    const date = prevWeekEnding(weekEnding);
+    const date = prevWeekEnding(settings.weekEnding);
     dispatch(setWeekEnding(date));
   };
 
   const onSelectNextWeek = () => {
-    const date = nextWeekEnding(weekEnding);
+    const date = nextWeekEnding(settings.weekEnding);
     dispatch(setWeekEnding(date));
   };
 
   return (
-    <div className="px-6 mx-auto max-w-screen-xl font-display text-gray-900 antialiased">
+    <div className="px-6 mx-auto h-screen flex flex-col max-w-screen-xl font-display text-gray-900 antialiased">
       <Router>
         <div className="mt-6">
           <WeekSelector
-            weekdays={getEachDayOfWeek(weekEnding)}
+            weekdays={getEachDayOfWeek(settings.weekEnding)}
             onPrevWeek={onSelectPrevWeek}
             onNextWeek={onSelectNextWeek}
           />
+          <div className="mt-3 mb-6">
+            <Header />
+          </div>
         </div>
-        <div className="mt-3">
-          <Header />
-        </div>
-        <div>
+        <div className="overflow-y-auto">
           <Switch>
             <Route path="/employee-overview">
               <EmployeeOverview />

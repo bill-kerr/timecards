@@ -2,9 +2,7 @@ export interface TimecardEmployee {
   id: string;
   timecardId: string;
   employeeId: string;
-  regularHours: EmployeeHours[];
-  overtimeHours: EmployeeHours[];
-  doubletimeHours: EmployeeHours[];
+  hours: EmployeeHours[];
 }
 
 export interface EmployeeHours {
