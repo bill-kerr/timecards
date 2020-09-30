@@ -9,7 +9,7 @@ export interface TimecardEmployee {
 export interface EmployeeHours {
   id: string;
   hours: number;
-  type: string;
+  type: 'regular' | 'overtime' | 'doubletime';
   tagCode: string;
   timecardCostCodeId: string;
 }

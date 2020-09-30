@@ -5,10 +5,11 @@ import { DateBadge } from '../DateBadge';
 import { EmployeeItem } from './EmployeeItem';
 
 export const EmployeeOverview: React.FC = () => {
-  const { weekEnding, employees } = useTypedSelector((state) => ({
+  const { weekEnding, employees, timecardEmployees } = useTypedSelector((state) => ({
     timecards: state.timecards,
     weekEnding: state.settings.weekEnding,
     employees: values(state.employees.employees, (em) => state.employees.activeEmployeeIds.includes(em.id)),
+    timecardEmployees: state.timecardEmployees.timecardEmployees,
   }));
 
   return (
@@ -30,7 +31,12 @@ export const EmployeeOverview: React.FC = () => {
       </div>
       <div className="mt-2">
         {employees.map((em) => (
-          <EmployeeItem key={em.id} employee={em} weekdays={getEachDayOfWeek(weekEnding)} />
+          <EmployeeItem
+            key={em.id}
+            employee={em}
+            weekdays={getEachDayOfWeek(weekEnding)}
+            timecardEmployees={values(timecardEmployees, (tcEmployee) => tcEmployee.employeeId === em.id)}
+          />
         ))}
       </div>
     </div>
