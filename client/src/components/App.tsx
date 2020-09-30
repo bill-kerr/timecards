@@ -15,19 +15,19 @@ import { WeekSelector } from './WeekSelector';
 
 export const App: React.FC = () => {
   const dispatch = useTypedDispatch();
-  const { settings } = useTypedSelector((state) => state);
+  const settings = useTypedSelector((state) => state.settings);
 
   useEffect(() => {
     dispatch(getEmployees());
     dispatch(getJobs());
     dispatch(getEquipment());
-    dispatch(getTimecardEmployees(firstAndLastOfWeek(settings.weekEnding)));
-  }, [dispatch, settings.weekEnding]);
+  }, [dispatch]);
 
   useEffect(() => {
     // Extract initial data load to custom hook
     const dates = firstAndLastOfWeek(settings.weekEnding);
     dispatch(getTimecards(dates));
+    dispatch(getTimecardEmployees(dates));
   }, [dispatch, settings.weekEnding]);
 
   const onSelectPrevWeek = () => {
@@ -49,7 +49,7 @@ export const App: React.FC = () => {
             onPrevWeek={onSelectPrevWeek}
             onNextWeek={onSelectNextWeek}
           />
-          <div className="mt-3 mb-6">
+          <div className="mt-8 mb-8">
             <Header />
           </div>
         </div>

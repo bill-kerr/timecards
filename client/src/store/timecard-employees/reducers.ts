@@ -15,7 +15,7 @@ interface TimecardEmployeesState {
 
 const initialState: TimecardEmployeesState = {
   timecardEmployees: {},
-  loading: false,
+  loading: true,
 };
 
 export const timecardEmployeesReducer = (
@@ -28,7 +28,7 @@ export const timecardEmployeesReducer = (
     case TIMECARD_EMPLOYEES_FETCH_COMPLETE:
       return {
         loading: false,
-        timecardEmployees: { ...state.timecardEmployees, ...mapKeys(action.timecardEmployees) },
+        timecardEmployees: mapKeys(action.timecardEmployees),
       };
     case TIMECARD_EMPLOYEES_FETCH_ERROR:
       return { ...state, loading: false };

@@ -7,3 +7,15 @@ export interface DateRange {
   start: Date;
   end: Date;
 }
+
+export interface Hours {
+  st: number;
+  ot: number;
+  dt: number;
+}
+
+export interface TagCodes {
+  st: string;
+  ot: string;
+  dt: string;
+}

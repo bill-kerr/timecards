@@ -2,7 +2,8 @@ import addTime from 'date-fns/add';
 import eachDayOfInterval from 'date-fns/eachDayOfInterval';
 import fnsFormat from 'date-fns/format';
 import { DATE_FORMAT } from './constants';
-import { DateRange, Dictionary, Identifiable } from './types';
+import { TimecardEmployee } from './store/timecard-employees/types';
+import { DateRange, Dictionary, Hours, Identifiable, TagCodes } from './types';
 
 export const mapKeys = <T extends Identifiable>(list: T[]): Dictionary<T> => {
   const result: Dictionary<T> = {};
@@ -22,10 +23,7 @@ export const values = <T>(object: Dictionary<T>, filter?: (elem: T) => boolean):
   return list;
 };
 
-export const filterDict = <T extends Identifiable>(
-  dictionary: Dictionary<T>,
-  filter: (elem: T) => boolean
-) => {
+export const filterDict = <T extends Identifiable>(dictionary: Dictionary<T>, filter: (elem: T) => boolean) => {
   const filteredDict: Dictionary<T> = {};
   values(dictionary).forEach((elem) => {
     if (filter(elem)) {
@@ -115,4 +113,45 @@ export const isEmptyObj = (obj: Object): boolean => {
 
 export const toTitleCase = (str: string): string => {
   return str.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+};
+
+export const calcHours = (timecardEmployees: TimecardEmployee[]): [Hours, TagCodes] => {
+  const hours: Hours = { st: 0, ot: 0, dt: 0 };
+  const tagCodes: TagCodes = { st: '', ot: '', dt: '' };
+  timecardEmployees.forEach((tcEmployee) => {
+    tcEmployee.hours.forEach((hourSet) => {
+      switch (hourSet.type) {
+        case 'regular':
+          hours.st += hourSet.hours;
+          tagCodes.st = hourSet.tagCode;
+          return;
+        case 'overtime':
+          hours.ot += hourSet.hours;
+          tagCodes.ot = hourSet.tagCode;
+          return;
+        case 'doubletime':
+          hours.dt += hourSet.hours;
+          tagCodes.dt = hourSet.tagCode;
+          return;
+        default:
+          return;
+      }
+    });
+  });
+  return [hours, tagCodes];
+};
+
+export const renderHours = (hours: Hours, tagCodes: TagCodes = { st: '', ot: '', dt: '' }): string => {
+  const st = (hours.st === 0 ? '' : hours.st.toString()) + tagCodes.st;
+
+  let ot = '';
+  if (hours.ot === 0 && hours.dt !== 0) {
+    ot = '/';
+  } else {
+    ot = (hours.ot === 0 ? '' : '/' + hours.ot.toString()) + tagCodes.ot;
+  }
+
+  const dt = (hours.dt === 0 ? '' : '/' + hours.dt.toString()) + tagCodes.dt;
+
+  return st + ot + dt;
 };

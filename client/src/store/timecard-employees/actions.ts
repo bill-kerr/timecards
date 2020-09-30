@@ -16,9 +16,10 @@ export const getTimecardEmployees = (dateRange: DateRange): AsyncAction<Timecard
     const employeeIds: Dictionary<string> = {};
     const timecardEmployees = (await response).map((tcEmployee) => {
       employeeIds[tcEmployee.employeeId] = tcEmployee.employeeId;
+      const tc = getState().timecards[tcEmployee.timecardId];
       return {
         ...tcEmployee,
-        timecardDate: getState().timecards[tcEmployee.timecardId].date,
+        timecardDate: tc ? tc.date : '',
       };
     });
     dispatch({ type: EMPLOYEES_SET_ACTIVE, employeeIds: values(employeeIds) });
