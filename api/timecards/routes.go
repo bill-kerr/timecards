@@ -43,7 +43,7 @@ func GetTimecardEmployees(ctx *fiber.Ctx) error {
 
 	db := common.GetDB()
 	employees := []TimecardEmployee{}
-	if err := db.Preload("Hours").Where("timecard_id IN ?", timecardIDs).Find(&employees).Limit(100).Error; err != nil {
+	if err := db.Preload("Hours").Where("timecard_id IN ?", timecardIDs).Find(&employees).Error; err != nil {
 		return err
 	}
 
@@ -93,6 +93,35 @@ func GetTimecard(ctx *fiber.Ctx) error {
 // GetEmployeeHours TODO
 func GetEmployeeHours(ctx *fiber.Ctx) error {
 	return nil
+}
+
+// GetTimecardCostCodes returns all timecard cost codes between two dates.
+func GetTimecardCostCodes(ctx *fiber.Ctx) error {
+	queryvals := TimecardCostCodeFilters{}
+	if err := ctx.QueryParser(&queryvals); err != nil {
+		return common.BadRequestError(ctx, "Invalid query parameters")
+	}
+	if err := queryvals.Validate(); err != nil {
+		return common.BadRequestError(ctx, "Bad query params")
+	}
+
+	timecards := getTimecards(TimecardFilters{
+		StartDate: queryvals.StartDate,
+		EndDate:   queryvals.EndDate,
+	})
+
+	timecardIDs := []string{}
+	for _, tc := range timecards {
+		timecardIDs = append(timecardIDs, tc.ID)
+	}
+
+	db := common.GetDB()
+	costCodes := []TimecardCostCode{}
+	if err := db.Where("timecard_id IN ?", timecardIDs).Find(&costCodes).Error; err != nil {
+		return err
+	}
+
+	return ctx.JSON(costCodes)
 }
 
 func getTimecards(filters TimecardFilters) []Timecard {

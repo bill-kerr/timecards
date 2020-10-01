@@ -64,6 +64,8 @@ func main() {
 
 	v1.Get("/timecard-employees", timecards.GetTimecardEmployees)
 
+	v1.Get("/timecard-cost-codes", timecards.GetTimecardCostCodes)
+
 	app.Use(common.NotFoundHandler)
 
 	if err := app.Listen(":" + c.Port); err != nil {

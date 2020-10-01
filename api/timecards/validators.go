@@ -24,6 +24,12 @@ type TimecardEmployeeFilters struct {
 	EndDate   string `url:"endDate,omitempty"`
 }
 
+// TimecardCostCodeFilters represents the filters that can be applied when fetching timecard cost codes.
+type TimecardCostCodeFilters struct {
+	StartDate string `url:"startDate,omitempty"`
+	EndDate   string `url:"endDate,omitempty"`
+}
+
 // Validate validates TimecardFilter fields
 func (f *TimecardFilters) Validate() error {
 	return v.ValidateStruct(f,
@@ -38,6 +44,14 @@ func (f *TimecardFilters) Validate() error {
 
 // Validate validates TimecardEmployeeFilter fields
 func (f *TimecardEmployeeFilters) Validate() error {
+	return v.ValidateStruct(f,
+		v.Field(&f.StartDate, v.Required, v.By(common.IsDate)),
+		v.Field(&f.EndDate, v.Required, v.By(common.IsDate)),
+	)
+}
+
+// Validate validates TimecardCostCodeFilters fields
+func (f *TimecardCostCodeFilters) Validate() error {
 	return v.ValidateStruct(f,
 		v.Field(&f.StartDate, v.Required, v.By(common.IsDate)),
 		v.Field(&f.EndDate, v.Required, v.By(common.IsDate)),
