@@ -179,7 +179,7 @@ func transformTimecards(hjTimecards []Timecard) []timecards.Timecard {
 			SentToPayrollDateTime: tc.SentToPayrollDateTime,
 			LastModifiedDateTime:  tc.LastModifiedDateTime,
 			TimecardCostCodes:     transformCostCodes(tc.CostCodes, tc.ID),
-			TimecardEmployees:     transformTimecardEmployees(tc.Employees, tc.ID),
+			TimecardEmployees:     transformTimecardEmployees(tc.Employees, tc.ID, tc.Date),
 		})
 	}
 	return transformed
@@ -202,14 +202,15 @@ func transformCostCodes(hjCostCodes []CostCode, timecardID string) []timecards.T
 }
 
 // transformTimecardEmployees transforms TimecardEmployees from HeavyJob's API to new TimecardEmployee objects.
-func transformTimecardEmployees(hjEmployees []TimecardEmployee, timecardID string) []timecards.TimecardEmployee {
+func transformTimecardEmployees(hjEmployees []TimecardEmployee, timecardID string, timecardDate string) []timecards.TimecardEmployee {
 	transformed := []timecards.TimecardEmployee{}
 	for _, em := range hjEmployees {
 		transformed = append(transformed, timecards.TimecardEmployee{
-			ID:         em.TimecardEmployeeID,
-			TimecardID: timecardID,
-			EmployeeID: em.EmployeeID,
-			Hours:      transformEmployeeHours(em),
+			ID:           em.TimecardEmployeeID,
+			TimecardID:   timecardID,
+			EmployeeID:   em.EmployeeID,
+			Hours:        transformEmployeeHours(em),
+			TimecardDate: timecardDate,
 		})
 	}
 	return transformed

@@ -90,7 +90,7 @@ func GetTimecard(ctx *fiber.Ctx) error {
 	return ctx.JSON(timecard)
 }
 
-// GetEmployeeHours dfd
+// GetEmployeeHours TODO
 func GetEmployeeHours(ctx *fiber.Ctx) error {
 	return nil
 }
