@@ -11,6 +11,17 @@ export const mapKeys = <T extends Identifiable>(list: T[]): Dictionary<T> => {
   return result;
 };
 
+export const mapTimecardEmployees = (timecardEmployees: TimecardEmployee[]): Dictionary<TimecardEmployee[]> => {
+  const result: Dictionary<TimecardEmployee[]> = {};
+  timecardEmployees.forEach((tcEmployee) => {
+    if (!result[tcEmployee.employeeId]) {
+      result[tcEmployee.employeeId] = [];
+    }
+    result[tcEmployee.employeeId].push(tcEmployee);
+  });
+  return result;
+};
+
 export const values = <T>(object: Dictionary<T>, filter?: (elem: T) => boolean): T[] => {
   const list: T[] = [];
   Object.values(object).forEach((elem) => {

@@ -6,6 +6,7 @@ import { EmployeeWeekday } from './EmployeeWeekday';
 
 interface EmployeeItemProps extends React.HTMLAttributes<HTMLDivElement> {
   employee: Employee;
+  active: boolean;
   timecardEmployees: TimecardEmployee[];
   weekdays?: Date[];
 }
@@ -21,9 +22,9 @@ export const EmployeeItem: React.FC<EmployeeItemProps> = ({
   timecardEmployees,
   weekdays = [],
   className,
+  active,
   ...props
 }) => {
-  const [active, setActive] = useState(false);
   const [totalHours] = useState<Hours>({ st: 0, ot: 0, dt: 0 });
 
   function renderEmployeeWeekday(date: Date) {
@@ -38,10 +39,9 @@ export const EmployeeItem: React.FC<EmployeeItemProps> = ({
 
   return (
     <div
-      className={`pl-4 py-2 hover:bg-gray-100 rounded ${
-        active ? 'cursor-default bg-gray-200 hover:bg-gray-200' : 'cursor-pointer'
+      className={`pl-4 py-2 hover:bg-gray-200 rounded ${
+        active ? 'cursor-default bg-teal-200 hover:bg-teal-200' : 'cursor-pointer'
       } ${className}`}
-      onClick={() => setActive(true)}
       {...props}
     >
       <div className="flex items-center justify-between">

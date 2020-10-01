@@ -2,27 +2,15 @@ import React from 'react';
 import { useTypedSelector } from '../../store';
 import { getEachDayOfWeek, values } from '../../utils';
 import { DateBadge } from '../DateBadge';
-import { EmployeeItem } from './EmployeeItem';
+import { EmployeeItemList } from './EmployeeItemList';
 
 export const EmployeeOverview: React.FC = () => {
   const state = useTypedSelector((state) => ({
-    timecards: state.timecards,
     weekEnding: state.settings.weekEnding,
-    employees: values(state.employees.employees, (em) => state.employees.activeEmployeeIds.includes(em.id)),
+    employees: values(state.employees.employees, (em) => !!state.timecardEmployees.timecardEmployees[em.id]),
     timecardEmployees: state.timecardEmployees.timecardEmployees,
     loading: state.timecardEmployees.loading,
   }));
-
-  function renderEmployees() {
-    return state.employees.map((em) => (
-      <EmployeeItem
-        key={em.id}
-        employee={em}
-        weekdays={getEachDayOfWeek(state.weekEnding)}
-        timecardEmployees={values(state.timecardEmployees, (tcEmployee) => tcEmployee.employeeId === em.id)}
-      />
-    ));
-  }
 
   function renderLoading() {
     return (
@@ -49,7 +37,17 @@ export const EmployeeOverview: React.FC = () => {
         ))}
         <div className="font-bold w-1/12 text-center">Total</div>
       </div>
-      <div className="mt-2">{state.loading ? renderLoading() : renderEmployees()}</div>
+      <div className="mt-2">
+        {state.loading ? (
+          renderLoading()
+        ) : (
+          <EmployeeItemList
+            timecardEmployees={state.timecardEmployees}
+            weekEnding={state.weekEnding}
+            employees={state.employees}
+          />
+        )}
+      </div>
     </div>
   );
 };

@@ -1,8 +1,7 @@
 import { AsyncAction } from '..';
 import { timecardsClient } from '../../apis/timecards';
 import { DateRange, Dictionary } from '../../types';
-import { formatRange, values } from '../../utils';
-import { EMPLOYEES_SET_ACTIVE } from '../employees/types';
+import { formatRange } from '../../utils';
 import {
   TimecardEmployeesFetchCompleteAction,
   TIMECARD_EMPLOYEES_FETCH_COMPLETE,
@@ -22,7 +21,6 @@ export const getTimecardEmployees = (dateRange: DateRange): AsyncAction<Timecard
         timecardDate: tc ? tc.date : '',
       };
     });
-    dispatch({ type: EMPLOYEES_SET_ACTIVE, employeeIds: values(employeeIds) });
 
     return dispatch({
       type: TIMECARD_EMPLOYEES_FETCH_COMPLETE,

@@ -41,18 +41,10 @@ export interface EmployeesUpdateErrorAction {
   type: typeof EMPLOYEES_UPDATE_ERROR;
 }
 
-export const EMPLOYEES_SET_ACTIVE = 'Employees:SetActive';
-
-export interface EmployeesSetActiveAction {
-  type: typeof EMPLOYEES_SET_ACTIVE;
-  employeeIds: string[];
-}
-
 export type EmployeesActionTypes =
   | EmployeesFetchCompleteAction
   | EmployeesFetchStartAction
   | EmployeesFetchErrorAction
   | EmployeesUpdateStartAction
   | EmployeesUpdateCompleteAction
-  | EmployeesUpdateErrorAction
-  | EmployeesSetActiveAction;
+  | EmployeesUpdateErrorAction;

@@ -1,5 +1,5 @@
 import { Dictionary } from '../../types';
-import { mapKeys } from '../../utils';
+import { mapTimecardEmployees } from '../../utils';
 import {
   TimecardEmployee,
   TimecardEmployeesActionTypes,
@@ -9,7 +9,7 @@ import {
 } from './types';
 
 interface TimecardEmployeesState {
-  timecardEmployees: Dictionary<TimecardEmployee>;
+  timecardEmployees: Dictionary<TimecardEmployee[]>;
   loading: boolean;
 }
 
@@ -28,7 +28,7 @@ export const timecardEmployeesReducer = (
     case TIMECARD_EMPLOYEES_FETCH_COMPLETE:
       return {
         loading: false,
-        timecardEmployees: mapKeys(action.timecardEmployees),
+        timecardEmployees: mapTimecardEmployees(action.timecardEmployees),
       };
     case TIMECARD_EMPLOYEES_FETCH_ERROR:
       return { ...state, loading: false };
