@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const ChevronRight: React.FC<React.HTMLAttributes<HTMLOrSVGElement>> = React.forwardRef<
+export const IconPlus: React.FC<React.HTMLAttributes<HTMLOrSVGElement>> = React.forwardRef<
   SVGSVGElement,
   React.HTMLAttributes<HTMLOrSVGElement>
 >((props, ref) => {
@@ -15,7 +15,7 @@ export const ChevronRight: React.FC<React.HTMLAttributes<HTMLOrSVGElement>> = Re
     >
       <path
         fillRule="evenodd"
-        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+        d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
         clipRule="evenodd"
       ></path>
     </svg>

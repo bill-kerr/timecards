@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Employee } from '../../store/employees/types';
 import { Timecard } from '../../store/timecards/types';
 import { formatDate, noop, weekDayLabel } from '../../utils';
-import { Trash } from '../icons/Trash';
+import { IconTrash } from '../icons/IconTrash';
 import { Tooltip } from '../Tooltip';
 
 interface ForemanCardProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -38,7 +38,7 @@ export const ForemanCard: React.FC<ForemanCardProps> = ({
         <span>{foreman.name}</span>
         {showMenu && (
           <Tooltip content="Remove as foreman">
-            <Trash
+            <IconTrash
               className="h-4 w-4 text-gray-600 hover:text-red-600 cursor-pointer focus:outline-none"
               onClick={() => onRemoveForeman(foreman)}
             />

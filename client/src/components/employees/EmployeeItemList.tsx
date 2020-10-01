@@ -1,30 +1,21 @@
-import React, { useState } from 'react';
-import { Employee } from '../../store/employees/types';
-import { TimecardEmployee } from '../../store/timecard-employees/types';
-import { Dictionary } from '../../types';
-import { getEachDayOfWeek } from '../../utils';
+import React from 'react';
+import { useTypedSelector } from '../../store';
+import { getEachDayOfWeek, values } from '../../utils';
 import { EmployeeItem } from './EmployeeItem';
 
-interface EmployeeItemListProps {
-  employees: Employee[];
-  timecardEmployees: Dictionary<TimecardEmployee[]>;
-  weekEnding: Date;
-}
-
-export const EmployeeItemList: React.FC<EmployeeItemListProps> = ({ employees, timecardEmployees, weekEnding }) => {
-  const [activeEmployee, setActiveEmployee] = useState({});
-  console.log('render employee item list');
+export const EmployeeItemList: React.FC = () => {
+  const employees = useTypedSelector((state) => state.employees.employees);
+  const weekEnding = useTypedSelector((state) => state.settings.weekEnding);
+  const timecardEmployees = useTypedSelector((state) => state.timecardEmployees.timecardEmployees);
 
   return (
     <div>
-      {employees.map((em) => (
+      {values(employees, (employee) => !!timecardEmployees[employee.id]).map((employee) => (
         <EmployeeItem
-          key={em.id}
-          employee={em}
+          key={employee.id}
+          employee={employee}
           weekdays={getEachDayOfWeek(weekEnding)}
-          timecardEmployees={timecardEmployees[em.id] || []}
-          active={activeEmployee === em.id}
-          onClick={() => setActiveEmployee(em.id)}
+          timecardEmployees={timecardEmployees[employee.id] || []}
         />
       ))}
     </div>

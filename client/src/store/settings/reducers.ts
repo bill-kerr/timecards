@@ -1,7 +1,8 @@
+import { firstAndLastOfWeek } from '../../utils';
 import { Settings, SettingsActionTypes, SETTINGS_SET_WEEK_ENDING } from './types';
 
 const initialState: Settings = {
-  weekEnding: new Date(2020, 8, 26), //twoWeekRange().endDate,
+  weekEnding: firstAndLastOfWeek(new Date()).end,
 };
 
 export const settingsReducer = (state = initialState, action: SettingsActionTypes): Settings => {

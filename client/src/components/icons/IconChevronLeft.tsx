@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const ChevronLeft: React.FC<React.HTMLAttributes<HTMLOrSVGElement>> = React.forwardRef<
+export const IconChevronLeft: React.FC<React.HTMLAttributes<HTMLOrSVGElement>> = React.forwardRef<
   SVGSVGElement,
   React.HTMLAttributes<HTMLOrSVGElement>
 >((props, ref) => {

@@ -9,6 +9,8 @@ import { jobsReducer } from './jobs/reducers';
 import { JobsActionTypes } from './jobs/types';
 import { settingsReducer } from './settings/reducers';
 import { SettingsActionTypes } from './settings/types';
+import { timecardCostCodesReducer } from './timecard-cost-codes/reducers';
+import { TimecardCostCodesActionTypes } from './timecard-cost-codes/types';
 import { timecardEmployeesReducer } from './timecard-employees/reducers';
 import { TimecardEmployeesActionTypes } from './timecard-employees/types';
 import { timecardsReducer } from './timecards/reducers';
@@ -18,6 +20,7 @@ export const rootReducer = combineReducers({
   employees: employeesReducer,
   timecards: timecardsReducer,
   timecardEmployees: timecardEmployeesReducer,
+  timecardCostCodes: timecardCostCodesReducer,
   jobs: jobsReducer,
   equipment: equipmentReducer,
   settings: settingsReducer,
@@ -29,10 +32,12 @@ export type ActionTypes =
   | JobsActionTypes
   | EquipmentActionTypes
   | TimecardEmployeesActionTypes
+  | TimecardCostCodesActionTypes
   | SettingsActionTypes;
 
 export type RootState = ReturnType<typeof rootReducer>;
 export const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;
+export type SelectorArgs = Parameters<Parameters<TypedUseSelectorHook<RootState>>[0]>[0];
 
 export type Dispatch = ThunkDispatch<RootState, any, ActionTypes>;
 export const useTypedDispatch = () => useDispatch<Dispatch>();

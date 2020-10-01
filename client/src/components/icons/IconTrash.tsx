@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const Trash: React.FC<React.HTMLAttributes<HTMLOrSVGElement>> = React.forwardRef<
+export const IconTrash: React.FC<React.HTMLAttributes<HTMLOrSVGElement>> = React.forwardRef<
   SVGSVGElement,
   React.HTMLAttributes<HTMLOrSVGElement>
 >((props, ref) => {

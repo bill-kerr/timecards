@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { Employee } from '../../store/employees/types';
 import { TimecardEmployee } from '../../store/timecard-employees/types';
 import { calcHours, formatDate, renderHours, toTitleCase } from '../../utils';
+import { Modal } from '../Modal';
+import { EmployeeDetails } from './EmployeeDetails';
 import { EmployeeWeekday } from './EmployeeWeekday';
 
 interface EmployeeItemProps extends React.HTMLAttributes<HTMLDivElement> {
   employee: Employee;
-  active: boolean;
   timecardEmployees: TimecardEmployee[];
   weekdays?: Date[];
 }
@@ -22,10 +23,10 @@ export const EmployeeItem: React.FC<EmployeeItemProps> = ({
   timecardEmployees,
   weekdays = [],
   className,
-  active,
   ...props
 }) => {
-  const [totalHours] = useState<Hours>({ st: 0, ot: 0, dt: 0 });
+  const [totalHours] = useState<Hours>(() => calcHours(timecardEmployees)[0]);
+  const [showModal, setShowModal] = useState(false);
 
   function renderEmployeeWeekday(date: Date) {
     const tcEmployees = timecardEmployees.filter((tcEmployee) => tcEmployee.timecardDate === formatDate(date));
@@ -33,15 +34,10 @@ export const EmployeeItem: React.FC<EmployeeItemProps> = ({
     return <EmployeeWeekday key={date.toString()} className="w-1/12 text-center" hours={hours} tagCodes={tagCodes} />;
   }
 
-  function renderDetails() {
-    return <div>test</div>;
-  }
-
   return (
     <div
-      className={`pl-4 py-2 hover:bg-gray-200 rounded ${
-        active ? 'cursor-default bg-teal-200 hover:bg-teal-200' : 'cursor-pointer'
-      } ${className}`}
+      className={`pl-4 py-2 hover:bg-teal-200 rounded cursor-pointer ${className}`}
+      onClick={() => setShowModal(true)}
       {...props}
     >
       <div className="flex items-center justify-between">
@@ -51,7 +47,11 @@ export const EmployeeItem: React.FC<EmployeeItemProps> = ({
         {weekdays.map((date) => renderEmployeeWeekday(date))}
         <div className="w-1/12 text-center">{renderHours(totalHours)}</div>
       </div>
-      {active && renderDetails()}
+      {showModal && (
+        <Modal onDismiss={() => setShowModal(false)}>
+          <EmployeeDetails employee={employee} timecardEmployees={timecardEmployees} />
+        </Modal>
+      )}
     </div>
   );
 };

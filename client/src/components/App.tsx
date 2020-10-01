@@ -5,6 +5,7 @@ import { getEmployees } from '../store/employees/actions';
 import { getEquipment } from '../store/equipment/actions';
 import { getJobs } from '../store/jobs/actions';
 import { setWeekEnding } from '../store/settings/actions';
+import { getTimecardCostCodes } from '../store/timecard-cost-codes/actions';
 import { getTimecardEmployees } from '../store/timecard-employees/actions';
 import { getTimecards } from '../store/timecards/actions';
 import { firstAndLastOfWeek, getEachDayOfWeek, nextWeekEnding, prevWeekEnding } from '../utils';
@@ -28,6 +29,7 @@ export const App: React.FC = () => {
     const dates = firstAndLastOfWeek(settings.weekEnding);
     dispatch(getTimecards(dates));
     dispatch(getTimecardEmployees(dates));
+    dispatch(getTimecardCostCodes(dates));
   }, [dispatch, settings.weekEnding]);
 
   const onSelectPrevWeek = () => {

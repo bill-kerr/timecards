@@ -1,8 +1,8 @@
 import React from 'react';
 import { formatDate, noop } from '../utils';
 import { DateBadge } from './DateBadge';
-import { ChevronLeft } from './icons/ChevronLeft';
-import { ChevronRight } from './icons/ChevronRight';
+import { IconChevronLeft } from './icons/IconChevronLeft';
+import { IconChevronRight } from './icons/IconChevronRight';
 
 interface WeekSelectorProps extends React.HTMLAttributes<HTMLDivElement> {
   weekdays: Date[];
@@ -19,8 +19,8 @@ export const WeekSelector: React.FC<WeekSelectorProps> = ({
 }) => {
   return (
     <div className={`flex items-center justify-center ${className}`} {...props}>
-      <ChevronLeft
-        className="h-16 w-16 text-gray-500 hover:text-teal-500 cursor-pointer"
+      <IconChevronLeft
+        className="h-16 w-16 text-gray-400 hover:text-teal-400 cursor-pointer"
         onClick={() => onPrevWeek()}
       />
       <div>
@@ -33,8 +33,8 @@ export const WeekSelector: React.FC<WeekSelectorProps> = ({
           ))}
         </div>
       </div>
-      <ChevronRight
-        className="h-16 w-16 text-gray-500 hover:text-teal-500 cursor-pointer"
+      <IconChevronRight
+        className="h-16 w-16 text-gray-400 hover:text-teal-400 cursor-pointer"
         onClick={() => onNextWeek()}
       />
     </div>
