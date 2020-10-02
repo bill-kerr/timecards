@@ -13,7 +13,7 @@ export const Tooltip: React.FC<TippyProps> = ({
     content={content}
     delay={delay}
     offset={offset}
-    className={`bg-gray-900 text-gray-100 rounded px-2 py-1 text-xs bg-opacity-75 shadow ${className}`}
+    className={`bg-gray-900 text-gray-100 rounded px-2 py-1 text-xs shadow ${className}`}
     {...props}
   >
     {children}

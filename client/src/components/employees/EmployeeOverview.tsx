@@ -9,11 +9,27 @@ export const EmployeeOverview: React.FC = () => {
   const loading = useTypedSelector((state) => state.timecardEmployees.loading);
 
   function renderLoading() {
-    return (
-      <div className="flex items-center justify-center">
-        <div className="w-1/6 h-5 bg-gray-300 rounded"></div>
-      </div>
-    );
+    return <div className="">{renderSkeletons(25)}</div>;
+  }
+
+  function renderSkeletons(count: number) {
+    const elements: React.ReactNode[] = [];
+    for (let i = 0; i < count; i++) {
+      elements.push(
+        <div className="pl-4 py-2 flex items-center justify-between">
+          <div className="w-1/6 h-5 bg-gray-400 rounded animate-pulse"></div>
+          <div className="w-1/12 h-5 bg-gray-400 rounded animate-pulse"></div>
+          <div className="w-1/12 h-5 bg-gray-400 rounded animate-pulse"></div>
+          <div className="w-1/12 h-5 bg-gray-400 rounded animate-pulse"></div>
+          <div className="w-1/12 h-5 bg-gray-400 rounded animate-pulse"></div>
+          <div className="w-1/12 h-5 bg-gray-400 rounded animate-pulse"></div>
+          <div className="w-1/12 h-5 bg-gray-400 rounded animate-pulse"></div>
+          <div className="w-1/12 h-5 bg-gray-400 rounded animate-pulse"></div>
+          <div className="w-1/12 h-5 bg-gray-400 rounded animate-pulse"></div>
+        </div>
+      );
+    }
+    return elements;
   }
 
   function renderEmployees() {

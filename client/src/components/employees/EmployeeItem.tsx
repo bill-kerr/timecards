@@ -29,9 +29,18 @@ export const EmployeeItem: React.FC<EmployeeItemProps> = ({
   const [showModal, setShowModal] = useState(false);
 
   function renderEmployeeWeekday(date: Date) {
-    const tcEmployees = timecardEmployees.filter((tcEmployee) => tcEmployee.timecardDate === formatDate(date));
+    const tcEmployees = timecardEmployees.filter(
+      (tcEmployee) => tcEmployee.timecardDate === formatDate(date)
+    );
     const [hours, tagCodes] = calcHours(tcEmployees);
-    return <EmployeeWeekday key={date.toString()} className="w-1/12 text-center" hours={hours} tagCodes={tagCodes} />;
+    return (
+      <EmployeeWeekday
+        key={date.toString()}
+        className="w-1/12 text-center"
+        hours={hours}
+        tagCodes={tagCodes}
+      />
+    );
   }
 
   return (
@@ -41,7 +50,7 @@ export const EmployeeItem: React.FC<EmployeeItemProps> = ({
       {...props}
     >
       <div className="flex items-center justify-between">
-        <div className="w-1/6">
+        <div className="w-1/6 truncate">
           <span>{toTitleCase(employee.name)}</span>
         </div>
         {weekdays.map((date) => renderEmployeeWeekday(date))}

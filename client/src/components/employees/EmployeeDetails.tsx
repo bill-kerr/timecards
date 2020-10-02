@@ -16,7 +16,10 @@ interface EmployeeDetailsProps {
   timecardEmployees: TimecardEmployee[];
 }
 
-export const EmployeeDetails: React.FC<EmployeeDetailsProps> = ({ employee, timecardEmployees }) => {
+export const EmployeeDetails: React.FC<EmployeeDetailsProps> = ({
+  employee,
+  timecardEmployees,
+}) => {
   const weekEnding = useTypedSelector((state) => state.settings.weekEnding);
   const timecardCostCodes = useTypedSelector((state) => state.timecardCostCodes.timecardCostCodes);
   const dispatch = useTypedDispatch();
@@ -56,7 +59,13 @@ export const EmployeeDetails: React.FC<EmployeeDetailsProps> = ({ employee, time
 
   const splitCostCodes = (timecardEmployees: TimecardEmployee[]) => {
     const costCodes: {
-      [key: string]: { hours: EmployeeHours[]; date: string; description: string; payClass: string; costCode: string };
+      [key: string]: {
+        hours: EmployeeHours[];
+        date: string;
+        description: string;
+        payClass: string;
+        costCode: string;
+      };
     } = {};
     timecardEmployees.forEach((tcEmployee) => {
       tcEmployee.hours.forEach((hours) => {
@@ -95,7 +104,7 @@ export const EmployeeDetails: React.FC<EmployeeDetailsProps> = ({ employee, time
   };
 
   return (
-    <div className="p-6 mx-20 w-full bg-white rounded-lg shadow">
+    <div className="mx-6 p-6 max-w-screen-xl w-full bg-white rounded-lg shadow">
       <div className="flex items-center justify-between">
         <div className="flex items-center">
           <h2 className="text-xl font-black uppercase">{employee.name}</h2>
@@ -103,12 +112,22 @@ export const EmployeeDetails: React.FC<EmployeeDetailsProps> = ({ employee, time
             {employee.payClassCode}
           </span>
         </div>
-        <div>{loading ? renderLoadingIcon() : employee.isForeman ? renderRemoveForeman() : renderAddForeman()}</div>
+        <div>
+          {loading
+            ? renderLoadingIcon()
+            : employee.isForeman
+            ? renderRemoveForeman()
+            : renderAddForeman()}
+        </div>
       </div>
       <div className="mt-6 flex items-center justify-between">
         <div className="w-1/5"></div>
         {getEachDayOfWeek(weekEnding).map((date) => (
-          <DateBadge date={date} key={date.toString()} className="w-1/12 flex items-center justify-center" />
+          <DateBadge
+            date={date}
+            key={date.toString()}
+            className="w-1/12 flex items-center justify-center"
+          />
         ))}
         <div className="w-1/12 text-sm font-bold">Total</div>
       </div>
