@@ -1,6 +1,7 @@
 import addTime from 'date-fns/add';
 import eachDayOfInterval from 'date-fns/eachDayOfInterval';
 import fnsFormat from 'date-fns/format';
+import { ErrorResponse } from './apis/timecards';
 import { DATE_FORMAT } from './constants';
 import { TimecardEmployee } from './store/timecard-employees/types';
 import { DateRange, Dictionary, Hours, Identifiable, TagCodes } from './types';
@@ -165,4 +166,8 @@ export const renderHours = (hours: Hours, tagCodes: TagCodes = { st: '', ot: '',
   const dt = (hours.dt === 0 ? '' : '/' + hours.dt.toString()) + tagCodes.dt;
 
   return st + ot + dt;
+};
+
+export const isError = (object: Object): object is ErrorResponse => {
+  return object.hasOwnProperty('error');
 };

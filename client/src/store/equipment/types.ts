@@ -14,20 +14,17 @@ export const EQUIPMENT_FETCH_START = 'Equipment:FetchStart';
 export const EQUIPMENT_FETCH_COMPLETE = 'Equipment:FetchComplete';
 export const EQUIPMENT_FETCH_ERROR = 'Equipment:FetchError';
 
-export interface IEquipmentFetchStartAction {
+export interface EquipmentFetchStartAction {
   type: typeof EQUIPMENT_FETCH_START;
 }
 
-export interface IEquipmentFetchCompleteAction {
+export interface EquipmentFetchCompleteAction {
   type: typeof EQUIPMENT_FETCH_COMPLETE;
   equipment: Equipment[];
 }
 
-export interface IEquipmentFetchErrorAction {
+export interface EquipmentFetchErrorAction {
   type: typeof EQUIPMENT_FETCH_ERROR;
 }
 
-export type EquipmentActionTypes =
-  | IEquipmentFetchCompleteAction
-  | IEquipmentFetchStartAction
-  | IEquipmentFetchErrorAction;
+export type EquipmentActionTypes = EquipmentFetchCompleteAction | EquipmentFetchStartAction | EquipmentFetchErrorAction;

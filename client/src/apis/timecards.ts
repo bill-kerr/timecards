@@ -16,60 +16,104 @@ const axiosClient = axios.create({
 });
 
 export interface ITimecardsClient {
-  getEmployees: () => Promise<Employee[]>;
-  updateEmployee: (id: string, employee: Partial<Employee>) => Promise<Employee>;
-  getTimecards: (startDate: string, endDate: string) => Promise<Timecard[]>;
-  getJobs: () => Promise<Job[]>;
-  getEquipment: () => Promise<Equipment[]>;
-  getTimecardEmployeesByTimecard: (timecardId: string) => Promise<TimecardEmployee[]>;
-  getTimecardEmployees: (startDate: string, endDate: string) => Promise<TimecardEmployee[]>;
-  getTimecardCostCodes: (startDate: string, endDate: string) => Promise<TimecardCostCode[]>;
+  getEmployees: () => Promise<Employee[] | ErrorResponse>;
+  updateEmployee: (id: string, employee: Partial<Employee>) => Promise<Employee | ErrorResponse>;
+  getTimecards: (startDate: string, endDate: string) => Promise<Timecard[] | ErrorResponse>;
+  getJobs: () => Promise<Job[] | ErrorResponse>;
+  getEquipment: () => Promise<Equipment[] | ErrorResponse>;
+  getTimecardEmployeesByTimecard: (timecardId: string) => Promise<TimecardEmployee[] | ErrorResponse>;
+  getTimecardEmployees: (startDate: string, endDate: string) => Promise<TimecardEmployee[] | ErrorResponse>;
+  getTimecardCostCodes: (startDate: string, endDate: string) => Promise<TimecardCostCode[] | ErrorResponse>;
 }
+
+export interface ErrorResponse {
+  error: string;
+  code: number;
+  details: string;
+}
+
+const errorResponse: ErrorResponse = {
+  error: 'Error retrieving data',
+  code: 500,
+  details: 'Error retrieving data',
+};
 
 export const timecardsClient: ITimecardsClient = {
   getEmployees: async () => {
-    const { data } = await axiosClient.get<Employee[]>('/employees');
-    return data;
+    try {
+      const res = await axiosClient.get<Employee[]>('/employees');
+      return res.data;
+    } catch (error) {
+      return errorResponse;
+    }
   },
 
   updateEmployee: async (id, employee) => {
-    const res = await axiosClient.patch<Employee>(`/employees/${id}`, employee, { headers });
-    return res.data;
+    try {
+      const res = await axiosClient.patch<Employee>(`/employees/${id}`, employee, { headers });
+      return res.data;
+    } catch (error) {
+      return errorResponse;
+    }
   },
 
   getTimecards: async (startDate: string, endDate: string) => {
-    const res = await axiosClient.get<Timecard[]>('/timecards', {
-      params: { startDate, endDate },
-    });
-    return res.data;
+    try {
+      const res = await axiosClient.get<Timecard[]>('/timecards', {
+        params: { startDate, endDate },
+      });
+      return res.data;
+    } catch (error) {
+      return errorResponse;
+    }
   },
 
   getJobs: async () => {
-    const res = await axiosClient.get<Job[]>('/jobs');
-    return res.data;
+    try {
+      const res = await axiosClient.get<Job[]>('/jobs');
+      return res.data;
+    } catch (error) {
+      return errorResponse;
+    }
   },
 
   getEquipment: async () => {
-    const res = await axiosClient.get<Equipment[]>('/equipment');
-    return res.data;
+    try {
+      const res = await axiosClient.get<Equipment[]>('/equipment');
+      return res.data;
+    } catch (error) {
+      return errorResponse;
+    }
   },
 
   getTimecardEmployeesByTimecard: async (timecardId) => {
-    const res = await axiosClient.get<TimecardEmployee[]>(`/timecards/${timecardId}/timecard-employees`);
-    return res.data;
+    try {
+      const res = await axiosClient.get<TimecardEmployee[]>(`/timecards/${timecardId}/timecard-employees`);
+      return res.data;
+    } catch (error) {
+      return errorResponse;
+    }
   },
 
   getTimecardEmployees: async (startDate, endDate) => {
-    const res = await axiosClient.get<TimecardEmployee[]>('/timecard-employees', {
-      params: { startDate, endDate },
-    });
-    return res.data;
+    try {
+      const res = await axiosClient.get<TimecardEmployee[]>('/timecard-employees', {
+        params: { startDate, endDate },
+      });
+      return res.data;
+    } catch (error) {
+      return errorResponse;
+    }
   },
 
   getTimecardCostCodes: async (startDate, endDate) => {
-    const res = await axiosClient.get<TimecardCostCode[]>('/timecard-cost-codes', {
-      params: { startDate, endDate },
-    });
-    return res.data;
+    try {
+      const res = await axiosClient.get<TimecardCostCode[]>('/timecard-cost-codes', {
+        params: { startDate, endDate },
+      });
+      return res.data;
+    } catch (error) {
+      return errorResponse;
+    }
   },
 };
