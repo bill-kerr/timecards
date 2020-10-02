@@ -209,6 +209,7 @@ func transformTimecardEmployees(hjEmployees []TimecardEmployee, timecardID strin
 			ID:           em.TimecardEmployeeID,
 			TimecardID:   timecardID,
 			EmployeeID:   em.EmployeeID,
+			PayClassCode: em.PayClassCode,
 			Hours:        transformEmployeeHours(em),
 			TimecardDate: timecardDate,
 		})

@@ -40,6 +40,7 @@ type TimecardEmployee struct {
 	TimecardID   string          `json:"timecardId"`
 	EmployeeID   string          `json:"employeeId"`
 	TimecardDate string          `json:"timecardDate"`
+	PayClassCode string          `json:"payClassCode"`
 	Hours        []EmployeeHours `json:"hours"`
 	CreatedAt    int64           `json:"createdAt"`
 	UpdatedAt    int64           `json:"updatedAt"`
