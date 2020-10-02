@@ -2,6 +2,7 @@ export interface TimecardEmployee {
   id: string;
   timecardId: string;
   employeeId: string;
+  payClassCode: string;
   hours: EmployeeHours[];
   timecardDate: string;
 }

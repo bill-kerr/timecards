@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { useTypedDispatch, useTypedSelector } from '../../store';
 import { updateEmployee } from '../../store/employees/actions';
 import { Employee } from '../../store/employees/types';
-import { TimecardEmployee } from '../../store/timecard-employees/types';
-import { getEachDayOfWeek } from '../../utils';
+import { EmployeeHours, TimecardEmployee } from '../../store/timecard-employees/types';
+import { getEachDayOfWeek, values } from '../../utils';
+import { CostCodeRow } from '../cost-codes/CostCodeRow';
 import { DateBadge } from '../DateBadge';
 import { IconRefresh } from '../icons/IconRefresh';
 import { IconUserAdd } from '../icons/IconUserAdd';
@@ -17,6 +18,7 @@ interface EmployeeDetailsProps {
 
 export const EmployeeDetails: React.FC<EmployeeDetailsProps> = ({ employee, timecardEmployees }) => {
   const weekEnding = useTypedSelector((state) => state.settings.weekEnding);
+  const timecardCostCodes = useTypedSelector((state) => state.timecardCostCodes.timecardCostCodes);
   const dispatch = useTypedDispatch();
   const [loading, setLoading] = useState(false);
 
@@ -52,8 +54,48 @@ export const EmployeeDetails: React.FC<EmployeeDetailsProps> = ({ employee, time
     return <IconRefresh className="h-6 w-6 text-gray-500 animate-spin" />;
   };
 
+  const splitCostCodes = (timecardEmployees: TimecardEmployee[]) => {
+    const costCodes: {
+      [key: string]: { hours: EmployeeHours[]; date: string; description: string; payClass: string; costCode: string };
+    } = {};
+    timecardEmployees.forEach((tcEmployee) => {
+      tcEmployee.hours.forEach((hours) => {
+        const timecardCostCode = timecardCostCodes[hours.timecardCostCodeId];
+        if (!timecardCostCode) {
+          return;
+        }
+        if (!(timecardCostCode.code in costCodes)) {
+          costCodes[timecardCostCode.code] = {
+            costCode: timecardCostCode.code,
+            payClass: tcEmployee.payClassCode,
+            date: tcEmployee.timecardDate,
+            description: timecardCostCode.description,
+            hours: [],
+          };
+        }
+        costCodes[timecardCostCode.code].hours.push(hours);
+      });
+    });
+    return costCodes;
+  };
+
+  const renderCostCodes = () => {
+    const costCodes = splitCostCodes(timecardEmployees);
+    return values(costCodes).map((costCode) => (
+      <CostCodeRow
+        className="mt-2"
+        key={costCode.costCode}
+        costCode={costCode.costCode}
+        hours={costCode.hours}
+        description={costCode.description}
+        dates={getEachDayOfWeek(weekEnding)}
+        payClass={costCode.payClass}
+      />
+    ));
+  };
+
   return (
-    <div className="p-6 bg-white rounded-lg shadow">
+    <div className="p-6 mx-20 w-full bg-white rounded-lg shadow">
       <div className="flex items-center justify-between">
         <div className="flex items-center">
           <h2 className="text-xl font-black uppercase">{employee.name}</h2>
@@ -64,16 +106,13 @@ export const EmployeeDetails: React.FC<EmployeeDetailsProps> = ({ employee, time
         <div>{loading ? renderLoadingIcon() : employee.isForeman ? renderRemoveForeman() : renderAddForeman()}</div>
       </div>
       <div className="mt-6 flex items-center justify-between">
+        <div className="w-1/5"></div>
         {getEachDayOfWeek(weekEnding).map((date) => (
-          <DateBadge date={date} key={date.toString()} className="w-20 flex items-center justify-center" />
+          <DateBadge date={date} key={date.toString()} className="w-1/12 flex items-center justify-center" />
         ))}
+        <div className="w-1/12 text-sm font-bold">Total</div>
       </div>
-      <div>
-        {timecardEmployees.map((tcEmployee) => {
-          console.log(tcEmployee);
-          return <div></div>;
-        })}
-      </div>
+      <div className="mt-4">{renderCostCodes()}</div>
     </div>
   );
 };

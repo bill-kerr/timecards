@@ -10,8 +10,8 @@ export const EmployeeOverview: React.FC = () => {
 
   function renderLoading() {
     return (
-      <div className="mt-64 flex items-center justify-center">
-        <div>Loading...</div>
+      <div className="flex items-center justify-center">
+        <div className="w-1/6 h-5 bg-gray-300 rounded"></div>
       </div>
     );
   }
@@ -21,9 +21,9 @@ export const EmployeeOverview: React.FC = () => {
   }
 
   return (
-    <div className="text-sm pr-4">
+    <div className="text-sm">
       <div
-        className="pl-4 pb-2 sticky flex items-center justify-between border-b border-gray-200 bg-white"
+        className="pb-2 sticky flex items-center justify-between border-b border-gray-200 bg-white"
         style={{ top: 0 }}
       >
         <div className="w-1/6 font-bold">Name</div>
