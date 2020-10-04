@@ -104,8 +104,8 @@ export const EmployeeDetails: React.FC<EmployeeDetailsProps> = ({
   };
 
   return (
-    <div className="mx-6 p-6 max-w-screen-xl w-full bg-white rounded-lg shadow">
-      <div className="flex items-center justify-between">
+    <div className="mx-6 max-w-screen-lg w-full bg-white rounded-lg shadow">
+      <div className="p-6 flex items-center justify-between">
         <div className="flex items-center">
           <h2 className="text-xl font-black uppercase">{employee.name}</h2>
           <span className="ml-4 px-2 py-1 rounded-full bg-teal-100 text-teal-600 text-xs font-bold">
@@ -120,18 +120,14 @@ export const EmployeeDetails: React.FC<EmployeeDetailsProps> = ({
             : renderAddForeman()}
         </div>
       </div>
-      <div className="mt-6 flex items-center justify-between">
+      <div className="px-6 py-2 flex items-center justify-between font-bold text-xs border-t border-b border-gray-200 bg-gray-100 uppercase text-gray-600 tracking-wide">
         <div className="w-1/5"></div>
         {getEachDayOfWeek(weekEnding).map((date) => (
-          <DateBadge
-            date={date}
-            key={date.toString()}
-            className="w-1/12 flex items-center justify-center"
-          />
+          <DateBadge date={date} key={date.toString()} className="w-1/12" />
         ))}
-        <div className="w-1/12 text-sm font-bold">Total</div>
+        <div className="w-1/12">Total</div>
       </div>
-      <div className="mt-4">{renderCostCodes()}</div>
+      <div className="px-6 pb-6 pt-2">{renderCostCodes()}</div>
     </div>
   );
 };

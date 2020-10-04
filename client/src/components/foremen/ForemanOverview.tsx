@@ -16,7 +16,7 @@ export const ForemanOverview: React.FC = () => {
   });
 
   return (
-    <div className="flex flex-col sm:flex-row flex-wrap">
+    <div className="px-6 flex flex-col sm:flex-row flex-wrap">
       {values(foremen).map((foreman) => (
         <div key={foreman.id} className="sm:mr-6 mt-6 inline-block w-64">
           <ForemanCard

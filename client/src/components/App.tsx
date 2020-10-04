@@ -11,7 +11,7 @@ import { getTimecards } from '../store/timecards/actions';
 import { firstAndLastOfWeek, getEachDayOfWeek, nextWeekEnding, prevWeekEnding } from '../utils';
 import { EmployeeOverview } from './employees/EmployeeOverview';
 import { ForemanOverview } from './foremen/ForemanOverview';
-import { Header } from './Header';
+import { SideNav } from './SideNav';
 import { WeekSelector } from './WeekSelector';
 
 export const App: React.FC = () => {
@@ -43,27 +43,29 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="px-6 mx-auto h-screen flex flex-col max-w-screen-xl font-display text-gray-900 antialiased">
+    <div className="h-screen">
       <Router>
-        <div className="mt-6">
-          <WeekSelector
-            weekdays={getEachDayOfWeek(settings.weekEnding)}
-            onPrevWeek={onSelectPrevWeek}
-            onNextWeek={onSelectNextWeek}
-          />
-          <div className="mt-8 mb-8">
-            <Header />
+        <div className="h-full flex">
+          <SideNav />
+          <div className="w-full flex flex-col">
+            <div>
+              <WeekSelector
+                weekdays={getEachDayOfWeek(settings.weekEnding)}
+                onPrevWeek={onSelectPrevWeek}
+                onNextWeek={onSelectNextWeek}
+              />
+            </div>
+            <div className="mt-10 overflow-y-auto">
+              <Switch>
+                <Route path="/employee-overview">
+                  <EmployeeOverview />
+                </Route>
+                <Route path="/foreman-overview">
+                  <ForemanOverview />
+                </Route>
+              </Switch>
+            </div>
           </div>
-        </div>
-        <div className="overflow-y-auto">
-          <Switch>
-            <Route path="/employee-overview">
-              <EmployeeOverview />
-            </Route>
-            <Route path="/foreman-overview">
-              <ForemanOverview />
-            </Route>
-          </Switch>
         </div>
       </Router>
     </div>

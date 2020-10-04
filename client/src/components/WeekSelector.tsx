@@ -18,18 +18,22 @@ export const WeekSelector: React.FC<WeekSelectorProps> = ({
   ...props
 }) => {
   return (
-    <div className={`flex items-center justify-center ${className}`} {...props}>
+    <div className={`mt-6 flex items-center justify-center ${className}`} {...props}>
       <IconChevronLeft
         className="h-16 w-16 text-gray-400 hover:text-teal-400 cursor-pointer"
         onClick={() => onPrevWeek()}
       />
       <div>
-        <h2 className="inline-block py-2 px-4 text-center font-bold">
+        <h2 className="block text-sm uppercase tracking-wide text-gray-600 text-center font-bold">
           Week Ending {formatDate(weekdays[weekdays.length - 1], 'MMMM, d yyyy')}
         </h2>
-        <div className="mt-2 flex items-center justify-center">
+        <div className="mt-1 flex items-center justify-center">
           {weekdays.map((date, i) => (
-            <DateBadge key={i} date={date} className="ml-2 first:ml-0" />
+            <DateBadge
+              key={i}
+              date={date}
+              className="ml-2 py-2 px-3 w-16 first:ml-0 rounded border border-gray-200"
+            />
           ))}
         </div>
       </div>
