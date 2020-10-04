@@ -13,11 +13,11 @@ export const SideNav: React.FC = () => {
           <IconClock className="h-8 w-8" />
           <h1 className="ml-2 font-black text-lg tracking-wider">Timecards</h1>
         </div>
-        <div className="mt-3 text-teal-200">
+        <div className="mt-6 text-teal-200">
           <NavLink
             to="/employee-overview"
             className="p-2 pr-20 flex items-center text-sm font-semibold rounded whitespace-no-wrap hover:bg-teal-700"
-            activeClassName="bg-teal-800 hover:bg-teal-800 text-teal-100"
+            activeClassName="bg-teal-800 hover:bg-teal-800 text-teal-100 shadow-inner"
           >
             <IconUserGroup className="h-5 w-5 text-teal-300" />
             <span className="ml-3">Employee Overview</span>
@@ -25,7 +25,7 @@ export const SideNav: React.FC = () => {
           <NavLink
             to="/foreman-overview"
             className="mt-3 p-2 pr-20 flex items-center text-sm font-semibold rounded whitespace-no-wrap hover:bg-teal-700"
-            activeClassName="bg-teal-800 hover:bg-teal-800 text-teal-100"
+            activeClassName="bg-teal-800 hover:bg-teal-800 text-teal-100 shadow-inner"
           >
             <IconUser className="h-5 w-5 text-teal-300" />
             <span className="ml-3">Foreman Overview</span>
@@ -36,7 +36,7 @@ export const SideNav: React.FC = () => {
         <NavLink
           to="/settings"
           className="p-2 pr-20 flex items-center text-sm font-semibold rounded whitespace-no-wrap hover:bg-teal-700"
-          activeClassName="bg-teal-800 hover:bg-teal-800 text-teal-100"
+          activeClassName="bg-teal-800 hover:bg-teal-800 text-teal-100 shadow-inner"
         >
           <IconCog className="h-5 w-5 text-teal-300" />
           <span className="ml-3">Settings</span>

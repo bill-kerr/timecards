@@ -15,7 +15,7 @@ export const EmployeeOverview: React.FC = () => {
   return (
     <div className="text-sm">
       <div
-        className="py-2 px-6 sticky  bg-gray-100 border-t border-b border-gray-200 text-gray-600 text-xs uppercase tracking-loose leading-none"
+        className="py-2 px-6 sticky  bg-gray-100 border-t border-b border-gray-200 text-gray-600 text-xs uppercase tracking-loose leading-none z-10"
         style={{ top: 0 }}
       >
         <div className="pl-4 flex items-center justify-between">

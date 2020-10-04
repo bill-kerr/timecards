@@ -25,7 +25,7 @@ export const WeekSelector: React.FC<WeekSelectorProps> = ({
       />
       <div>
         <h2 className="block text-sm uppercase tracking-wide text-gray-600 text-center font-bold">
-          Week Ending {formatDate(weekdays[weekdays.length - 1], 'MMMM, d yyyy')}
+          Week Ending {formatDate(weekdays[weekdays.length - 1], 'MMMM d, yyyy')}
         </h2>
         <div className="mt-1 flex items-center justify-center">
           {weekdays.map((date, i) => (
