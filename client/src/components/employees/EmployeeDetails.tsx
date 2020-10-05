@@ -9,17 +9,16 @@ import { DateBadge } from '../DateBadge';
 import { IconRefresh } from '../icons/IconRefresh';
 import { IconUserAdd } from '../icons/IconUserAdd';
 import { IconUserRemove } from '../icons/IconUserRemove';
+import { IconX } from '../icons/IconX';
 import { Tooltip } from '../Tooltip';
 
 interface EmployeeDetailsProps {
   employee: Employee;
   timecardEmployees: TimecardEmployee[];
+  dismiss: () => void;
 }
 
-export const EmployeeDetails: React.FC<EmployeeDetailsProps> = ({
-  employee,
-  timecardEmployees,
-}) => {
+export const EmployeeDetails: React.FC<EmployeeDetailsProps> = ({ employee, timecardEmployees, dismiss }) => {
   const weekEnding = useTypedSelector((state) => state.settings.weekEnding);
   const timecardCostCodes = useTypedSelector((state) => state.timecardCostCodes.timecardCostCodes);
   const dispatch = useTypedDispatch();
@@ -112,12 +111,11 @@ export const EmployeeDetails: React.FC<EmployeeDetailsProps> = ({
             {employee.payClassCode}
           </span>
         </div>
-        <div>
-          {loading
-            ? renderLoadingIcon()
-            : employee.isForeman
-            ? renderRemoveForeman()
-            : renderAddForeman()}
+        <div className="flex justify-between items-center">
+          {loading ? renderLoadingIcon() : employee.isForeman ? renderRemoveForeman() : renderAddForeman()}
+          <div className="ml-4 pl-2 border-l border-gray-200">
+            <IconX onClick={dismiss} className="h-6 w-6 text-gray-600 hover:text-gray-700 cursor-pointer" />
+          </div>
         </div>
       </div>
       <div className="px-6 py-2 flex items-center justify-between font-bold text-xs border-t border-b border-gray-200 bg-gray-100 uppercase text-gray-600 tracking-wide">

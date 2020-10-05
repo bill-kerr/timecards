@@ -22,21 +22,19 @@ export const EmployeeItem: React.FC<EmployeeItemProps> = ({
   employee,
   timecardEmployees,
   weekdays = [],
-  className,
+  className = '',
   ...props
 }) => {
   const [totalHours] = useState<Hours>(() => calcHours(timecardEmployees)[0]);
   const [showModal, setShowModal] = useState(false);
 
   function renderEmployeeWeekday(date: Date) {
-    const tcEmployees = timecardEmployees.filter(
-      (tcEmployee) => tcEmployee.timecardDate === formatDate(date)
-    );
+    const tcEmployees = timecardEmployees.filter((tcEmployee) => tcEmployee.timecardDate === formatDate(date));
     const [hours, tagCodes] = calcHours(tcEmployees);
     return (
       <EmployeeWeekday
         key={date.toString()}
-        className="w-1/12 text-center"
+        className="w-1/12 flex justify-center items-center"
         hours={hours}
         tagCodes={tagCodes}
       />
@@ -58,7 +56,11 @@ export const EmployeeItem: React.FC<EmployeeItemProps> = ({
       </div>
       {showModal && (
         <Modal onDismiss={() => setShowModal(false)}>
-          <EmployeeDetails employee={employee} timecardEmployees={timecardEmployees} />
+          <EmployeeDetails
+            employee={employee}
+            timecardEmployees={timecardEmployees}
+            dismiss={() => setShowModal(false)}
+          />
         </Modal>
       )}
     </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { IconClock } from './icons/IconClock';
 import { IconCog } from './icons/IconCog';
 import { IconUser } from './icons/IconUser';
@@ -9,10 +9,10 @@ export const SideNav: React.FC = () => {
   return (
     <div className="h-full flex flex-col justify-between bg-teal-600 text-teal-100 shadow">
       <div className="p-3">
-        <div className="flex items-center">
+        <Link to="/" className="flex items-center">
           <IconClock className="h-8 w-8" />
           <h1 className="ml-2 font-black text-lg tracking-wider">Timecards</h1>
-        </div>
+        </Link>
         <div className="mt-6 text-teal-200">
           <NavLink
             to="/employee-overview"

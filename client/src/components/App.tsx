@@ -11,6 +11,7 @@ import { getTimecards } from '../store/timecards/actions';
 import { firstAndLastOfWeek, getEachDayOfWeek, nextWeekEnding, prevWeekEnding } from '../utils';
 import { EmployeeOverview } from './employees/EmployeeOverview';
 import { ForemanOverview } from './foremen/ForemanOverview';
+import { HomePage } from './HomePage';
 import { SideNav } from './SideNav';
 import { WeekSelector } from './WeekSelector';
 
@@ -57,11 +58,14 @@ export const App: React.FC = () => {
             </div>
             <div className="mt-10 overflow-y-auto">
               <Switch>
-                <Route path="/employee-overview">
+                <Route path="/employee-overview" exact>
                   <EmployeeOverview />
                 </Route>
-                <Route path="/foreman-overview">
+                <Route path="/foreman-overview" exact>
                   <ForemanOverview />
+                </Route>
+                <Route path="/" exact>
+                  <HomePage />
                 </Route>
               </Switch>
             </div>
