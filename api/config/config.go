@@ -21,6 +21,10 @@ type Config struct {
 	HCSSTokenRefreshInt uint64
 	HeavyjobRootURL     string
 	BusinessUnitID      string
+	MinPasswordLength   int
+	MaxPasswordLength   int
+	MinUsernameLength   int
+	MaxUsernameLength   int
 	PGConnString        string
 	JobRefreshInt       uint64
 	EmployeeRefreshInt  uint64
@@ -51,6 +55,10 @@ func GetConfig() *Config {
 		HCSSTokenRefreshInt: HCSSTokenRefreshInt(),
 		HeavyjobRootURL:     HeavyjobRootURL(),
 		BusinessUnitID:      BusinessUnitID(),
+		MinPasswordLength:   MinPasswordLength(),
+		MaxPasswordLength:   MaxPasswordLength(),
+		MinUsernameLength:   MinUsernameLength(),
+		MaxUsernameLength:   MaxUsernameLength(),
 		PGConnString:        PGConnString(),
 		JobRefreshInt:       JobRefreshInt(),
 		EmployeeRefreshInt:  EmployeeRefreshInt(),
@@ -129,6 +137,42 @@ func HeavyjobRootURL() string {
 // BusinessUnitID returns the manager's business unit id from the BUSINESS_UNIT_ID env variable.
 func BusinessUnitID() string {
 	return get("BUSINESS_UNIT_ID")
+}
+
+// MinPasswordLength returns the minimum password length as an integer from the MIN_PASSWORD_LENGTH env variable.
+func MinPasswordLength() int {
+	length, err := strconv.Atoi(get("MIN_PASSWORD_LENGTH"))
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	return length
+}
+
+// MaxPasswordLength returns the maximum password length as an integer from the MAX_PASSWORD_LENGTH env variable.
+func MaxPasswordLength() int {
+	length, err := strconv.Atoi(get("MAX_PASSWORD_LENGTH"))
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	return length
+}
+
+// MinUsernameLength returns the minimum Username length as an integer from the MIN_USERNAME_LENGTH env variable.
+func MinUsernameLength() int {
+	length, err := strconv.Atoi(get("MIN_USERNAME_LENGTH"))
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	return length
+}
+
+// MaxUsernameLength returns the maximum Username length as an integer from the MAX_USERNAME_LENGTH env variable.
+func MaxUsernameLength() int {
+	length, err := strconv.Atoi(get("MAX_USERNAME_LENGTH"))
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	return length
 }
 
 // PGConnString returns the connection string for the Postgres database from the PG_CONN_STRING env variable.
