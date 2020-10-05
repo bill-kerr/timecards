@@ -32,18 +32,18 @@ func ScheduleRefresh(scheduleConfig ScheduleConfig) {
 		log.Println("Refreshing access token...")
 		client = newClient()
 	})
-	schedule.Every(scheduleConfig.JobRefreshInterval).Minutes().Do(client.refreshJobs)
-	schedule.Every(scheduleConfig.EmployeeRefreshInterval).Minutes().Do(client.refreshEmployees)
-	schedule.Every(scheduleConfig.EquipmentRefreshInterval).Minutes().Do(client.refreshEquipment)
-	schedule.Every(scheduleConfig.TimecardRefreshInterval).Minutes().StartImmediately().Do(client.refreshTimecards)
+	schedule.Every(scheduleConfig.JobRefreshInterval).Minutes().Do(refreshJobs)
+	schedule.Every(scheduleConfig.EmployeeRefreshInterval).Minutes().Do(refreshEmployees)
+	schedule.Every(scheduleConfig.EquipmentRefreshInterval).Minutes().Do(refreshEquipment)
+	schedule.Every(scheduleConfig.TimecardRefreshInterval).Minutes().StartImmediately().Do(refreshTimecards)
 
 	schedule.StartAsync()
 }
 
 // refreshJobs refreshes all of the jobs in the database from the HeavyJob API.
-func (c *Client) refreshJobs() error {
+func refreshJobs() error {
 	log.Println("Refreshing jobs...")
-	hjJobs, err := c.GetJobs()
+	hjJobs, err := client.GetJobs()
 	if err != nil {
 		return err
 	}
@@ -52,9 +52,9 @@ func (c *Client) refreshJobs() error {
 }
 
 // refreshEmployees refreshes all of the employees from the HeavyJob API.
-func (c *Client) refreshEmployees() error {
+func refreshEmployees() error {
 	log.Println("Refreshing employees...")
-	hjEmployees, err := c.GetEmployees()
+	hjEmployees, err := client.GetEmployees()
 	if err != nil {
 		return err
 	}
@@ -63,9 +63,9 @@ func (c *Client) refreshEmployees() error {
 }
 
 // refreshEquipment refreshes all of the equipment from the HeavyJob API.
-func (c *Client) refreshEquipment() error {
+func refreshEquipment() error {
 	log.Println("Refreshing equipment...")
-	hjEquipment, err := c.GetEquipment()
+	hjEquipment, err := client.GetEquipment()
 	if err != nil {
 		return err
 	}
@@ -74,9 +74,9 @@ func (c *Client) refreshEquipment() error {
 }
 
 // refreshTimecards refreshes all of the timecard data using the HeavyJob API.
-func (c *Client) refreshTimecards() error {
+func refreshTimecards() error {
 	log.Println("Refreshing timecards...")
-	summaries, err := c.GetTimecardSummaries(TimecardFilters{
+	summaries, err := client.GetTimecardSummaries(TimecardFilters{
 		StartDate: common.TwoSundaysAgo(time.Now().Local()).Format("2006-01-02"),
 	})
 	if err != nil {
@@ -85,7 +85,7 @@ func (c *Client) refreshTimecards() error {
 
 	hjTimecards := []Timecard{}
 	for _, summary := range summaries {
-		tc, _ := c.GetTimecard(summary.ID)
+		tc, _ := client.GetTimecard(summary.ID)
 		hjTimecards = append(hjTimecards, tc)
 	}
 
