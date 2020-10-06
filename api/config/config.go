@@ -25,6 +25,7 @@ type Config struct {
 	MaxPasswordLength   int
 	MinUsernameLength   int
 	MaxUsernameLength   int
+	JWTSecret           string
 	PGConnString        string
 	JobRefreshInt       uint64
 	EmployeeRefreshInt  uint64
@@ -60,6 +61,7 @@ func setConfig() *Config {
 		MaxPasswordLength:   getMaxPasswordLength(),
 		MinUsernameLength:   getMinUsernameLength(),
 		MaxUsernameLength:   getMaxUsernameLength(),
+		JWTSecret:           getJWTSecret(),
 		PGConnString:        getPGConnString(),
 		JobRefreshInt:       getJobRefreshInt(),
 		EmployeeRefreshInt:  getEmployeeRefreshInt(),
@@ -183,6 +185,11 @@ func getMaxUsernameLength() int {
 		log.Fatal(err.Error())
 	}
 	return length
+}
+
+// getJWTSecret returns the JWT secret from the JWT_SECRET env variable.
+func getJWTSecret() string {
+	return get("JWT_SECRET")
 }
 
 // PGConnString returns the connection string for the Postgres database from the PG_CONN_STRING env variable.

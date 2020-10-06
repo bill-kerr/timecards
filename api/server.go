@@ -10,6 +10,7 @@ import (
 	"github.com/bk7987/timecards/heavyjob"
 	"github.com/bk7987/timecards/jobs"
 	"github.com/bk7987/timecards/timecards"
+	"github.com/bk7987/timecards/users"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/recover"
@@ -26,6 +27,7 @@ func migrate(db *gorm.DB) {
 	db.AutoMigrate(&timecards.EmployeeHours{})
 	db.AutoMigrate(&timecards.TimecardEquipment{})
 	db.AutoMigrate(&timecards.EquipmentHours{})
+	db.AutoMigrate(&users.User{})
 }
 
 func main() {
@@ -46,6 +48,8 @@ func main() {
 
 	api := app.Group("/api")
 	v1 := api.Group("/v1", config.SetConfig(), heavyjob.SetClient())
+
+	v1.Post("/test", users.Register)
 
 	v1.Get("/jobs", jobs.GetJobs)
 	v1.Get("/jobs/:id", jobs.GetJob)

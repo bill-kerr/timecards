@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v2/utils"
+	"github.com/gofrs/uuid"
 	"github.com/google/go-querystring/query"
 )
 
@@ -60,4 +61,10 @@ func IsBool(value interface{}) error {
 		return err
 	}
 	return nil
+}
+
+// UUID generates a v4 UUID
+func UUID() string {
+	ID, _ := uuid.NewV4()
+	return ID.String()
 }

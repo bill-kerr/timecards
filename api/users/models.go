@@ -1,6 +1,7 @@
 package users
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/bk7987/timecards/common"
@@ -10,9 +11,11 @@ import (
 
 // User represents a single user in the database.
 type User struct {
-	ID       string `gorm:"primary_key" json:"id"`
-	Username string `json:"username" gorm:"unique"`
-	Password string `json:"-"`
+	ID        string `gorm:"primary_key" json:"id"`
+	Username  string `json:"username" gorm:"unique"`
+	Password  string `json:"-"`
+	CreatedAt int64  `json:"createdAt"`
+	UpdatedAt int64  `json:"updatedAt"`
 }
 
 func (u *User) setPassword(password string) error {
@@ -46,8 +49,22 @@ func FindOne(condition User) (User, error) {
 }
 
 // Save saves the provided User to the database.
-func Save(user User) error {
+func (u *User) Save() error {
 	db := common.GetDB()
-	tx := db.Create(&user)
+	tx := db.Create(u)
 	return tx.Error
+}
+
+// NewUser creates a new User object from a UserRegister object
+func NewUser(userRegister *UserRegister) (User, error) {
+	user := User{
+		ID:       common.UUID(),
+		Username: userRegister.Username,
+	}
+
+	if err := user.setPassword(userRegister.Password); err != nil {
+		return user, errors.New("Error setting password")
+	}
+
+	return user, nil
 }

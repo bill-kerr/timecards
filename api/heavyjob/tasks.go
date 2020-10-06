@@ -35,7 +35,7 @@ func ScheduleRefresh(scheduleConfig ScheduleConfig) {
 	schedule.Every(scheduleConfig.JobRefreshInterval).Minutes().Do(refreshJobs)
 	schedule.Every(scheduleConfig.EmployeeRefreshInterval).Minutes().Do(refreshEmployees)
 	schedule.Every(scheduleConfig.EquipmentRefreshInterval).Minutes().Do(refreshEquipment)
-	schedule.Every(scheduleConfig.TimecardRefreshInterval).Minutes().StartImmediately().Do(refreshTimecards)
+	schedule.Every(scheduleConfig.TimecardRefreshInterval).Minutes().Do(refreshTimecards)
 
 	schedule.StartAsync()
 }

@@ -3,7 +3,6 @@ package heavyjob
 import (
 	"github.com/bk7987/timecards/common"
 	"github.com/bk7987/timecards/timecards"
-	"github.com/gofrs/uuid"
 )
 
 // TimecardSummary represents the summary data for a specific timecard.
@@ -249,12 +248,8 @@ func transformEmployeeHours(hjEmployee TimecardEmployee) []timecards.EmployeeHou
 }
 
 func makeHours(timecardEmployeeID string, hjHours EmployeeHours, hoursType string) (timecards.EmployeeHours, error) {
-	ID, err := uuid.NewV4()
-	if err != nil {
-		return timecards.EmployeeHours{}, err
-	}
 	return timecards.EmployeeHours{
-		ID:                 ID.String(),
+		ID:                 common.UUID(),
 		TimecardEmployeeID: timecardEmployeeID,
 		Hours:              hjHours.Hours,
 		Type:               hoursType,
@@ -281,12 +276,8 @@ func transformTimecardEquipment(hjEquipment []TimecardEquipment, timecardID stri
 func transformEquipmentHours(hjHours []EquipmentHours, tcEquipmentID string) []timecards.EquipmentHours {
 	transformed := []timecards.EquipmentHours{}
 	for _, hours := range hjHours {
-		ID, err := uuid.NewV4()
-		if err != nil {
-			continue
-		}
 		transformed = append(transformed, timecards.EquipmentHours{
-			ID:                  ID.String(),
+			ID:                  common.UUID(),
 			TimecardEquipmentID: tcEquipmentID,
 			TimecardCostCodeID:  hours.TimecardCostCodeID,
 			Hours:               hours.Hours,
