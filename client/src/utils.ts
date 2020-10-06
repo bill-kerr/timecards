@@ -3,7 +3,7 @@ import eachDayOfInterval from 'date-fns/eachDayOfInterval';
 import fnsFormat from 'date-fns/format';
 import { ErrorResponse } from './apis/timecards';
 import { DATE_FORMAT } from './constants';
-import { TimecardEmployee } from './store/timecard-employees/types';
+import { EmployeeHours, TimecardEmployee } from './store/timecard-employees/types';
 import { DateRange, Dictionary, Hours, Identifiable, TagCodes } from './types';
 
 export const mapKeys = <T extends Identifiable>(list: T[]): Dictionary<T> => {
@@ -127,29 +127,44 @@ export const toTitleCase = (str: string): string => {
   return str.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
 };
 
-export const calcHours = (timecardEmployees: TimecardEmployee[]): [Hours, TagCodes] => {
+export const calcHoursByTimecardEmployees = (timecardEmployees: TimecardEmployee[]): [Hours, TagCodes] => {
   const hours: Hours = { st: 0, ot: 0, dt: 0 };
   const tagCodes: TagCodes = { st: '', ot: '', dt: '' };
   timecardEmployees.forEach((tcEmployee) => {
-    tcEmployee.hours.forEach((hourSet) => {
-      switch (hourSet.type) {
-        case 'regular':
-          hours.st += hourSet.hours;
-          tagCodes.st = hourSet.tagCode;
-          return;
-        case 'overtime':
-          hours.ot += hourSet.hours;
-          tagCodes.ot = hourSet.tagCode;
-          return;
-        case 'doubletime':
-          hours.dt += hourSet.hours;
-          tagCodes.dt = hourSet.tagCode;
-          return;
-        default:
-          return;
-      }
-    });
+    const [emHours, emTagCodes] = calcHours(tcEmployee.hours);
+    hours.st += emHours.st;
+    hours.ot += emHours.ot;
+    hours.dt += emHours.dt;
+    tagCodes.st = emTagCodes.st;
+    tagCodes.ot = emTagCodes.ot;
+    tagCodes.dt = emTagCodes.dt;
   });
+  return [hours, tagCodes];
+};
+
+export const calcHours = (employeeHours: EmployeeHours[]): [Hours, TagCodes] => {
+  const hours: Hours = { st: 0, ot: 0, dt: 0 };
+  const tagCodes: TagCodes = { st: '', ot: '', dt: '' };
+
+  employeeHours.forEach((hourSet) => {
+    switch (hourSet.type) {
+      case 'regular':
+        hours.st += hourSet.hours;
+        tagCodes.st = hourSet.tagCode;
+        return;
+      case 'overtime':
+        hours.ot += hourSet.hours;
+        tagCodes.ot = hourSet.tagCode;
+        return;
+      case 'doubletime':
+        hours.dt += hourSet.hours;
+        tagCodes.dt = hourSet.tagCode;
+        return;
+      default:
+        return;
+    }
+  });
+
   return [hours, tagCodes];
 };
 

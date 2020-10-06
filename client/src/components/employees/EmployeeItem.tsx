@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Employee } from '../../store/employees/types';
 import { TimecardEmployee } from '../../store/timecard-employees/types';
-import { calcHours, formatDate, renderHours, toTitleCase } from '../../utils';
+import { calcHoursByTimecardEmployees, formatDate, renderHours, toTitleCase } from '../../utils';
 import { Modal } from '../Modal';
 import { EmployeeDetails } from './EmployeeDetails';
 import { EmployeeWeekday } from './EmployeeWeekday';
@@ -25,12 +25,12 @@ export const EmployeeItem: React.FC<EmployeeItemProps> = ({
   className = '',
   ...props
 }) => {
-  const [totalHours] = useState<Hours>(() => calcHours(timecardEmployees)[0]);
+  const [totalHours] = useState<Hours>(() => calcHoursByTimecardEmployees(timecardEmployees)[0]);
   const [showModal, setShowModal] = useState(false);
 
   function renderEmployeeWeekday(date: Date) {
     const tcEmployees = timecardEmployees.filter((tcEmployee) => tcEmployee.timecardDate === formatDate(date));
-    const [hours, tagCodes] = calcHours(tcEmployees);
+    const [hours, tagCodes] = calcHoursByTimecardEmployees(tcEmployees);
     return (
       <EmployeeWeekday
         key={date.toString()}

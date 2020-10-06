@@ -1,3 +1,5 @@
+import { EmployeeHours } from './store/timecard-employees/types';
+
 export interface Identifiable {
   id: string;
 }
@@ -18,4 +20,8 @@ export interface TagCodes {
   st: string;
   ot: string;
   dt: string;
+}
+
+export interface CostCodeHours extends EmployeeHours {
+  date: string;
 }

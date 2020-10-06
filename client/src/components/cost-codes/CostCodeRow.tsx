@@ -1,23 +1,32 @@
 import React from 'react';
-import { EmployeeHours } from '../../store/timecard-employees/types';
+import { CostCodeHours } from '../../types';
+import { calcHours, formatDate, renderHours } from '../../utils';
 import { Tooltip } from '../Tooltip';
 
 interface CostCodeRowProps extends React.HTMLAttributes<HTMLDivElement> {
   costCode: string;
   description?: string;
   payClass?: string;
-  hours: EmployeeHours[];
+  hours: CostCodeHours[];
   dates: Date[];
 }
 
 export const CostCodeRow: React.FC<CostCodeRowProps> = ({
   costCode,
+  hours,
+  dates,
   description = '',
   payClass = '',
+  className = '',
   ...props
 }) => {
+  const getHours = (date: Date) => {
+    const [hourSet, tagCodes] = calcHours(hours.filter((hourSet) => hourSet.date === formatDate(date)));
+    return renderHours(hourSet, tagCodes);
+  };
+
   return (
-    <div {...props}>
+    <div {...props} className={`flex items-center justify-between ${className}`}>
       <div className="w-1/5 text-xs">
         <div>
           <span className="font-bold">{costCode}</span>
@@ -29,6 +38,10 @@ export const CostCodeRow: React.FC<CostCodeRowProps> = ({
           </Tooltip>
         </div>
       </div>
+      {dates.map((date) => {
+        return <div className="w-1/12 flex items-center justify-center text-sm">{getHours(date)}</div>;
+      })}
+      <div className="w-1/12 flex items-center justify-center text-sm">a</div>
     </div>
   );
 };

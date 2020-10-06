@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useTypedDispatch, useTypedSelector } from '../../store';
 import { updateEmployee } from '../../store/employees/actions';
 import { Employee } from '../../store/employees/types';
-import { EmployeeHours, TimecardEmployee } from '../../store/timecard-employees/types';
+import { TimecardEmployee } from '../../store/timecard-employees/types';
+import { CostCodeHours } from '../../types';
 import { getEachDayOfWeek, values } from '../../utils';
 import { CostCodeRow } from '../cost-codes/CostCodeRow';
 import { DateBadge } from '../DateBadge';
@@ -59,7 +60,7 @@ export const EmployeeDetails: React.FC<EmployeeDetailsProps> = ({ employee, time
   const splitCostCodes = (timecardEmployees: TimecardEmployee[]) => {
     const costCodes: {
       [key: string]: {
-        hours: EmployeeHours[];
+        hours: CostCodeHours[];
         date: string;
         description: string;
         payClass: string;
@@ -81,7 +82,7 @@ export const EmployeeDetails: React.FC<EmployeeDetailsProps> = ({ employee, time
             hours: [],
           };
         }
-        costCodes[timecardCostCode.code].hours.push(hours);
+        costCodes[timecardCostCode.code].hours.push({ ...hours, date: tcEmployee.timecardDate });
       });
     });
     return costCodes;
@@ -91,7 +92,7 @@ export const EmployeeDetails: React.FC<EmployeeDetailsProps> = ({ employee, time
     const costCodes = splitCostCodes(timecardEmployees);
     return values(costCodes).map((costCode) => (
       <CostCodeRow
-        className="mt-2"
+        className="px-6 py-2"
         key={costCode.costCode}
         costCode={costCode.costCode}
         hours={costCode.hours}
@@ -103,7 +104,7 @@ export const EmployeeDetails: React.FC<EmployeeDetailsProps> = ({ employee, time
   };
 
   return (
-    <div className="mx-6 max-w-screen-lg w-full bg-white rounded-lg shadow">
+    <div className="mx-6 pb-6 max-w-screen-lg w-full bg-white rounded-lg shadow">
       <div className="p-6 flex items-center justify-between">
         <div className="flex items-center">
           <h2 className="text-xl font-black uppercase">{employee.name}</h2>
@@ -118,14 +119,14 @@ export const EmployeeDetails: React.FC<EmployeeDetailsProps> = ({ employee, time
           </div>
         </div>
       </div>
-      <div className="px-6 py-2 flex items-center justify-between font-bold text-xs border-t border-b border-gray-200 bg-gray-100 uppercase text-gray-600 tracking-wide">
+      <div className="px-6 py-2 mb-2 flex items-center justify-between font-bold text-xs border-t border-b border-gray-200 bg-gray-100 uppercase text-gray-600 tracking-wide">
         <div className="w-1/5"></div>
         {getEachDayOfWeek(weekEnding).map((date) => (
           <DateBadge date={date} key={date.toString()} className="w-1/12" />
         ))}
-        <div className="w-1/12">Total</div>
+        <div className="w-1/12 text-center">Total</div>
       </div>
-      <div className="px-6 pb-6 pt-2">{renderCostCodes()}</div>
+      {renderCostCodes()}
     </div>
   );
 };
