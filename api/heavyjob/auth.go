@@ -24,14 +24,15 @@ func GetIdentity() IdentityResponse {
 		"Content-Type": "x-www-form-urlencoded",
 	}
 
+	c := config.GetConfig()
 	data := url.Values{}
-	data.Set("client_id", config.HCSSClientID())
-	data.Set("client_secret", config.HCSSClientSecret())
-	data.Set("scope", config.HCSSScope())
-	data.Set("grant_type", config.HCSSGrantType())
+	data.Set("client_id", c.HCSSClientID)
+	data.Set("client_secret", c.HCSSClientSecret)
+	data.Set("scope", c.HCSSScope)
+	data.Set("grant_type", c.HCSSGrantType)
 	body := strings.NewReader(data.Encode())
 
-	res, err := r.Post(config.HCSSIdentityURL(), body, header)
+	res, err := r.Post(c.HCSSIdentityURL, body, header)
 	if err != nil {
 		log.Fatal(err.Error())
 	}

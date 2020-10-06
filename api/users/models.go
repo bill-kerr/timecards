@@ -16,7 +16,7 @@ type User struct {
 }
 
 func (u *User) setPassword(password string) error {
-	minLength := config.MinPasswordLength()
+	minLength := config.GetConfig().MinPasswordLength
 	if len(password) < minLength {
 		return fmt.Errorf("Password must be longer than %v characters", minLength)
 	}

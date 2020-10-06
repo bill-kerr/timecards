@@ -23,7 +23,7 @@ func newClient() *Client {
 	request := req.New()
 
 	return &Client{
-		RootURL: config.HeavyjobRootURL(),
+		RootURL: config.GetConfig().HeavyjobRootURL,
 		Token:   token,
 		Request: request,
 	}
