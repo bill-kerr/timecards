@@ -49,8 +49,11 @@ func main() {
 	api := app.Group("/api")
 	v1 := api.Group("/v1", config.SetConfig(), heavyjob.SetClient())
 
-	v1.Post("/test", users.Register)
+	auth := v1.Group("/auth")
+	auth.Post("/register", users.Register)
+	auth.Post("/login", users.Login)
 
+	v1.Use(users.RequireAuth)
 	v1.Get("/jobs", jobs.GetJobs)
 	v1.Get("/jobs/:id", jobs.GetJob)
 

@@ -63,3 +63,19 @@ func BadRequestError(ctx *fiber.Ctx, details ...string) error {
 
 	return ctx.Status(response.StatusCode).JSON(response)
 }
+
+// UnauthorizedError returns a 401 unauthorized error with the provided context.
+func UnauthorizedError(ctx *fiber.Ctx, details ...string) error {
+	response := ErrorResponse{
+		Error:      "Unauthorized error",
+		StatusCode: fiber.StatusUnauthorized,
+		Detail:     "Unauthorized request",
+	}
+
+	detail, err := GetFirstArg(details)
+	if err == nil {
+		response.Detail = detail
+	}
+
+	return ctx.Status(response.StatusCode).JSON(response)
+}

@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
@@ -26,6 +27,7 @@ type Config struct {
 	MinUsernameLength   int
 	MaxUsernameLength   int
 	JWTSecret           string
+	JWTExpiration       time.Duration
 	PGConnString        string
 	JobRefreshInt       uint64
 	EmployeeRefreshInt  uint64
@@ -62,6 +64,7 @@ func setConfig() *Config {
 		MinUsernameLength:   getMinUsernameLength(),
 		MaxUsernameLength:   getMaxUsernameLength(),
 		JWTSecret:           getJWTSecret(),
+		JWTExpiration:       getJWTExpiration(),
 		PGConnString:        getPGConnString(),
 		JobRefreshInt:       getJobRefreshInt(),
 		EmployeeRefreshInt:  getEmployeeRefreshInt(),
@@ -190,6 +193,15 @@ func getMaxUsernameLength() int {
 // getJWTSecret returns the JWT secret from the JWT_SECRET env variable.
 func getJWTSecret() string {
 	return get("JWT_SECRET")
+}
+
+// getJWTExpriation returns the JWT expiration time as a duration in seconds from the JWT_EXPIRATION env variable.
+func getJWTExpiration() time.Duration {
+	seconds, err := strconv.Atoi(get("JWT_EXPIRATION"))
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	return time.Duration(seconds) * time.Second
 }
 
 // PGConnString returns the connection string for the Postgres database from the PG_CONN_STRING env variable.

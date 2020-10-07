@@ -18,6 +18,12 @@ type User struct {
 	UpdatedAt int64  `json:"updatedAt"`
 }
 
+// UserInfo represents the data fields required for registering or logging in a user.
+type UserInfo struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
 func (u *User) setPassword(password string) error {
 	minLength := config.GetConfig().MinPasswordLength
 	if len(password) < minLength {
@@ -34,7 +40,8 @@ func (u *User) setPassword(password string) error {
 	return nil
 }
 
-func (u *User) checkPassword(password string) error {
+// CheckPassword checks the provided password against the decrypted password belonging to the user.
+func (u *User) CheckPassword(password string) error {
 	bytePassword := []byte(password)
 	byteHashedPassword := []byte(u.Password)
 	return bcrypt.CompareHashAndPassword(byteHashedPassword, bytePassword)
@@ -55,14 +62,14 @@ func (u *User) Save() error {
 	return tx.Error
 }
 
-// NewUser creates a new User object from a UserRegister object
-func NewUser(userRegister *UserRegister) (User, error) {
+// NewUser creates a new User from a UserInfo struct
+func NewUser(userInfo *UserInfo) (User, error) {
 	user := User{
 		ID:       common.UUID(),
-		Username: userRegister.Username,
+		Username: userInfo.Username,
 	}
 
-	if err := user.setPassword(userRegister.Password); err != nil {
+	if err := user.setPassword(userInfo.Password); err != nil {
 		return user, errors.New("Error setting password")
 	}
 

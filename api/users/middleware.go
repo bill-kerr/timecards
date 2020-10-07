@@ -30,18 +30,19 @@ func setUser(ctx *fiber.Ctx, userID string) error {
 }
 
 // RequireAuth checks for a valid JWT and sets the user in the current context.
-func RequireAuth() fiber.Handler {
-	return func(ctx *fiber.Ctx) error {
-		token, err := extractBearerToken(ctx)
-		if err != nil {
-			return common.NotFoundError(ctx)
-		}
-
-		if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-			userID := claims["id"].(string)
-			return setUser(ctx, userID)
-		}
-
+func RequireAuth(ctx *fiber.Ctx) error {
+	token, err := extractBearerToken(ctx)
+	if err != nil {
 		return common.NotFoundError(ctx)
 	}
+
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		userID := claims["id"].(string)
+		if err := setUser(ctx, userID); err != nil {
+			return err
+		}
+		return ctx.Next()
+	}
+
+	return common.NotFoundError(ctx)
 }

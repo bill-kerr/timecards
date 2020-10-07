@@ -5,14 +5,8 @@ import (
 	v "github.com/go-ozzo/ozzo-validation/v4"
 )
 
-// UserRegister represents the data fields required for registering a user.
-type UserRegister struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
-}
-
-// ValidateRegister validates the creation of a new user.
-func (u *UserRegister) ValidateRegister() error {
+// Validate checks that the username and password are valid.
+func (u *UserInfo) Validate() error {
 	c := config.GetConfig()
 
 	return v.ValidateStruct(u,
