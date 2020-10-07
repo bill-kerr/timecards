@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { TIMECARDS_BASE_URL } from '../constants';
+import { User } from '../store/auth/types';
 import { Employee } from '../store/employees/types';
 import { Equipment } from '../store/equipment/types';
 import { Job } from '../store/jobs/types';
@@ -11,9 +12,14 @@ const headers = {
   'Content-Type': 'application/json',
 };
 
-const axiosClient = axios.create({
-  baseURL: TIMECARDS_BASE_URL,
-});
+const axiosClient = (accessToken: string) =>
+  axios.create({
+    baseURL: TIMECARDS_BASE_URL,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
 
 export interface ITimecardsClient {
   getEmployees: () => Promise<Employee[] | ErrorResponse>;
@@ -24,6 +30,8 @@ export interface ITimecardsClient {
   getTimecardEmployeesByTimecard: (timecardId: string) => Promise<TimecardEmployee[] | ErrorResponse>;
   getTimecardEmployees: (startDate: string, endDate: string) => Promise<TimecardEmployee[] | ErrorResponse>;
   getTimecardCostCodes: (startDate: string, endDate: string) => Promise<TimecardCostCode[] | ErrorResponse>;
+  login: (username: string, password: string) => Promise<LoginResponse | ErrorResponse>;
+  refreshToken: () => Promise<LoginResponse | ErrorResponse>;
 }
 
 export interface ErrorResponse {
@@ -32,16 +40,20 @@ export interface ErrorResponse {
   details: string;
 }
 
+export interface LoginResponse extends User {
+  accessToken: string;
+}
+
 const errorResponse: ErrorResponse = {
   error: 'Error retrieving data',
   code: 500,
   details: 'Error retrieving data',
 };
 
-export const timecardsClient: ITimecardsClient = {
+export const timecardsClient = (accessToken: string): ITimecardsClient => ({
   getEmployees: async () => {
     try {
-      const res = await axiosClient.get<Employee[]>('/employees');
+      const res = await axiosClient(accessToken).get<Employee[]>('/employees');
       return res.data;
     } catch (error) {
       return errorResponse;
@@ -50,7 +62,7 @@ export const timecardsClient: ITimecardsClient = {
 
   updateEmployee: async (id, employee) => {
     try {
-      const res = await axiosClient.patch<Employee>(`/employees/${id}`, employee, { headers });
+      const res = await axiosClient(accessToken).patch<Employee>(`/employees/${id}`, employee, { headers });
       return res.data;
     } catch (error) {
       return errorResponse;
@@ -59,7 +71,7 @@ export const timecardsClient: ITimecardsClient = {
 
   getTimecards: async (startDate: string, endDate: string) => {
     try {
-      const res = await axiosClient.get<Timecard[]>('/timecards', {
+      const res = await axiosClient(accessToken).get<Timecard[]>('/timecards', {
         params: { startDate, endDate },
       });
       return res.data;
@@ -70,7 +82,7 @@ export const timecardsClient: ITimecardsClient = {
 
   getJobs: async () => {
     try {
-      const res = await axiosClient.get<Job[]>('/jobs');
+      const res = await axiosClient(accessToken).get<Job[]>('/jobs');
       return res.data;
     } catch (error) {
       return errorResponse;
@@ -79,7 +91,7 @@ export const timecardsClient: ITimecardsClient = {
 
   getEquipment: async () => {
     try {
-      const res = await axiosClient.get<Equipment[]>('/equipment');
+      const res = await axiosClient(accessToken).get<Equipment[]>('/equipment');
       return res.data;
     } catch (error) {
       return errorResponse;
@@ -88,7 +100,7 @@ export const timecardsClient: ITimecardsClient = {
 
   getTimecardEmployeesByTimecard: async (timecardId) => {
     try {
-      const res = await axiosClient.get<TimecardEmployee[]>(`/timecards/${timecardId}/timecard-employees`);
+      const res = await axiosClient(accessToken).get<TimecardEmployee[]>(`/timecards/${timecardId}/timecard-employees`);
       return res.data;
     } catch (error) {
       return errorResponse;
@@ -97,7 +109,7 @@ export const timecardsClient: ITimecardsClient = {
 
   getTimecardEmployees: async (startDate, endDate) => {
     try {
-      const res = await axiosClient.get<TimecardEmployee[]>('/timecard-employees', {
+      const res = await axiosClient(accessToken).get<TimecardEmployee[]>('/timecard-employees', {
         params: { startDate, endDate },
       });
       return res.data;
@@ -108,7 +120,7 @@ export const timecardsClient: ITimecardsClient = {
 
   getTimecardCostCodes: async (startDate, endDate) => {
     try {
-      const res = await axiosClient.get<TimecardCostCode[]>('/timecard-cost-codes', {
+      const res = await axiosClient(accessToken).get<TimecardCostCode[]>('/timecard-cost-codes', {
         params: { startDate, endDate },
       });
       return res.data;
@@ -116,4 +128,22 @@ export const timecardsClient: ITimecardsClient = {
       return errorResponse;
     }
   },
-};
+
+  login: async (username, password) => {
+    try {
+      const res = await axiosClient(accessToken).post<LoginResponse>('/auth/login', { username, password });
+      return res.data;
+    } catch (error) {
+      return errorResponse;
+    }
+  },
+
+  refreshToken: async () => {
+    try {
+      const res = await axiosClient(accessToken).get<LoginResponse>('/auth/refresh');
+      return res.data;
+    } catch (error) {
+      return errorResponse;
+    }
+  },
+});

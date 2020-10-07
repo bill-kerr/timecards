@@ -10,10 +10,11 @@ import {
 } from './types';
 
 export const getJobs = (): AsyncAction<JobsFetchCompleteAction | JobsFetchErrorAction> => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
     dispatch({ type: JOBS_FETCH_START });
 
-    const response = await timecardsClient.getJobs();
+    const token = getState().auth.accessToken;
+    const response = await timecardsClient(token).getJobs();
     if (isError(response)) {
       return dispatch({ type: JOBS_FETCH_ERROR });
     }

@@ -10,10 +10,11 @@ import {
 } from './types';
 
 export const getEquipment = (): AsyncAction<EquipmentFetchCompleteAction | EquipmentFetchErrorAction> => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
     dispatch({ type: EQUIPMENT_FETCH_START });
 
-    const response = await timecardsClient.getEquipment();
+    const token = getState().auth.accessToken;
+    const response = await timecardsClient(token).getEquipment();
     if (isError(response)) {
       return dispatch({ type: EQUIPMENT_FETCH_ERROR });
     }

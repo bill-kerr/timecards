@@ -16,10 +16,11 @@ import {
 } from './types';
 
 export const getEmployees = (): AsyncAction<EmployeesFetchCompleteAction | EmployeesFetchErrorAction> => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
     dispatch({ type: EMPLOYEES_FETCH_START });
 
-    const response = await timecardsClient.getEmployees();
+    const token = getState().auth.accessToken;
+    const response = await timecardsClient(token).getEmployees();
     if (isError(response)) {
       return dispatch({ type: EMPLOYEES_FETCH_ERROR });
     }
@@ -31,10 +32,11 @@ export const updateEmployee = (
   id: string,
   employee: Partial<Employee>
 ): AsyncAction<EmployeesUpdateCompleteAction | EmployeesUpdateErrorAction> => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
     dispatch({ type: EMPLOYEES_UPDATE_START });
 
-    const response = await timecardsClient.updateEmployee(id, employee);
+    const token = getState().auth.accessToken;
+    const response = await timecardsClient(token).updateEmployee(id, employee);
     if (isError(response)) {
       return dispatch({ type: EMPLOYEES_UPDATE_ERROR });
     }

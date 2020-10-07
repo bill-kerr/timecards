@@ -13,10 +13,11 @@ import {
 export const getTimecardEmployees = (
   dateRange: DateRange
 ): AsyncAction<TimecardEmployeesFetchCompleteAction | TimecardEmployeesFetchErrorAction> => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
     dispatch({ type: TIMECARD_EMPLOYEES_FETCH_START });
 
-    const response = await timecardsClient.getTimecardEmployees(...formatRange(dateRange));
+    const token = getState().auth.accessToken;
+    const response = await timecardsClient(token).getTimecardEmployees(...formatRange(dateRange));
     if (isError(response)) {
       return dispatch({ type: TIMECARD_EMPLOYEES_FETCH_ERROR });
     }

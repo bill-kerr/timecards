@@ -13,10 +13,11 @@ import {
 export const getTimecardCostCodes = (
   dateRange: DateRange
 ): AsyncAction<TimecardCostCodesFetchCompleteAction | TimecardCostCodesFetchErrorAction> => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
     dispatch({ type: TIMECARD_COST_CODES_FETCH_START });
 
-    const response = await timecardsClient.getTimecardCostCodes(...formatRange(dateRange));
+    const token = getState().auth.accessToken;
+    const response = await timecardsClient(token).getTimecardCostCodes(...formatRange(dateRange));
     if (isError(response)) {
       return dispatch({ type: TIMECARD_COST_CODES_FETCH_ERROR });
     }

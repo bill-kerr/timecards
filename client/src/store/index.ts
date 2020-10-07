@@ -1,6 +1,8 @@
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { Action, combineReducers } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
+import { authReducer } from './auth/reducers';
+import { AuthActionTypes } from './auth/types';
 import { employeesReducer } from './employees/reducers';
 import { EmployeesActionTypes } from './employees/types';
 import { equipmentReducer } from './equipment/reducers';
@@ -24,6 +26,7 @@ export const rootReducer = combineReducers({
   jobs: jobsReducer,
   equipment: equipmentReducer,
   settings: settingsReducer,
+  auth: authReducer,
 });
 
 export type ActionTypes =
@@ -33,7 +36,8 @@ export type ActionTypes =
   | EquipmentActionTypes
   | TimecardEmployeesActionTypes
   | TimecardCostCodesActionTypes
-  | SettingsActionTypes;
+  | SettingsActionTypes
+  | AuthActionTypes;
 
 export type RootState = ReturnType<typeof rootReducer>;
 export const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;
