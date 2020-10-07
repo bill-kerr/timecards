@@ -6,16 +6,12 @@ import (
 
 	"github.com/bk7987/timecards/config"
 	"github.com/dgrijalva/jwt-go"
+	"github.com/gofiber/fiber/v2"
 	"golang.org/x/crypto/bcrypt"
 )
 
-// tokenRefreshRequest defines the shape of a refresh token request.
-type tokenRefreshRequest struct {
-	RefreshToken string `json:"refreshToken"`
-}
-
-// tokenResponse defines the success response to a login/register/refresh request.
-type tokenResponse struct {
+// JWTPair defines the return value for generating a JWT pair.
+type JWTPair struct {
 	AccessToken  string `json:"accessToken"`
 	RefreshToken string `json:"refreshToken"`
 }
@@ -36,7 +32,7 @@ func GenerateSignedToken(user *User, expires time.Time) (string, error) {
 }
 
 // generateJWTPair generates an access token and a refresh token for the given user.
-func generateJWTPair(user *User) (*tokenResponse, error) {
+func generateJWTPair(user *User) (*JWTPair, error) {
 	accessToken, err := GenerateSignedToken(user, time.Now().Add(config.GetConfig().JWTExpiration))
 	if err != nil {
 		return nil, err
@@ -47,7 +43,7 @@ func generateJWTPair(user *User) (*tokenResponse, error) {
 		return nil, err
 	}
 
-	return &tokenResponse{
+	return &JWTPair{
 		AccessToken:  accessToken,
 		RefreshToken: refreshToken,
 	}, nil
@@ -66,6 +62,16 @@ func ParseJWT(tokenString string) (*jwt.Token, error) {
 	}
 
 	return token, err
+}
+
+// SetRefreshTokenCookie sets the refresh token cookie in the provided response context
+func SetRefreshTokenCookie(ctx *fiber.Ctx, cookieValue string) {
+	cookie := new(fiber.Cookie)
+	cookie.Name = "refreshToken"
+	cookie.Value = cookieValue
+	cookie.Expires = time.Now().Add(config.GetConfig().JWTRefreshExpiration)
+	cookie.HTTPOnly = true
+	ctx.Cookie(cookie)
 }
 
 func (u *User) setPassword(password string) error {

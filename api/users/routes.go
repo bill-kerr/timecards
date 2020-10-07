@@ -1,8 +1,6 @@
 package users
 
 import (
-	"log"
-
 	"github.com/bk7987/timecards/common"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gofiber/fiber/v2"
@@ -45,23 +43,23 @@ func Login(ctx *fiber.Ctx) error {
 		return common.UnauthorizedError(ctx, "Email or password incorrect")
 	}
 
-	response, err := generateJWTPair(&user)
+	pair, err := generateJWTPair(&user)
 	if err != nil {
 		return common.InternalServerError(ctx)
 	}
-	return ctx.JSON(response)
+
+	SetRefreshTokenCookie(ctx, pair.RefreshToken)
+	return ctx.JSON(fiber.Map{"accessToken": pair.AccessToken})
 }
 
 // RefreshToken is the endpoint for refreshing JWTs.
 func RefreshToken(ctx *fiber.Ctx) error {
-	tokenReq := tokenRefreshRequest{}
-	ctx.BodyParser(&tokenReq)
-	log.Println(tokenReq)
-	if err := tokenReq.ValidateRefresh(); err != nil {
-		return common.BadRequestError(ctx)
+	tokenReq := ctx.Cookies("refreshToken", "")
+	if tokenReq == "" {
+		return common.UnauthorizedError(ctx, "Invalid refresh token")
 	}
 
-	token, err := ParseJWT(tokenReq.RefreshToken)
+	token, err := ParseJWT(tokenReq)
 	if err != nil {
 		return common.UnauthorizedError(ctx, "Invalid refresh token")
 	}
@@ -72,12 +70,13 @@ func RefreshToken(ctx *fiber.Ctx) error {
 			return common.UnauthorizedError(ctx, "Invalid refresh token")
 		}
 
-		response, err := generateJWTPair(&user)
+		pair, err := generateJWTPair(&user)
 		if err != nil {
 			return common.InternalServerError(ctx)
 		}
 
-		return ctx.JSON(response)
+		SetRefreshTokenCookie(ctx, pair.RefreshToken)
+		return ctx.JSON(fiber.Map{"accessToken": pair.AccessToken})
 	}
 
 	return common.UnauthorizedError(ctx, "Invalid refresh token")

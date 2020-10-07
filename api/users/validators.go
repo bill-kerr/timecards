@@ -22,10 +22,3 @@ func (u *UserInfo) ValidateLogin() error {
 		v.Field(&u.Password, v.Required, v.NotNil),
 	)
 }
-
-// ValidateRefresh validates that a refresh token property exists and is not nil.
-func (r *tokenRefreshRequest) ValidateRefresh() error {
-	return v.ValidateStruct(r,
-		v.Field(&r.RefreshToken, v.Required, v.NotNil),
-	)
-}
