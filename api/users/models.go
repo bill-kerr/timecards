@@ -2,11 +2,8 @@ package users
 
 import (
 	"errors"
-	"fmt"
 
 	"github.com/bk7987/timecards/common"
-	"github.com/bk7987/timecards/config"
-	"golang.org/x/crypto/bcrypt"
 )
 
 // User represents a single user in the database.
@@ -22,29 +19,6 @@ type User struct {
 type UserInfo struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
-}
-
-func (u *User) setPassword(password string) error {
-	minLength := config.GetConfig().MinPasswordLength
-	if len(password) < minLength {
-		return fmt.Errorf("Password must be longer than %v characters", minLength)
-	}
-
-	bytePassword := []byte(password)
-	passwordHash, err := bcrypt.GenerateFromPassword(bytePassword, bcrypt.DefaultCost)
-	if err != nil {
-		return err
-	}
-
-	u.Password = string(passwordHash)
-	return nil
-}
-
-// CheckPassword checks the provided password against the decrypted password belonging to the user.
-func (u *User) CheckPassword(password string) error {
-	bytePassword := []byte(password)
-	byteHashedPassword := []byte(u.Password)
-	return bcrypt.CompareHashAndPassword(byteHashedPassword, bytePassword)
 }
 
 // FindOne returns the first user that matches the given criteria.

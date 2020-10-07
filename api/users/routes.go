@@ -1,10 +1,9 @@
 package users
 
 import (
-	"time"
+	"log"
 
 	"github.com/bk7987/timecards/common"
-	"github.com/bk7987/timecards/config"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gofiber/fiber/v2"
 )
@@ -12,8 +11,8 @@ import (
 // Register is the endpoint for registering new users.
 func Register(ctx *fiber.Ctx) error {
 	userInfo := &UserInfo{}
-	ctx.BodyParser(&userInfo)
-	if err := userInfo.Validate(); err != nil {
+	ctx.BodyParser(userInfo)
+	if err := userInfo.ValidateRegister(); err != nil {
 		return common.BadRequestError(ctx)
 	}
 
@@ -33,6 +32,9 @@ func Register(ctx *fiber.Ctx) error {
 func Login(ctx *fiber.Ctx) error {
 	userInfo := &UserInfo{}
 	ctx.BodyParser(userInfo)
+	if err := userInfo.ValidateLogin(); err != nil {
+		return common.BadRequestError(ctx)
+	}
 
 	user, err := FindOne(User{Username: userInfo.Username})
 	if err != nil {
@@ -43,15 +45,40 @@ func Login(ctx *fiber.Ctx) error {
 		return common.UnauthorizedError(ctx, "Email or password incorrect")
 	}
 
-	token := jwt.New(jwt.SigningMethodHS256)
-	claims := token.Claims.(jwt.MapClaims)
-	claims["id"] = user.ID
-	claims["expires"] = time.Now().Add(config.GetConfig().JWTExpiration)
-
-	signedToken, err := token.SignedString([]byte(config.GetConfig().JWTSecret))
+	response, err := generateJWTPair(&user)
 	if err != nil {
 		return common.InternalServerError(ctx)
 	}
+	return ctx.JSON(response)
+}
 
-	return ctx.JSON(fiber.Map{"token": signedToken})
+// RefreshToken is the endpoint for refreshing JWTs.
+func RefreshToken(ctx *fiber.Ctx) error {
+	tokenReq := tokenRefreshRequest{}
+	ctx.BodyParser(&tokenReq)
+	log.Println(tokenReq)
+	if err := tokenReq.ValidateRefresh(); err != nil {
+		return common.BadRequestError(ctx)
+	}
+
+	token, err := ParseJWT(tokenReq.RefreshToken)
+	if err != nil {
+		return common.UnauthorizedError(ctx, "Invalid refresh token")
+	}
+
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		user, err := FindOne(User{ID: claims["id"].(string)})
+		if err != nil {
+			return common.UnauthorizedError(ctx, "Invalid refresh token")
+		}
+
+		response, err := generateJWTPair(&user)
+		if err != nil {
+			return common.InternalServerError(ctx)
+		}
+
+		return ctx.JSON(response)
+	}
+
+	return common.UnauthorizedError(ctx, "Invalid refresh token")
 }

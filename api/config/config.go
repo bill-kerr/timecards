@@ -12,27 +12,28 @@ import (
 
 // Config represents the configuration state of the application.
 type Config struct {
-	Environment         string
-	Port                string
-	HCSSClientID        string
-	HCSSClientSecret    string
-	HCSSScope           string
-	HCSSGrantType       string
-	HCSSIdentityURL     string
-	HCSSTokenRefreshInt uint64
-	HeavyjobRootURL     string
-	BusinessUnitID      string
-	MinPasswordLength   int
-	MaxPasswordLength   int
-	MinUsernameLength   int
-	MaxUsernameLength   int
-	JWTSecret           string
-	JWTExpiration       time.Duration
-	PGConnString        string
-	JobRefreshInt       uint64
-	EmployeeRefreshInt  uint64
-	EquipmentRefreshInt uint64
-	TimecardRefreshInt  uint64
+	Environment          string
+	Port                 string
+	HCSSClientID         string
+	HCSSClientSecret     string
+	HCSSScope            string
+	HCSSGrantType        string
+	HCSSIdentityURL      string
+	HCSSTokenRefreshInt  uint64
+	HeavyjobRootURL      string
+	BusinessUnitID       string
+	MinPasswordLength    int
+	MaxPasswordLength    int
+	MinUsernameLength    int
+	MaxUsernameLength    int
+	JWTSecret            string
+	JWTExpiration        time.Duration
+	JWTRefreshExpiration time.Duration
+	PGConnString         string
+	JobRefreshInt        uint64
+	EmployeeRefreshInt   uint64
+	EquipmentRefreshInt  uint64
+	TimecardRefreshInt   uint64
 }
 
 var envConfig *Config
@@ -49,27 +50,28 @@ func Init() *Config {
 
 func setConfig() *Config {
 	envConfig = &Config{
-		Environment:         getEnvironment(),
-		Port:                getPort(),
-		HCSSClientID:        getHCSSClientID(),
-		HCSSClientSecret:    getHCSSClientSecret(),
-		HCSSScope:           getHCSSScope(),
-		HCSSGrantType:       getHCSSGrantType(),
-		HCSSIdentityURL:     getHCSSIdentityURL(),
-		HCSSTokenRefreshInt: getHCSSTokenRefreshInt(),
-		HeavyjobRootURL:     getHeavyjobRootURL(),
-		BusinessUnitID:      getBusinessUnitID(),
-		MinPasswordLength:   getMinPasswordLength(),
-		MaxPasswordLength:   getMaxPasswordLength(),
-		MinUsernameLength:   getMinUsernameLength(),
-		MaxUsernameLength:   getMaxUsernameLength(),
-		JWTSecret:           getJWTSecret(),
-		JWTExpiration:       getJWTExpiration(),
-		PGConnString:        getPGConnString(),
-		JobRefreshInt:       getJobRefreshInt(),
-		EmployeeRefreshInt:  getEmployeeRefreshInt(),
-		EquipmentRefreshInt: getEquipmentRefreshInt(),
-		TimecardRefreshInt:  getTimecardRefreshInt(),
+		Environment:          getEnvironment(),
+		Port:                 getPort(),
+		HCSSClientID:         getHCSSClientID(),
+		HCSSClientSecret:     getHCSSClientSecret(),
+		HCSSScope:            getHCSSScope(),
+		HCSSGrantType:        getHCSSGrantType(),
+		HCSSIdentityURL:      getHCSSIdentityURL(),
+		HCSSTokenRefreshInt:  getHCSSTokenRefreshInt(),
+		HeavyjobRootURL:      getHeavyjobRootURL(),
+		BusinessUnitID:       getBusinessUnitID(),
+		MinPasswordLength:    getMinPasswordLength(),
+		MaxPasswordLength:    getMaxPasswordLength(),
+		MinUsernameLength:    getMinUsernameLength(),
+		MaxUsernameLength:    getMaxUsernameLength(),
+		JWTSecret:            getJWTSecret(),
+		JWTExpiration:        getJWTExpiration(),
+		JWTRefreshExpiration: getJWTRefreshExpiration(),
+		PGConnString:         getPGConnString(),
+		JobRefreshInt:        getJobRefreshInt(),
+		EmployeeRefreshInt:   getEmployeeRefreshInt(),
+		EquipmentRefreshInt:  getEquipmentRefreshInt(),
+		TimecardRefreshInt:   getTimecardRefreshInt(),
 	}
 	return envConfig
 }
@@ -198,6 +200,15 @@ func getJWTSecret() string {
 // getJWTExpriation returns the JWT expiration time as a duration in seconds from the JWT_EXPIRATION env variable.
 func getJWTExpiration() time.Duration {
 	seconds, err := strconv.Atoi(get("JWT_EXPIRATION"))
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	return time.Duration(seconds) * time.Second
+}
+
+// getJWTRefreshExpiration returns the JWT refresh token expiration time as a duration in seconds from the JWT_REFRESH_EXPIRATION env variable.
+func getJWTRefreshExpiration() time.Duration {
+	seconds, err := strconv.Atoi(get("JWT_REFRESH_EXPIRATION"))
 	if err != nil {
 		log.Fatal(err.Error())
 	}
