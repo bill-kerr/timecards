@@ -25,7 +25,7 @@ func GenerateSignedToken(user *User, expires time.Time) (string, error) {
 	token := jwt.New(jwt.SigningMethodHS256)
 	claims := token.Claims.(jwt.MapClaims)
 	claims["id"] = user.ID
-	claims["exp"] = expires
+	claims["exp"] = expires.Unix()
 
 	signedToken, err := token.SignedString([]byte(config.GetConfig().JWTSecret))
 	if err != nil {
