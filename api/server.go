@@ -52,7 +52,7 @@ func main() {
 	auth := v1.Group("/auth")
 	auth.Post("/register", users.Register)
 	auth.Post("/login", users.Login)
-	auth.Post("/refresh", users.RefreshToken)
+	auth.Get("/refresh", users.RefreshToken)
 
 	v1.Use(users.RequireAuth)
 	v1.Get("/jobs", jobs.GetJobs)

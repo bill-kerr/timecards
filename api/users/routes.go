@@ -20,7 +20,7 @@ func Register(ctx *fiber.Ctx) error {
 	}
 
 	if err := user.Save(); err != nil {
-		return common.BadRequestError(ctx)
+		return common.InternalServerError(ctx)
 	}
 
 	return ctx.Status(fiber.StatusCreated).JSON(user)
@@ -49,7 +49,11 @@ func Login(ctx *fiber.Ctx) error {
 	}
 
 	SetRefreshTokenCookie(ctx, pair.RefreshToken)
-	return ctx.JSON(fiber.Map{"accessToken": pair.AccessToken})
+	return ctx.JSON(&UserResponse{
+		ID:          user.ID,
+		Username:    user.Username,
+		AccessToken: pair.AccessToken,
+	})
 }
 
 // RefreshToken is the endpoint for refreshing JWTs.
@@ -76,7 +80,11 @@ func RefreshToken(ctx *fiber.Ctx) error {
 		}
 
 		SetRefreshTokenCookie(ctx, pair.RefreshToken)
-		return ctx.JSON(fiber.Map{"accessToken": pair.AccessToken})
+		return ctx.JSON(&UserResponse{
+			ID:          user.ID,
+			Username:    user.Username,
+			AccessToken: pair.AccessToken,
+		})
 	}
 
 	return common.UnauthorizedError(ctx, "Invalid refresh token")

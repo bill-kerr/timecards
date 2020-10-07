@@ -21,6 +21,13 @@ type UserInfo struct {
 	Password string `json:"password"`
 }
 
+// UserResponse defines the shape of a successful login/refresh response.
+type UserResponse struct {
+	ID          string `json:"id"`
+	Username    string `json:"username"`
+	AccessToken string `json:"accessToken"`
+}
+
 // FindOne returns the first user that matches the given criteria.
 func FindOne(condition User) (User, error) {
 	db := common.GetDB()
