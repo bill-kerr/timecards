@@ -10,7 +10,7 @@ export const EmployeeItemList: React.FC = () => {
   const timecardEmployees = useTypedSelector((state) => state.timecardEmployees.timecardEmployees);
 
   const renderNoEmployees = () => (
-    <div className="mt-10 flex flex-col items-center justify-center">
+    <div className="mt-10 px-6 flex flex-col items-center justify-center">
       <IconUserGroup className="text-gray-500 h-16 w-16" />
       <span className="mt-1 text-xl text-gray-600 text-center">
         No timecard data has been submitted for this week.

@@ -31,7 +31,7 @@ export const Login: React.FC = () => {
   };
 
   return (
-    <div className="h-screen flex items-center justify-center bg-teal-300">
+    <div className="h-screen flex items-center justify-center bg-teal-500">
       <div className="p-6 rounded shadow bg-gray-100">
         <div className="flex items-center justify-center text-teal-900">
           <IconClock className="h-12 w-12 text-teal-700" />
@@ -61,14 +61,16 @@ export const Login: React.FC = () => {
                 />
 
                 {failed && (
-                  <div className="mt-4 flex items-center">
+                  <div className="mt-4 flex items-center leading-none">
                     <IconExclamation className="h-6 w-6 text-red-500" />
-                    <span className="ml-2 text-sm text-red-600">Incorrect username or password.</span>
+                    <span className="ml-2 text-sm text-red-600">
+                      Incorrect username or password.
+                    </span>
                   </div>
                 )}
                 <button
                   type="submit"
-                  className="mt-4 p-3 w-full flex items-center justify-center text-center bg-teal-700 text-gray-100 rounded font-bold hover:bg-teal-600 focus:outline-none focus:shadow-outline"
+                  className="mt-4 p-3 w-full flex items-center justify-center text-center bg-teal-600 text-gray-100 rounded font-bold hover:bg-teal-500 focus:outline-none focus:shadow-outline"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? <IconRefresh className="h-6 w-6 animate-spin" /> : 'Login'}

@@ -27,9 +27,17 @@ export interface ITimecardsClient {
   getTimecards: (startDate: string, endDate: string) => Promise<Timecard[] | ErrorResponse>;
   getJobs: () => Promise<Job[] | ErrorResponse>;
   getEquipment: () => Promise<Equipment[] | ErrorResponse>;
-  getTimecardEmployeesByTimecard: (timecardId: string) => Promise<TimecardEmployee[] | ErrorResponse>;
-  getTimecardEmployees: (startDate: string, endDate: string) => Promise<TimecardEmployee[] | ErrorResponse>;
-  getTimecardCostCodes: (startDate: string, endDate: string) => Promise<TimecardCostCode[] | ErrorResponse>;
+  getTimecardEmployeesByTimecard: (
+    timecardId: string
+  ) => Promise<TimecardEmployee[] | ErrorResponse>;
+  getTimecardEmployees: (
+    startDate: string,
+    endDate: string
+  ) => Promise<TimecardEmployee[] | ErrorResponse>;
+  getTimecardCostCodes: (
+    startDate: string,
+    endDate: string
+  ) => Promise<TimecardCostCode[] | ErrorResponse>;
   login: (username: string, password: string) => Promise<LoginResponse | ErrorResponse>;
   refreshToken: () => Promise<LoginResponse | ErrorResponse>;
 }
@@ -62,7 +70,9 @@ export const timecardsClient = (accessToken: string): ITimecardsClient => ({
 
   updateEmployee: async (id, employee) => {
     try {
-      const res = await axiosClient(accessToken).patch<Employee>(`/employees/${id}`, employee, { headers });
+      const res = await axiosClient(accessToken).patch<Employee>(`/employees/${id}`, employee, {
+        headers,
+      });
       return res.data;
     } catch (error) {
       return errorResponse;
@@ -100,7 +110,9 @@ export const timecardsClient = (accessToken: string): ITimecardsClient => ({
 
   getTimecardEmployeesByTimecard: async (timecardId) => {
     try {
-      const res = await axiosClient(accessToken).get<TimecardEmployee[]>(`/timecards/${timecardId}/timecard-employees`);
+      const res = await axiosClient(accessToken).get<TimecardEmployee[]>(
+        `/timecards/${timecardId}/timecard-employees`
+      );
       return res.data;
     } catch (error) {
       return errorResponse;
@@ -131,7 +143,10 @@ export const timecardsClient = (accessToken: string): ITimecardsClient => ({
 
   login: async (username, password) => {
     try {
-      const res = await axiosClient(accessToken).post<LoginResponse>('/auth/login', { username, password });
+      const res = await axiosClient(accessToken).post<LoginResponse>('/auth/login', {
+        username,
+        password,
+      });
       return res.data;
     } catch (error) {
       return errorResponse;
