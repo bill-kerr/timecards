@@ -21,6 +21,7 @@ type Config struct {
 	HCSSIdentityURL      string
 	HCSSTokenRefreshInt  uint64
 	HeavyjobRootURL      string
+	AllowOrigins         string
 	BusinessUnitID       string
 	MinPasswordLength    int
 	MaxPasswordLength    int
@@ -59,6 +60,7 @@ func setConfig() *Config {
 		HCSSIdentityURL:      getHCSSIdentityURL(),
 		HCSSTokenRefreshInt:  getHCSSTokenRefreshInt(),
 		HeavyjobRootURL:      getHeavyjobRootURL(),
+		AllowOrigins:         getAllowOrigins(),
 		BusinessUnitID:       getBusinessUnitID(),
 		MinPasswordLength:    getMinPasswordLength(),
 		MaxPasswordLength:    getMaxPasswordLength(),
@@ -149,6 +151,11 @@ func getHCSSTokenRefreshInt() uint64 {
 // HeavyjobRootURL returns the HEAVYJOB_ROOT_URL env variable.
 func getHeavyjobRootURL() string {
 	return get("HEAVYJOB_ROOT_URL")
+}
+
+// getAllowOrigins returns the Allow Origins header content from the ALLOW_ORIGINS env variable.
+func getAllowOrigins() string {
+	return get("ALLOW_ORIGINS")
 }
 
 // BusinessUnitID returns the manager's business unit id from the BUSINESS_UNIT_ID env variable.

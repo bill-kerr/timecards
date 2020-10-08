@@ -44,7 +44,10 @@ func main() {
 
 	app := fiber.New()
 	app.Use(recover.New())
-	app.Use(cors.New())
+	app.Use(cors.New(cors.Config{
+		AllowCredentials: true,
+		AllowOrigins:     c.AllowOrigins,
+	}))
 
 	api := app.Group("/api")
 	v1 := api.Group("/v1", config.SetConfig(), heavyjob.SetClient())
