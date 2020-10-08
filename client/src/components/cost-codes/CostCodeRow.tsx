@@ -39,7 +39,11 @@ export const CostCodeRow: React.FC<CostCodeRowProps> = ({
         </div>
       </div>
       {dates.map((date) => {
-        return <div className="w-1/12 flex items-center justify-center text-sm">{getHours(date)}</div>;
+        return (
+          <div key={date.toString()} className="w-1/12 flex items-center justify-center text-sm">
+            {getHours(date)}
+          </div>
+        );
       })}
       <div className="w-1/12 flex items-center justify-center text-sm">a</div>
     </div>

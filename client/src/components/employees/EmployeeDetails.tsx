@@ -54,7 +54,7 @@ export const EmployeeDetails: React.FC<EmployeeDetailsProps> = ({ employee, time
   };
 
   const renderLoadingIcon = () => {
-    return <IconRefresh className="h-6 w-6 text-gray-500 animate-spin" />;
+    return <IconRefresh className="h-6 w-6 text-gray-500 animate-spin-reverse" />;
   };
 
   const splitCostCodes = (timecardEmployees: TimecardEmployee[]) => {

@@ -17,12 +17,14 @@ import history from '../history';
 import { Login } from './Login';
 import { getEmployees } from '../store/employees/actions';
 import { getJobs } from '../store/jobs/actions';
+import { FullscreenLoading } from './FullscreenLoading';
 
 export const App: React.FC = () => {
   const dispatch = useTypedDispatch();
   const settings = useTypedSelector((state) => state.settings);
   const user = useTypedSelector((state) => state.auth.user);
 
+  // Get rid of this. Need to be able to check for existence of cookie.
   useEffect(() => {
     if (user !== null) {
       return;
@@ -64,37 +66,35 @@ export const App: React.FC = () => {
     dispatch(setWeekEnding(date));
   };
 
-  const renderLoading = () => {
-    return <div className="h-screen flex items-center justify-center">Loading...</div>;
-  };
-
   return (
     <div className="h-screen">
       <Router history={history}>
-        <Route path="/login" exact component={Login} />
-        {!user ? (
-          renderLoading()
-        ) : (
-          <div className="h-full flex">
-            <SideNav />
-            <div className="w-full flex flex-col">
-              <div>
-                <WeekSelector
-                  weekdays={getEachDayOfWeek(settings.weekEnding)}
-                  onPrevWeek={onSelectPrevWeek}
-                  onNextWeek={onSelectNextWeek}
-                />
+        <Switch>
+          <Route path="/login" exact component={Login} />
+          <Route path="/">
+            {user ? (
+              <div className="h-full flex">
+                <SideNav />
+                <div className="w-full flex flex-col">
+                  <div>
+                    <WeekSelector
+                      weekdays={getEachDayOfWeek(settings.weekEnding)}
+                      onPrevWeek={onSelectPrevWeek}
+                      onNextWeek={onSelectNextWeek}
+                    />
+                  </div>
+                  <div className="mt-10 overflow-y-auto">
+                    <Route path="/employee-overview" exact component={EmployeeOverview} />
+                    <Route path="/foreman-overview" exact component={ForemanOverview} />
+                    <Route path="/" exact component={HomePage} />
+                  </div>
+                </div>
               </div>
-              <div className="mt-10 overflow-y-auto">
-                <Switch>
-                  <Route path="/employee-overview" exact component={EmployeeOverview} />
-                  <Route path="/foreman-overview" exact component={ForemanOverview} />
-                  <Route path="/" exact component={HomePage} />
-                </Switch>
-              </div>
-            </div>
-          </div>
-        )}
+            ) : (
+              <FullscreenLoading />
+            )}
+          </Route>
+        </Switch>
       </Router>
     </div>
   );
