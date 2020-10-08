@@ -1,11 +1,16 @@
 import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import { IconCog } from './icons/IconCog';
 import { IconUser } from './icons/IconUser';
 import { IconUserGroup } from './icons/IconUserGroup';
 import logo from '../assets/img/timecards_logo_white.svg';
+import { IconUserCircle } from './icons/IconUserCircle';
+import { User } from '../store/auth/types';
 
-export const SideNav: React.FC = () => {
+interface SideNavProps {
+  user: User;
+}
+
+export const SideNav: React.FC<SideNavProps> = ({ user }) => {
   return (
     <div className="h-full flex flex-col justify-between bg-teal-600 text-teal-100 shadow">
       <div className="p-3">
@@ -37,8 +42,8 @@ export const SideNav: React.FC = () => {
           className="p-2 pr-20 flex items-center text-sm font-semibold rounded whitespace-no-wrap hover:bg-teal-700"
           activeClassName="bg-teal-800 hover:bg-teal-800 text-teal-100 shadow-inner"
         >
-          <IconCog className="h-5 w-5 text-teal-300" />
-          <span className="ml-3">Settings</span>
+          <IconUserCircle className="h-5 w-5 text-teal-300" />
+          <span className="ml-3">{user.username}</span>
         </NavLink>
       </div>
     </div>

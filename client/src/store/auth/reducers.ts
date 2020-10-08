@@ -1,4 +1,4 @@
-import { AuthActionTypes, AUTH_LOGIN_COMPLETE, AUTH_REFRESH_COMPLETE, User } from './types';
+import { AuthActionTypes, AUTH_LOGIN_COMPLETE, AUTH_LOGOUT, AUTH_REFRESH_COMPLETE, User } from './types';
 
 interface AuthState {
   user: User | null;
@@ -18,6 +18,12 @@ export const authReducer = (state = initialState, action: AuthActionTypes): Auth
         ...state,
         user: action.user,
         accessToken: action.accessToken,
+      };
+    case AUTH_LOGOUT:
+      return {
+        ...state,
+        user: null,
+        accessToken: '',
       };
     default:
       return state;

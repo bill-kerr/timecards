@@ -39,10 +39,17 @@ export interface AuthRefreshErrorAction {
   type: typeof AUTH_REFRESH_ERROR;
 }
 
+export const AUTH_LOGOUT = 'Auth:Logout';
+
+export interface AuthLogoutAction {
+  type: typeof AUTH_LOGOUT;
+}
+
 export type AuthActionTypes =
   | AuthLoginCompleteAction
   | AuthLoginErrorAction
   | AuthLoginStartAction
   | AuthRefreshStartAction
   | AuthRefreshErrorAction
-  | AuthRefreshCompleteAction;
+  | AuthRefreshCompleteAction
+  | AuthLogoutAction;

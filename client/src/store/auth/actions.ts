@@ -4,11 +4,13 @@ import { isError } from '../../utils';
 import {
   AuthLoginCompleteAction,
   AuthLoginErrorAction,
+  AuthLogoutAction,
   AuthRefreshCompleteAction,
   AuthRefreshErrorAction,
   AUTH_LOGIN_COMPLETE,
   AUTH_LOGIN_ERROR,
   AUTH_LOGIN_START,
+  AUTH_LOGOUT,
   AUTH_REFRESH_COMPLETE,
   AUTH_REFRESH_ERROR,
   AUTH_REFRESH_START,
@@ -46,4 +48,8 @@ export const refreshToken = (): AsyncAction<AuthRefreshCompleteAction | AuthRefr
     const user: User = { id: response.id, username: response.username };
     return dispatch({ type: AUTH_REFRESH_COMPLETE, user, accessToken: response.accessToken });
   };
+};
+
+export const logout = (): AuthLogoutAction => {
+  return { type: AUTH_LOGOUT };
 };
