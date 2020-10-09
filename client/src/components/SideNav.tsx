@@ -12,7 +12,7 @@ interface SideNavProps {
 
 export const SideNav: React.FC<SideNavProps> = ({ user }) => {
   return (
-    <div className="h-full flex flex-col justify-between bg-teal-600 text-teal-100 shadow">
+    <div className="h-full flex flex-col justify-between bg-gradient-to-r from-teal-600 to-teal-500 text-teal-100 shadow">
       <div className="p-3">
         <Link to="/" className="flex items-center">
           <img src={logo} alt="Timecards" style={{ width: '192px' }} />

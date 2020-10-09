@@ -34,7 +34,7 @@ export const EmployeeOverview: React.FC = () => {
         onNextWeek={onSelectNextWeek}
       />
       <div
-        className="mt-10 py-2 px-6 sticky bg-gray-100 border-t border-b border-gray-200 text-gray-600 text-xs uppercase tracking-loose leading-none z-10"
+        className="mt-10 py-2 px-6 sticky border-t border-b border-gray-200 bg-white text-gray-600 text-xs uppercase tracking-loose leading-none z-10"
         style={{ top: 0 }}
       >
         <div className="pl-4 flex items-center justify-between">

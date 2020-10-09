@@ -32,7 +32,7 @@ export const WeekSelector: React.FC<WeekSelectorProps> = ({
             <DateBadge
               key={i}
               date={date}
-              className="ml-2 py-2 px-3 w-16 first:ml-0 rounded border border-gray-200"
+              className="ml-2 py-2 px-3 w-16 first:ml-0 rounded border border-gray-200 bg-white"
             />
           ))}
         </div>

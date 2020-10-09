@@ -55,7 +55,7 @@ export const App: React.FC = () => {
   }, [dispatch, settings.weekEnding, user]);
 
   return (
-    <div className="h-screen">
+    <div className="h-screen bg-gray-100">
       <Router history={history}>
         <Switch>
           <Route path="/login" exact component={Login} />

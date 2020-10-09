@@ -29,7 +29,7 @@ export const ForemanCard: React.FC<ForemanCardProps> = ({
 
   return (
     <div
-      className={`px-4 py-3 inline-block rounded-lg bg-gray-200 shadow ${className}`}
+      className={`px-4 py-3 inline-block rounded-lg bg-white shadow ${className}`}
       onMouseEnter={() => setShowMenu(true)}
       onMouseLeave={() => setShowMenu(false)}
       {...props}

@@ -35,7 +35,7 @@ export const EmployeeDetails: React.FC<EmployeeDetailsProps> = ({ employee, time
     return (
       <Tooltip content="Add as foreman">
         <IconUserAdd
-          className="h-6 w-6 text-gray-600 hover:text-gray-700 cursor-pointer focus:outline-none"
+          className="h-6 w-6 text-teal-800 hover:text-teal-700 cursor-pointer focus:outline-none"
           onClick={() => handleAddRemoveForeman(true)}
         />
       </Tooltip>
@@ -46,7 +46,7 @@ export const EmployeeDetails: React.FC<EmployeeDetailsProps> = ({ employee, time
     return (
       <Tooltip content="Remove as foreman">
         <IconUserRemove
-          className="h-6 w-6 text-gray-600 hover:text-gray-700 cursor-pointer focus:outline-none"
+          className="h-6 w-6 text-teal-800 hover:text-teal-700 cursor-pointer focus:outline-none"
           onClick={() => handleAddRemoveForeman(false)}
         />
       </Tooltip>
@@ -54,7 +54,7 @@ export const EmployeeDetails: React.FC<EmployeeDetailsProps> = ({ employee, time
   };
 
   const renderLoadingIcon = () => {
-    return <IconRefresh className="h-6 w-6 text-gray-500 animate-spin-reverse" />;
+    return <IconRefresh className="h-6 w-6 text-teal-700 animate-spin-reverse" />;
   };
 
   const splitCostCodes = (timecardEmployees: TimecardEmployee[]) => {
@@ -105,17 +105,17 @@ export const EmployeeDetails: React.FC<EmployeeDetailsProps> = ({ employee, time
 
   return (
     <div className="mx-6 pb-6 max-w-screen-lg w-full bg-white rounded-lg shadow">
-      <div className="p-6 flex items-center justify-between">
+      <div className="p-6 flex items-center justify-between bg-gradient-to-r from-teal-600 to-teal-500 rounded-t-lg text-gray-100">
         <div className="flex items-center">
           <h2 className="text-xl font-black uppercase">{employee.name}</h2>
-          <span className="ml-4 px-2 py-1 rounded-full bg-teal-100 text-teal-600 text-xs font-bold">
+          <span className="ml-4 px-2 py-1 rounded-full bg-teal-400 text-teal-800 text-xs font-bold">
             {employee.payClassCode}
           </span>
         </div>
         <div className="flex justify-between items-center">
           {loading ? renderLoadingIcon() : employee.isForeman ? renderRemoveForeman() : renderAddForeman()}
-          <div className="ml-4 pl-2 border-l border-gray-200">
-            <IconX onClick={dismiss} className="h-6 w-6 text-gray-600 hover:text-gray-700 cursor-pointer" />
+          <div className="ml-4 pl-2">
+            <IconX onClick={dismiss} className="h-6 w-6 text-teal-800 hover:text-teal-700 cursor-pointer" />
           </div>
         </div>
       </div>
