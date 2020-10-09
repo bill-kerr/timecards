@@ -27,14 +27,14 @@ export const CostCodeRow: React.FC<CostCodeRowProps> = ({
 
   return (
     <div {...props} className={`flex items-center justify-between hover:bg-teal-200 ${className}`}>
-      <div className="w-1/5 text-xs">
-        <div>
+      <div className="w-1/5 leading-tight">
+        <div className="text-sm">
           <span className="font-bold">{costCode}</span>
           <span className="ml-4">{payClass}</span>
         </div>
         <div className="truncate">
           <Tooltip content={description} delay={[500, null]}>
-            <span>{description}</span>
+            <span className="text-xs">{description}</span>
           </Tooltip>
         </div>
       </div>
