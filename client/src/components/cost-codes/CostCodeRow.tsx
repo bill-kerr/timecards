@@ -26,7 +26,7 @@ export const CostCodeRow: React.FC<CostCodeRowProps> = ({
   };
 
   return (
-    <div {...props} className={`flex items-center justify-between ${className}`}>
+    <div {...props} className={`flex items-center justify-between hover:bg-teal-200 ${className}`}>
       <div className="w-1/5 text-xs">
         <div>
           <span className="font-bold">{costCode}</span>

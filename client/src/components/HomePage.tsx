@@ -1,12 +1,16 @@
 import React from 'react';
 import { LinkCard } from './LinkCard';
+import timecardsIcon from '../assets/img/timecards_icon_gradient.svg';
 
 export const HomePage: React.FC = () => {
   return (
     <div className="px-6 py-3">
-      <div className="p-6 rounded border border-gray-300">
-        <h2 className="text-3xl font-bold">Welcome to Timecards!</h2>
-        <p className="text-gray-600">Click on one of the options below to get started.</p>
+      <div className="flex items-center">
+        <img src={timecardsIcon} alt="Timecards" />
+        <div className="ml-4 leading-tight">
+          <h2 className="text-5xl font-bold">Welcome to Timecards!</h2>
+          <p className="text-gray-600">Click on one of the options below to get started.</p>
+        </div>
       </div>
       <div className="mt-10 flex flex-wrap items-stretch">
         <LinkCard

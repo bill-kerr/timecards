@@ -12,20 +12,20 @@ interface WeekSelectorProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export const WeekSelector: React.FC<WeekSelectorProps> = ({
   weekdays,
-  className,
+  className = '',
   onNextWeek = noop,
   onPrevWeek = noop,
   ...props
 }) => {
   return (
-    <div className={`mt-6 flex items-center justify-center ${className}`} {...props}>
+    <div className={`pt-6 flex items-center justify-center ${className}`} {...props}>
       <IconChevronLeft
         className="h-16 w-16 text-gray-400 hover:text-teal-400 cursor-pointer"
         onClick={() => onPrevWeek()}
       />
       <div>
         <h2 className="block text-sm uppercase tracking-wide text-gray-600 text-center font-bold">
-          Week Ending {formatDate(weekdays[weekdays.length - 1], 'MMMM d, yyyy')}
+          Week Ending <span className="text-teal-500">{formatDate(weekdays[weekdays.length - 1], 'MMMM d, yyyy')}</span>
         </h2>
         <div className="mt-1 flex items-center justify-center">
           {weekdays.map((date, i) => (

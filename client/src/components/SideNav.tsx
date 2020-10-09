@@ -12,38 +12,41 @@ interface SideNavProps {
 
 export const SideNav: React.FC<SideNavProps> = ({ user }) => {
   return (
-    <div className="h-full flex flex-col justify-between bg-gradient-to-r from-teal-600 to-teal-500 text-teal-100 shadow">
+    <div className="h-full flex flex-col justify-between bg-gray-900 text-gray-100 shadow">
       <div className="p-3">
         <Link to="/" className="flex items-center">
           <img src={logo} alt="Timecards" style={{ width: '192px' }} />
         </Link>
-        <div className="mt-6 text-teal-200">
+        <div className="mt-6 text-gray-200">
           <NavLink
             to="/employee-overview"
-            className="p-2 pr-20 flex items-center text-sm font-semibold rounded whitespace-no-wrap hover:bg-teal-700"
-            activeClassName="bg-teal-800 hover:bg-teal-800 text-teal-100 shadow-inner"
+            className="p-2 pr-20 flex items-center text-sm font-semibold rounded whitespace-no-wrap hover:bg-gray-700"
+            activeClassName="bg-gray-800 hover:bg-gray-800 text-gray-100 shadow-inner"
           >
-            <IconUserGroup className="h-5 w-5 text-teal-300" />
+            <IconUserGroup className="h-5 w-5 text-gray-300" />
             <span className="ml-3">Employee Overview</span>
           </NavLink>
           <NavLink
             to="/foreman-overview"
-            className="mt-3 p-2 pr-20 flex items-center text-sm font-semibold rounded whitespace-no-wrap hover:bg-teal-700"
-            activeClassName="bg-teal-800 hover:bg-teal-800 text-teal-100 shadow-inner"
+            className="mt-3 p-2 pr-20 flex items-center text-sm font-semibold rounded whitespace-no-wrap hover:bg-gray-700"
+            activeClassName="bg-gray-800 hover:bg-gray-800 text-gray-100 shadow-inner"
           >
-            <IconUser className="h-5 w-5 text-teal-300" />
+            <IconUser className="h-5 w-5 text-gray-300" />
             <span className="ml-3">Foreman Overview</span>
           </NavLink>
         </div>
       </div>
-      <div className="p-3 border-teal-500 border-t text-teal-200">
+      <div className="p-3 text-teal-200 bg-teal-700">
         <NavLink
           to="/settings"
-          className="p-2 pr-20 flex items-center text-sm font-semibold rounded whitespace-no-wrap hover:bg-teal-700"
+          className="p-2 pr-20 flex items-center rounded whitespace-no-wrap hover:bg-teal-800"
           activeClassName="bg-teal-800 hover:bg-teal-800 text-teal-100 shadow-inner"
         >
-          <IconUserCircle className="h-5 w-5 text-teal-300" />
-          <span className="ml-3">{user.username}</span>
+          <IconUserCircle className="h-8 w-8 text-teal-300" />
+          <div className="ml-3 flex flex-col leading-tight">
+            <span className="font-semibold">{user.username}</span>
+            <span className="text-sm text-teal-400">View profile</span>
+          </div>
         </NavLink>
       </div>
     </div>

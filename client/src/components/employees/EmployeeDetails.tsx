@@ -35,7 +35,7 @@ export const EmployeeDetails: React.FC<EmployeeDetailsProps> = ({ employee, time
     return (
       <Tooltip content="Add as foreman">
         <IconUserAdd
-          className="h-6 w-6 text-teal-800 hover:text-teal-700 cursor-pointer focus:outline-none"
+          className="h-6 w-6 text-teal-300 hover:text-teal-400 cursor-pointer focus:outline-none"
           onClick={() => handleAddRemoveForeman(true)}
         />
       </Tooltip>
@@ -46,7 +46,7 @@ export const EmployeeDetails: React.FC<EmployeeDetailsProps> = ({ employee, time
     return (
       <Tooltip content="Remove as foreman">
         <IconUserRemove
-          className="h-6 w-6 text-teal-800 hover:text-teal-700 cursor-pointer focus:outline-none"
+          className="h-6 w-6 text-teal-300 hover:text-teal-400 cursor-pointer focus:outline-none"
           onClick={() => handleAddRemoveForeman(false)}
         />
       </Tooltip>
@@ -54,7 +54,7 @@ export const EmployeeDetails: React.FC<EmployeeDetailsProps> = ({ employee, time
   };
 
   const renderLoadingIcon = () => {
-    return <IconRefresh className="h-6 w-6 text-teal-700 animate-spin-reverse" />;
+    return <IconRefresh className="h-6 w-6 text-teal-500 animate-spin-reverse" />;
   };
 
   const splitCostCodes = (timecardEmployees: TimecardEmployee[]) => {
@@ -104,8 +104,8 @@ export const EmployeeDetails: React.FC<EmployeeDetailsProps> = ({ employee, time
   };
 
   return (
-    <div className="mx-6 pb-6 max-w-screen-lg w-full bg-white rounded-lg shadow">
-      <div className="p-6 flex items-center justify-between bg-gradient-to-r from-teal-600 to-teal-500 rounded-t-lg text-gray-100">
+    <div className="mx-6 max-w-screen-lg w-full bg-white rounded-lg shadow">
+      <div className="p-6 flex items-center justify-between bg-gradient-to-r from-teal-800 to-teal-700 rounded-t-lg text-gray-100">
         <div className="flex items-center">
           <h2 className="text-xl font-black uppercase">{employee.name}</h2>
           <span className="ml-4 px-2 py-1 rounded-full bg-teal-400 text-teal-800 text-xs font-bold">
@@ -115,18 +115,23 @@ export const EmployeeDetails: React.FC<EmployeeDetailsProps> = ({ employee, time
         <div className="flex justify-between items-center">
           {loading ? renderLoadingIcon() : employee.isForeman ? renderRemoveForeman() : renderAddForeman()}
           <div className="ml-4 pl-2">
-            <IconX onClick={dismiss} className="h-6 w-6 text-teal-800 hover:text-teal-700 cursor-pointer" />
+            <Tooltip content="Close">
+              <IconX
+                onClick={dismiss}
+                className="h-6 w-6 text-teal-300 hover:text-teal-400 cursor-pointer outline-none"
+              />
+            </Tooltip>
           </div>
         </div>
       </div>
-      <div className="px-6 py-2 mb-2 flex items-center justify-between font-bold text-xs border-t border-b border-gray-200 bg-gray-100 uppercase text-gray-600 tracking-wide">
+      <div className="px-6 py-2 flex items-center justify-between font-bold text-xs border-t border-b border-gray-200 bg-gray-100 uppercase text-gray-600 tracking-wide">
         <div className="w-1/5"></div>
         {getEachDayOfWeek(weekEnding).map((date) => (
           <DateBadge date={date} key={date.toString()} className="w-1/12" />
         ))}
         <div className="w-1/12 text-center">Total</div>
       </div>
-      {renderCostCodes()}
+      <div className="py-6">{renderCostCodes()}</div>
     </div>
   );
 };
