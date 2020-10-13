@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useTypedDispatch, useTypedSelector } from '../../store';
 import { updateEmployee } from '../../store/employees/actions';
 import { Employee } from '../../store/employees/types';
-import { TimecardEmployee } from '../../store/timecard-employees/types';
+import { EmployeeHours, TimecardEmployee } from '../../store/timecard-employees/types';
 import { CostCodeHours } from '../../types';
-import { getEachDayOfWeek, values } from '../../utils';
+import { calcHours, formatDate, getEachDayOfWeek, renderHours, values } from '../../utils';
 import { CostCodeRow } from '../cost-codes/CostCodeRow';
 import { DateBadge } from '../DateBadge';
 import { IconRefresh } from '../icons/IconRefresh';
@@ -23,12 +23,10 @@ export const EmployeeDetails: React.FC<EmployeeDetailsProps> = ({ employee, time
   const weekEnding = useTypedSelector((state) => state.settings.weekEnding);
   const timecardCostCodes = useTypedSelector((state) => state.timecardCostCodes.timecardCostCodes);
   const dispatch = useTypedDispatch();
-  const [loading, setLoading] = useState(false);
+  const loading = useTypedSelector((state) => state.employees.loading);
 
   const handleAddRemoveForeman = async (isForeman: boolean) => {
-    setLoading(true);
     await dispatch(updateEmployee(employee.id, { isForeman }));
-    setLoading(false);
   };
 
   const renderAddForeman = () => {
@@ -88,6 +86,15 @@ export const EmployeeDetails: React.FC<EmployeeDetailsProps> = ({ employee, time
     return costCodes;
   };
 
+  const getDateHours = (date: Date) => {
+    const tcEmployees = timecardEmployees.filter(tcEmployee => tcEmployee.timecardDate === formatDate(date));
+    const dateHours: EmployeeHours[] = [];
+    tcEmployees.forEach(tcEmployee => {
+      dateHours.push(...tcEmployee.hours)
+    });
+    return dateHours;
+  }
+
   const renderCostCodes = () => {
     const costCodes = splitCostCodes(timecardEmployees);
     return values(costCodes).map((costCode) => (
@@ -132,6 +139,12 @@ export const EmployeeDetails: React.FC<EmployeeDetailsProps> = ({ employee, time
         <div className="w-1/12 text-center">Total</div>
       </div>
       <div className="py-6">{renderCostCodes()}</div>
+        <div>
+          {getEachDayOfWeek(weekEnding).map((date) => {
+            const dateHours = getDateHours(date)
+            return <span>{renderHours(calcHours(dateHours)[0])}</span>
+          })}
+        </div>
     </div>
   );
 };

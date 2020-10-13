@@ -25,6 +25,11 @@ export const CostCodeRow: React.FC<CostCodeRowProps> = ({
     return renderHours(hourSet, tagCodes);
   };
 
+  const getTotalHours = () => {
+    const [total] = calcHours(hours);
+    return renderHours(total);
+  }
+
   return (
     <div {...props} className={`flex items-center justify-between hover:bg-teal-200 ${className}`}>
       <div className="w-1/5 leading-tight">
@@ -45,7 +50,7 @@ export const CostCodeRow: React.FC<CostCodeRowProps> = ({
           </div>
         );
       })}
-      <div className="w-1/12 flex items-center justify-center text-sm">a</div>
+      <div className="w-1/12 flex items-center justify-center text-sm">{getTotalHours()}</div>
     </div>
   );
 };
