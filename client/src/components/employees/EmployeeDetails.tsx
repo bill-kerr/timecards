@@ -19,11 +19,15 @@ interface EmployeeDetailsProps {
   dismiss: () => void;
 }
 
-export const EmployeeDetails: React.FC<EmployeeDetailsProps> = ({ employee, timecardEmployees, dismiss }) => {
-  const weekEnding = useTypedSelector((state) => state.settings.weekEnding);
-  const timecardCostCodes = useTypedSelector((state) => state.timecardCostCodes.timecardCostCodes);
+export const EmployeeDetails: React.FC<EmployeeDetailsProps> = ({
+  employee,
+  timecardEmployees,
+  dismiss,
+}) => {
+  const weekEnding = useTypedSelector(state => state.settings.weekEnding);
+  const timecardCostCodes = useTypedSelector(state => state.timecardCostCodes.timecardCostCodes);
   const dispatch = useTypedDispatch();
-  const loading = useTypedSelector((state) => state.employees.loading);
+  const loading = useTypedSelector(state => state.employees.loading);
 
   const handleAddRemoveForeman = async (isForeman: boolean) => {
     await dispatch(updateEmployee(employee.id, { isForeman }));
@@ -65,8 +69,8 @@ export const EmployeeDetails: React.FC<EmployeeDetailsProps> = ({ employee, time
         costCode: string;
       };
     } = {};
-    timecardEmployees.forEach((tcEmployee) => {
-      tcEmployee.hours.forEach((hours) => {
+    timecardEmployees.forEach(tcEmployee => {
+      tcEmployee.hours.forEach(hours => {
         const timecardCostCode = timecardCostCodes[hours.timecardCostCodeId];
         if (!timecardCostCode) {
           return;
@@ -86,18 +90,20 @@ export const EmployeeDetails: React.FC<EmployeeDetailsProps> = ({ employee, time
     return costCodes;
   };
 
-  const getDateHours = (date: Date) => {
-    const tcEmployees = timecardEmployees.filter(tcEmployee => tcEmployee.timecardDate === formatDate(date));
+  const getDateHours = (date?: Date) => {
+    const tcEmployees = date
+      ? timecardEmployees.filter(tcEmployee => tcEmployee.timecardDate === formatDate(date))
+      : timecardEmployees;
     const dateHours: EmployeeHours[] = [];
     tcEmployees.forEach(tcEmployee => {
-      dateHours.push(...tcEmployee.hours)
+      dateHours.push(...tcEmployee.hours);
     });
     return dateHours;
-  }
+  };
 
   const renderCostCodes = () => {
     const costCodes = splitCostCodes(timecardEmployees);
-    return values(costCodes).map((costCode) => (
+    return values(costCodes).map(costCode => (
       <CostCodeRow
         className="px-6 py-2"
         key={costCode.costCode}
@@ -120,7 +126,11 @@ export const EmployeeDetails: React.FC<EmployeeDetailsProps> = ({ employee, time
           </span>
         </div>
         <div className="flex justify-between items-center">
-          {loading ? renderLoadingIcon() : employee.isForeman ? renderRemoveForeman() : renderAddForeman()}
+          {loading
+            ? renderLoadingIcon()
+            : employee.isForeman
+            ? renderRemoveForeman()
+            : renderAddForeman()}
           <div className="ml-4 pl-2">
             <Tooltip content="Close">
               <IconX
@@ -133,18 +143,26 @@ export const EmployeeDetails: React.FC<EmployeeDetailsProps> = ({ employee, time
       </div>
       <div className="px-6 py-2 flex items-center justify-between font-bold text-xs border-t border-b border-gray-200 bg-gray-100 uppercase text-gray-600 tracking-wide">
         <div className="w-1/5"></div>
-        {getEachDayOfWeek(weekEnding).map((date) => (
+        {getEachDayOfWeek(weekEnding).map(date => (
           <DateBadge date={date} key={date.toString()} className="w-1/12" />
         ))}
         <div className="w-1/12 text-center">Total</div>
       </div>
-      <div className="py-6">{renderCostCodes()}</div>
-        <div>
-          {getEachDayOfWeek(weekEnding).map((date) => {
-            const dateHours = getDateHours(date)
-            return <span>{renderHours(calcHours(dateHours)[0])}</span>
+      <div className="py-6">
+        {renderCostCodes()}
+        <div className="mt-2 border-t border-b border-indigo-200 px-6 py-2 flex items-center justify-between text-sm font-bold bg-indigo-100">
+          <div className="w-1/5">Totals</div>
+          {getEachDayOfWeek(weekEnding).map(date => {
+            const dateHours = getDateHours(date);
+            return (
+              <div key={date.toString()} className="w-1/12 text-center">
+                {renderHours(calcHours(dateHours)[0])}
+              </div>
+            );
           })}
+          <div className="w-1/12 text-center">{renderHours(calcHours(getDateHours())[0])}</div>
         </div>
+      </div>
     </div>
   );
 };

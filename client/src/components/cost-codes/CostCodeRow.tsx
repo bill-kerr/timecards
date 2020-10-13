@@ -21,14 +21,16 @@ export const CostCodeRow: React.FC<CostCodeRowProps> = ({
   ...props
 }) => {
   const getHours = (date: Date) => {
-    const [hourSet, tagCodes] = calcHours(hours.filter((hourSet) => hourSet.date === formatDate(date)));
+    const [hourSet, tagCodes] = calcHours(
+      hours.filter(hourSet => hourSet.date === formatDate(date))
+    );
     return renderHours(hourSet, tagCodes);
   };
 
   const getTotalHours = () => {
     const [total] = calcHours(hours);
     return renderHours(total);
-  }
+  };
 
   return (
     <div {...props} className={`flex items-center justify-between hover:bg-teal-200 ${className}`}>
@@ -43,14 +45,16 @@ export const CostCodeRow: React.FC<CostCodeRowProps> = ({
           </Tooltip>
         </div>
       </div>
-      {dates.map((date) => {
+      {dates.map(date => {
         return (
           <div key={date.toString()} className="w-1/12 flex items-center justify-center text-sm">
             {getHours(date)}
           </div>
         );
       })}
-      <div className="w-1/12 flex items-center justify-center text-sm">{getTotalHours()}</div>
+      <div className="w-1/12 flex items-center justify-center text-sm font-bold">
+        {getTotalHours()}
+      </div>
     </div>
   );
 };
