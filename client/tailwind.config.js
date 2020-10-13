@@ -21,6 +21,9 @@ module.exports = {
           to: { transform: 'rotate(-360deg)' },
         },
       },
+      spacing: {
+        96: '24rem',
+      },
     },
   },
   variants: {

@@ -1,20 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTypedDispatch, useTypedSelector } from '../../store';
 import { updateEmployee } from '../../store/employees/actions';
 import { setWeekEnding } from '../../store/settings/actions';
 import { filterDict, getEachDayOfWeek, nextWeekEnding, prevWeekEnding, values } from '../../utils';
 import { IconPlus } from '../icons/IconPlus';
 import { IconUserGroup } from '../icons/IconUserGroup';
+import { Modal } from '../Modal';
 import { WeekSelector } from '../WeekSelector';
+import { AddForemen } from './AddForemen';
 import { ForemanCard } from './ForemanCard';
 
 export const ForemanOverview: React.FC = () => {
+  const [showModal, setShowModal] = useState(false);
   const dispatch = useTypedDispatch();
-  const { foremen, timecards, weekdays, settings } = useTypedSelector((state) => {
-    const foremen = filterDict(state.employees.employees, (e) => e.isForeman);
+  const { foremen, timecards, weekdays, settings } = useTypedSelector(state => {
+    const foremen = filterDict(state.employees.employees, e => e.isForeman);
     return {
       foremen,
-      timecards: filterDict(state.timecards, (t) => t.foremanId in foremen),
+      timecards: filterDict(state.timecards, t => t.foremanId in foremen),
       weekdays: getEachDayOfWeek(state.settings.weekEnding),
       settings: state.settings,
     };
@@ -37,12 +40,17 @@ export const ForemanOverview: React.FC = () => {
         No foremen have been added. Get started by adding some foremen.
       </span>
       <button
-        type="submit"
         className="mt-4 p-3 flex items-center justify-center text-center bg-teal-600 text-gray-100 rounded font-bold hover:bg-teal-500 focus:outline-none focus:shadow-outline"
+        onClick={() => setShowModal(true)}
       >
         <IconPlus />
         <span className="ml-2">Add Foremen</span>
       </button>
+      {showModal && (
+        <Modal onDismiss={() => setShowModal(false)}>
+          <AddForemen />
+        </Modal>
+      )}
     </div>
   );
 
@@ -58,11 +66,11 @@ export const ForemanOverview: React.FC = () => {
         onNextWeek={onSelectNextWeek}
       />
       <div className="mt-10 px-6 flex flex-col sm:flex-row flex-wrap">
-        {values(foremen).map((foreman) => (
+        {values(foremen).map(foreman => (
           <div key={foreman.id} className="sm:mr-6 mb-6 inline-block w-64">
             <ForemanCard
               foreman={foreman}
-              timecards={values(timecards, (t) => t.foremanId === foreman.id)}
+              timecards={values(timecards, t => t.foremanId === foreman.id)}
               weekdays={weekdays}
               className="w-full"
               onRemoveForeman={() => dispatch(updateEmployee(foreman.id, { isForeman: false }))}
