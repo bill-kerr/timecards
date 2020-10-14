@@ -31,6 +31,7 @@ export interface AuthRefreshStartAction {
 
 export interface AuthRefreshCompleteAction {
   type: typeof AUTH_REFRESH_COMPLETE;
+  setUser: boolean;
   user: User;
   accessToken: string;
 }

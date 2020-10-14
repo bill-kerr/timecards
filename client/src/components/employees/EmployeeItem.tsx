@@ -29,12 +29,14 @@ export const EmployeeItem: React.FC<EmployeeItemProps> = ({
   const [showModal, setShowModal] = useState(false);
 
   function renderEmployeeWeekday(date: Date) {
-    const tcEmployees = timecardEmployees.filter((tcEmployee) => tcEmployee.timecardDate === formatDate(date));
+    const tcEmployees = timecardEmployees.filter(
+      tcEmployee => tcEmployee.timecardDate === formatDate(date)
+    );
     const [hours, tagCodes] = calcHoursByTimecardEmployees(tcEmployees);
     return (
       <EmployeeWeekday
         key={date.toString()}
-        className="w-1/12 flex justify-center items-center"
+        className="w-1/12 hidden lg:flex justify-center items-center"
         hours={hours}
         tagCodes={tagCodes}
       />
@@ -48,11 +50,11 @@ export const EmployeeItem: React.FC<EmployeeItemProps> = ({
       {...props}
     >
       <div className="flex items-center justify-between">
-        <div className="w-1/6 truncate">
+        <div className="lg:w-1/6 truncate">
           <span>{toTitleCase(employee.name)}</span>
         </div>
-        {weekdays.map((date) => renderEmployeeWeekday(date))}
-        <div className="w-1/12 text-center">{renderHours(totalHours)}</div>
+        {weekdays.map(date => renderEmployeeWeekday(date))}
+        <div className="lg:w-1/12 pr-4 lg:pr-0 text-center">{renderHours(totalHours)}</div>
       </div>
       {showModal && (
         <Modal onDismiss={() => setShowModal(false)}>

@@ -35,7 +35,9 @@ export const login = (
   };
 };
 
-export const refreshToken = (): AsyncAction<AuthRefreshCompleteAction | AuthRefreshErrorAction> => {
+export const refreshToken = (
+  setUser = false
+): AsyncAction<AuthRefreshCompleteAction | AuthRefreshErrorAction> => {
   return async (dispatch, getState) => {
     dispatch({ type: AUTH_REFRESH_START });
 
@@ -46,7 +48,12 @@ export const refreshToken = (): AsyncAction<AuthRefreshCompleteAction | AuthRefr
     }
 
     const user: User = { id: response.id, username: response.username };
-    return dispatch({ type: AUTH_REFRESH_COMPLETE, user, accessToken: response.accessToken });
+    return dispatch({
+      type: AUTH_REFRESH_COMPLETE,
+      accessToken: response.accessToken,
+      setUser,
+      user,
+    });
   };
 };
 

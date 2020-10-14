@@ -16,11 +16,12 @@ export const AddForemen: React.FC = () => {
   };
 
   return (
-    <div className="p-6 max-h-full bg-white rounded overflow-hidden">
-      <div className="p-2 bg-gray-200 rounded">
+    <div className="p-6 max-h-full max-w-screen-lg bg-white rounded overflow-hidden">
+      <h2 className="font-bold text-lg">Add Foremen</h2>
+      <div className="mt-6 p-2 bg-gray-200 rounded">
         <div className="overflow-y-scroll h-96">
           {values(employees).map(employee => (
-            <div key={employee.id} className="flex items-center justify-between">
+            <div key={employee.id} className="my-1 flex items-center justify-between">
               <span>{employee.name}</span>
               {employee.isForeman
                 ? renderRemoveForeman(employee.id)

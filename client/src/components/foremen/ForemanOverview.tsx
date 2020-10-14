@@ -6,6 +6,7 @@ import { filterDict, getEachDayOfWeek, nextWeekEnding, prevWeekEnding, values } 
 import { IconPlus } from '../icons/IconPlus';
 import { IconUserGroup } from '../icons/IconUserGroup';
 import { Modal } from '../Modal';
+import { Tooltip } from '../Tooltip';
 import { WeekSelector } from '../WeekSelector';
 import { AddForemen } from './AddForemen';
 import { ForemanCard } from './ForemanCard';
@@ -65,7 +66,7 @@ export const ForemanOverview: React.FC = () => {
         onPrevWeek={onSelectPrevWeek}
         onNextWeek={onSelectNextWeek}
       />
-      <div className="mt-10 px-6 flex flex-col sm:flex-row flex-wrap">
+      <div className="mt-10 px-6 flex flex-col sm:flex-row flex-wrap items-stretch">
         {values(foremen).map(foreman => (
           <div key={foreman.id} className="sm:mr-6 mb-6 inline-block w-64">
             <ForemanCard
@@ -77,6 +78,19 @@ export const ForemanOverview: React.FC = () => {
             />
           </div>
         ))}
+        <Tooltip content="Add foreman" placement="bottom" delay={[500, null]}>
+          <button
+            className="mb-6 px-4 py-3 w-24 flex items-center justify-center bg-white border-2 border-dashed border-teal-300 rounded-lg hover:bg-teal-100 cursor-pointer focus:outline-none"
+            onClick={() => setShowModal(true)}
+          >
+            <IconPlus className="w-8 h-8 text-teal-400" />
+          </button>
+        </Tooltip>
+        {showModal && (
+          <Modal onDismiss={() => setShowModal(false)}>
+            <AddForemen />
+          </Modal>
+        )}
       </div>
     </div>
   );

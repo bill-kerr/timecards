@@ -5,7 +5,7 @@ import timecardsIcon from '../assets/img/timecards_icon_gradient.svg';
 export const HomePage: React.FC = () => {
   return (
     <div className="px-6 py-3">
-      <div className="flex items-center">
+      <div className="flex items-center justify-center">
         <img src={timecardsIcon} alt="Timecards" />
         <div className="ml-4 leading-tight">
           <h2 className="text-5xl font-bold">Welcome to Timecards!</h2>

@@ -20,14 +20,17 @@ export const WeekSelector: React.FC<WeekSelectorProps> = ({
   return (
     <div className={`pt-6 flex items-center justify-center ${className}`} {...props}>
       <IconChevronLeft
-        className="h-16 w-16 text-gray-400 hover:text-teal-400 cursor-pointer"
+        className="h-10 w-10 lg:h-16 lg:w-16 text-gray-400 hover:text-teal-400 cursor-pointer"
         onClick={() => onPrevWeek()}
       />
-      <div>
+      <div className="mx-2 lg:mx-0">
         <h2 className="block text-sm uppercase tracking-wide text-gray-600 text-center font-bold">
-          Week Ending <span className="text-teal-500">{formatDate(weekdays[weekdays.length - 1], 'MMMM d, yyyy')}</span>
+          Week Ending{' '}
+          <span className="text-teal-500">
+            {formatDate(weekdays[weekdays.length - 1], 'MMMM d, yyyy')}
+          </span>
         </h2>
-        <div className="mt-1 flex items-center justify-center">
+        <div className="hidden mt-1 lg:flex items-center justify-center">
           {weekdays.map((date, i) => (
             <DateBadge
               key={i}
@@ -38,7 +41,7 @@ export const WeekSelector: React.FC<WeekSelectorProps> = ({
         </div>
       </div>
       <IconChevronRight
-        className="h-16 w-16 text-gray-400 hover:text-teal-400 cursor-pointer"
+        className="h-10 w-10 lg:h-16 lg:w-16 text-gray-400 hover:text-teal-400 cursor-pointer"
         onClick={() => onNextWeek()}
       />
     </div>

@@ -16,18 +16,22 @@ import { Login } from './Login';
 import { getEmployees } from '../store/employees/actions';
 import { getJobs } from '../store/jobs/actions';
 import { FullscreenLoading } from './FullscreenLoading';
+import { useInterval } from '../hooks/useInterval';
+import { TOKEN_REFRESH_INTERVAL } from '../constants';
 
 export const App: React.FC = () => {
   const dispatch = useTypedDispatch();
-  const settings = useTypedSelector((state) => state.settings);
-  const user = useTypedSelector((state) => state.auth.user);
+  const settings = useTypedSelector(state => state.settings);
+  const user = useTypedSelector(state => state.auth.user);
+
+  useInterval(() => dispatch(refreshToken()), TOKEN_REFRESH_INTERVAL * 1000 * 60);
 
   // Get rid of this. Need to be able to check for existence of cookie.
   useEffect(() => {
     if (user !== null) {
       return;
     }
-    dispatch(refreshToken()).then((res) => {
+    dispatch(refreshToken(true)).then(res => {
       if (res.type === AUTH_REFRESH_ERROR) {
         history.push('/login');
         return;
