@@ -3,10 +3,6 @@ import { Router, Switch, Route } from 'react-router-dom';
 import { useTypedDispatch, useTypedSelector } from '../store';
 import { refreshToken } from '../store/auth/actions';
 import { AUTH_REFRESH_ERROR } from '../store/auth/types';
-import { getTimecardCostCodes } from '../store/timecard-cost-codes/actions';
-import { getTimecardEmployees } from '../store/timecard-employees/actions';
-import { getTimecards } from '../store/timecards/actions';
-import { firstAndLastOfWeek } from '../utils';
 import { EmployeeOverview } from './employees/EmployeeOverview';
 import { ForemanOverview } from './foremen/ForemanOverview';
 import { HomePage } from './HomePage';
@@ -17,11 +13,11 @@ import { getEmployees } from '../store/employees/actions';
 import { getJobs } from '../store/jobs/actions';
 import { FullscreenLoading } from './FullscreenLoading';
 import { useInterval } from '../hooks/useInterval';
-import { TOKEN_REFRESH_INTERVAL } from '../constants';
+import { TIMECARDS_REFRESH_INTERVAL, TOKEN_REFRESH_INTERVAL } from '../constants';
+import { useTimecards } from '../hooks/useTimecards';
 
 export const App: React.FC = () => {
   const dispatch = useTypedDispatch();
-  const settings = useTypedSelector(state => state.settings);
   const user = useTypedSelector(state => state.auth.user);
 
   useInterval(() => dispatch(refreshToken()), TOKEN_REFRESH_INTERVAL * 1000 * 60);
@@ -48,15 +44,17 @@ export const App: React.FC = () => {
     dispatch(getEmployees());
   }, [dispatch, user]);
 
-  useEffect(() => {
-    if (!user) {
-      return;
-    }
-    const dates = firstAndLastOfWeek(settings.weekEnding);
-    dispatch(getTimecards(dates));
-    dispatch(getTimecardEmployees(dates));
-    dispatch(getTimecardCostCodes(dates));
-  }, [dispatch, settings.weekEnding, user]);
+  // useEffect(() => {
+  //   if (!user) {
+  //     return;
+  //   }
+  //   const dates = firstAndLastOfWeek(settings.weekEnding);
+  //   dispatch(getTimecards(dates));
+  //   dispatch(getTimecardEmployees(dates));
+  //   dispatch(getTimecardCostCodes(dates));
+  // }, [dispatch, settings.weekEnding, user]);
+
+  useTimecards(TIMECARDS_REFRESH_INTERVAL);
 
   return (
     <div className="h-screen bg-gray-100">

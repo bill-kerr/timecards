@@ -2,7 +2,14 @@ import React, { useState } from 'react';
 import { useTypedDispatch, useTypedSelector } from '../../store';
 import { updateEmployee } from '../../store/employees/actions';
 import { setWeekEnding } from '../../store/settings/actions';
-import { filterDict, getEachDayOfWeek, nextWeekEnding, prevWeekEnding, values } from '../../utils';
+import {
+  filterDict,
+  getEachDayOfWeek,
+  nextWeekEnding,
+  noop,
+  prevWeekEnding,
+  values,
+} from '../../utils';
 import { IconPlus } from '../icons/IconPlus';
 import { IconUserGroup } from '../icons/IconUserGroup';
 import { Modal } from '../Modal';
@@ -49,7 +56,7 @@ export const ForemanOverview: React.FC = () => {
       </button>
       {showModal && (
         <Modal onDismiss={() => setShowModal(false)}>
-          <AddForemen />
+          <AddForemen dismiss={noop} />
         </Modal>
       )}
     </div>
