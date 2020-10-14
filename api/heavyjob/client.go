@@ -52,6 +52,10 @@ func (c *Client) get(path string, v interface{}) (*http.Response, error) {
 	}
 
 	res, err := c.Request.Get(u, headers)
+	if err != nil {
+		return nil, err
+	}
+	
 	if err := res.ToJSON(&v); err != nil {
 		return nil, err
 	}
